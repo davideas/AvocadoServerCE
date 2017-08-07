@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'flyway'
+//apply plugin: 'flyway'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
@@ -7,6 +7,14 @@ apply plugin: 'war'
 group 'eu.davidea'
 version '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
+ext {
+    appName = 'Avocado Server Community Edition'
+    builtBy = System.properties['user.name'] + "@" + getTimestamp()
+}
+
+// load config for active profile
+def propertyDrivenProfile = configForActiveProfile();
 
 repositories {
     mavenCentral()
@@ -22,19 +30,85 @@ configurations {
     compile.exclude group: 'com.zaxxer'
 }
 
-//flyway {
-//    url 'jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&amp;characterEncoding=UTF-8&amp;useSSL=false'
-//    user 'avocado_ce'
-//    password 'avocado_ce'
-//}
-
 dependencies {
-    compile('org.flywaydb:flyway-core')
+    //compile('org.flywaydb:flyway-core')
     compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.0')
     compile('org.springframework.boot:spring-boot-starter-web') {
         exclude module: "spring-boot-starter-tomcat"
     }
     runtime('mysql:mysql-connector-java')
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    // Needed when testing Mybatis
+    //testCompile('commons-dbcp:commons-dbcp:1.4')
+}
+
+/**
+ * Explode the domain war when task 'war' ends.
+ * Needed for local development when using Weblogic and deploying the exploded version
+ */
+task explodedWar(type: Copy) {
+    into "$buildDir/exploded"
+    with war
+}
+war.dependsOn explodedWar
+
+
+/**
+ * Pre-process any needed resource file when copying it to WEBINF/classes
+ */
+processResources {
+    // Include Log4j configuration for specified profile
+    from "etc/env/$propertyDrivenProfile"
+
+    exclude "**/*.gradle"
+
+    // exclude('ecas-config-*.properties')
+    filesMatching("**/*.properties") { fcd ->
+        if (!fcd.name.startsWith('ecas-config')) {
+            fcd.expand(project.properties)
+        }
+    }
+}
+
+/**
+ * Helper functions.
+ */
+
+/**
+ * @return current timestamp
+ */
+static def getTimestamp() {
+    def date = new Date()
+    return date.format('yyyy.MM.dd HH:mm')
+}
+
+/**
+ * Configure the needed properties depending on user specified profile ( using 'gradle task -PprofileName').
+ *
+ * @return active profile name
+ */
+def configForActiveProfile() {
+    def activeProfile
+    def base = '../avocado-config/etc/env/'
+    if (project.hasProperty('prod')) {
+        // Used for production environment
+        activeProfile = 'prod'
+        apply from: project.file(base + activeProfile + '/profile_prod.gradle');
+    } else if (project.hasProperty('acc')) {
+        // Used for acceptance environment
+        activeProfile = 'acc'
+        apply from: project.file(base + activeProfile + '/profile_acc.gradle');
+    } else if (project.hasProperty('dev')) {
+        // Used for test environment
+        activeProfile = 'dev'
+        apply from: project.file(base + activeProfile + '/profile_dev.gradle');
+    } else {
+        // Default when no profile property is specified, used for testing
+        activeProfile = 'local'
+        apply from: project.file(base + activeProfile + '/profile_local.gradle');
+    }
+    println ">> Selected profile is: '${activeProfile}'"
+    return activeProfile
 }
