@@ -13,7 +13,7 @@
   - Select all Object Rights and DDL Rights, deselect Other Rights
   - Press Apply
 - Close root window and create a new connection by pressing '+' button:
-  - Give a connection name, for instance: 'Local instance (avocado_ce)'
+  - Give a connection name, for instance: 'Local (avocado_ce)'
   - Specify username: avocado_ce
   - Leave all others fields as they are (we want localhost access)
   - Test Connection (and specify the password above) > Close

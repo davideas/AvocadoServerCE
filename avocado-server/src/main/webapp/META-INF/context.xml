@@ -27,7 +27,7 @@
 
 	<Resource name="jdbc/avocadoDB" auth="Container" type="javax.sql.DataSource"
 			  maxTotal="100" maxIdle="30" maxWaitMillis="30000"
-			  username="avocado_ce" password="avocado_ce" driverClassName="com.mysql.cj.jdbc.driver"
+			  username="avocado_ce" password="avocado_ce" driverClassName="com.mysql.cj.jdbc.Driver"
 			  url="jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&amp;characterEncoding=UTF-8&amp;useSSL=false"
 			  validationQuery="select 1">
 	</Resource>

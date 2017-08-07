@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS RESTAURANTS (
   website          VARCHAR(255),
   open_hours       VARCHAR(255),
   description      VARCHAR(255),
-  flag_deleted     ENUM ('T', 'F') NOT NULL DEFAULT 'F'
+  deleted          ENUM ('T', 'F') NOT NULL DEFAULT 'F'
 );
 
 /**
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS MENUS (
   mod_date      TIMESTAMP       NOT NULL,
   title         BIGINT COMMENT 'Menu title translated',
   hidden        ENUM ('T', 'F') NOT NULL DEFAULT 'F',
-  flag_deleted  ENUM ('T', 'F') NOT NULL DEFAULT 'F'
+  deleted       ENUM ('T', 'F') NOT NULL DEFAULT 'F'
 );
 
 /**
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS MENU_ITEMS (
   total_shares      SMALLINT COMMENT 'Shares count',
   sum_of_stars      FLOAT COMMENT 'Sum of all stars. Single star is between 1 and 5',
   hidden            ENUM ('T', 'F') NOT NULL DEFAULT 'F',
-  flag_deleted      ENUM ('T', 'F') NOT NULL DEFAULT 'F'
+  deleted           ENUM ('T', 'F') NOT NULL DEFAULT 'F'
 );
 
 /**
@@ -270,7 +270,7 @@ CREATE TABLE IF NOT EXISTS USERS (
   avatar          BLOB,
   last_login_date TIMESTAMP,
   profile_type    VARCHAR(5)      NOT NULL,
-  flag_deleted    ENUM ('T', 'F') NOT NULL DEFAULT 'F'
+  deleted         ENUM ('T', 'F') NOT NULL DEFAULT 'F'
 );
 
 /* ========== ORDERS ========== */

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="info">
+	<Properties>
+		<Property name="baseDir">../logs</Property>
+	</Properties>
+
+	<Appenders>
+		<!-- Console appender -->
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %-5p [%t] %c - %m%n"/>
+		</Console>
+
+		<!-- https://logging.apache.org/log4j/2.0/manual/appenders.html#RollingFileAppender -->
+		<RollingRandomAccessFile name="file" fileName="${baseDir}/avocadoserver-trace.log"
+								 filePattern="${baseDir}/avocadoserver-trace-%d{yyyy-MM-dd}.log.gz"
+								 immediateFlush="false" append="true">
+			<PatternLayout pattern="%d %-5p [%t] %c - %m%n"/>
+			<Policies>
+				<!--<OnStartupTriggeringPolicy/>-->
+				<!--<SizeBasedTriggeringPolicy size="100 MB"/>-->
+				<TimeBasedTriggeringPolicy/>
+			</Policies>
+			<DefaultRolloverStrategy max="91">
+				<Delete basePath="${baseDir}" maxDepth="2">
+					<IfFileName glob="*/avocadoserver-trace*.log.gz">
+						<IfLastModified age="60d">
+							<IfAny>
+								<IfAccumulatedFileSize exceeds="1 GB"/>
+								<IfAccumulatedFileCount exceeds="10"/>
+							</IfAny>
+						</IfLastModified>
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingRandomAccessFile>
+
+		<RollingRandomAccessFile name="file-jpa" fileName="${baseDir}/avocadoserver-jpa.log"
+								 filePattern="${baseDir}/avocadoserver-jpa-%d{yyyy-MM-dd}.log.gz"
+								 immediateFlush="false" append="true">
+			<PatternLayout pattern="%d %-5p [%t] %c - %m%n"/>
+			<Policies>
+				<!--<OnStartupTriggeringPolicy/>-->
+				<!--<SizeBasedTriggeringPolicy size="100 MB" />-->
+				<TimeBasedTriggeringPolicy/>
+			</Policies>
+			<DefaultRolloverStrategy max="91">
+				<Delete basePath="${baseDir}" maxDepth="2">
+					<IfFileName glob="*/avocadoserver-jpa*.log.gz">
+						<IfLastModified age="60d">
+							<IfAccumulatedFileCount exceeds="10"/>
+						</IfLastModified>
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingRandomAccessFile>
+	</Appenders>
+
+	<Loggers>
+		<!-- AvocadoServer -->
+		<AsyncLogger name="eu.davidea.avocadoserver" level="debug" additivity="false">
+			<AppenderRef ref="console"/>
+			<Appender-ref ref="file"/>
+		</AsyncLogger>
+		<AsyncLogger name="QUERY-STATS" level="trace" additivity="false">
+			<AppenderRef ref="console"/>
+			<AppenderRef ref="file-jpa"/>
+		</AsyncLogger>
+
+		<!-- Libraries -->
+		<AsyncLogger name="org.springframework" level="info" additivity="false">
+			<AppenderRef ref="console"/>
+			<AppenderRef ref="file"/>
+		</AsyncLogger>
+		<AsyncLogger name="org.apache" level="info" additivity="false">
+			<AppenderRef ref="console"/>
+			<AppenderRef ref="file"/>
+		</AsyncLogger>
+		<!--<AsyncLogger name="org.hibernate.SQL" level="debug" additivity="false">-->
+		<!--<AppenderRef ref="console"/>-->
+		<!--<AppenderRef ref="file-jpa"/>-->
+		<!--</AsyncLogger>-->
+		<!--<AsyncLogger name="org.hibernate.type" level="trace" additivity="false">-->
+		<!--<AppenderRef ref="console"/>-->
+		<!--<AppenderRef ref="file-jpa"/>-->
+		<!--</AsyncLogger>-->
+		<!--<AsyncLogger name="org.springframework.transaction" level="trace" additivity="false">-->
+		<!--<AppenderRef ref="console"/>-->
+		<!--<AppenderRef ref="file-jpa"/>-->
+		<!--</AsyncLogger>-->
+
+		<!-- Root -->
+		<AsyncRoot level="info">
+			<AppenderRef ref="console"/>
+		</AsyncRoot>
+	</Loggers>
+
+</Configuration>

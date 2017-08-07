@@ -19,6 +19,7 @@ So those Apps are also a playground to experiment new frameworks and new feature
 
 # Features
 **Note:** _All features are under deep analysis with continuous development; Features will be added step by step._
+
 - [Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html) by Uncle Bob
 - API (Key generation or Token generation with JWT) 
 - [Spring Boot 2](https://github.com/spring-projects/spring-boot)

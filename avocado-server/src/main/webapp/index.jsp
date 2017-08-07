@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Tamarindo</title>
+    <title>Avocado Server CE</title>
 </head>
 <body>
-<h1>Tamarindo is being born!</h1>
+<h1>Avocado Community is listening!</h1>
 </body>
 </html>
