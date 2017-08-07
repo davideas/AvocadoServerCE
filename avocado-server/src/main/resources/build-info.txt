@@ -1,0 +1,4 @@
+ version=${version}
+ builtOn=${build.timestamp}
+ builtBy=${user.name}
+ buildJdk=${java.version}
