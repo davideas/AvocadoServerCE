@@ -1,0 +1,31 @@
+# Gradle files
+.gradle
+build/
+gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+.DS_Store
+*.iws
+*.iml
+*.ipr
+
+# Java class files
+target/
+out/
+
+# Local configuration file (sdk path, etc)
+local.properties
+gradle.properties
+
+# Log Files
+/logs
+*.log
