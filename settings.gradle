@@ -1,2 +1,2 @@
-include 'avocado-server'
+include 'avocado-spring-boot'
 

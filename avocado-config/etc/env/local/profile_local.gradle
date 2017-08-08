@@ -1,16 +1,11 @@
-/**
+/*
 * LOCAL - Specific gradle configuration
 */
 ext {
     springActiveProfile = 'local'
-}
-
-apply plugin: 'flyway'
-
-// Used by flyway when gradle is used in command line mode
-flyway {
-    url 'jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&characterEncoding=UTF-8&useSSL=false'
-    user 'avocado_ce'
-    password 'avocado_ce'
-    encoding = 'UTF-8'
+    datasourceUrl = 'jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&characterEncoding=UTF-8&useSSL=false'
+    datasourceDriverClassName = 'com.mysql.cj.jdbc.Driver'
+    datasourceJndiName = 'java:comp/env/jdbc/avocadoDB'
+    datasourceUsername = 'avocado_ce'
+    datasourcePassword = 'avocado_ce'
 }

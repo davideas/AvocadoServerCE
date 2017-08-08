@@ -1,11 +1,14 @@
 apply plugin: 'java'
+apply plugin: 'flyway'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
+apply plugin: 'idea'
 
 group 'eu.davidea'
 version '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 ext {
     appName = 'Avocado Server Community Edition'
@@ -21,16 +24,6 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
-war {
-    baseName = 'avocadoce'
-    version =  version
-    archiveName = 'avocadoce.war'
-
-    doLast {
-        println "War build at: " + getTimestamp()
-    }
-}
-
 configurations {
     providedRuntime
     compile.exclude module: 'spring-boot-starter-tomcat'
@@ -44,7 +37,7 @@ dependencies {
     compile('org.flywaydb:flyway-core')
     compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:${myBatisBootVersion}")
     compile('org.springframework.boot:spring-boot-starter-web') {
-        //exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-tomcat"
     }
 
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
@@ -58,10 +51,28 @@ dependencies {
     compileOnly("javax.servlet:javax.servlet-api:3.1.0")
     //providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
-    //testCompile("javax.servlet:javax.servlet-api:3.1.0")
+    testCompile("javax.servlet:javax.servlet-api:3.1.0")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     // Needed when testing Mybatis
-    //testCompile('commons-dbcp:commons-dbcp:1.4')
+    testCompile('commons-dbcp:commons-dbcp:1.4')
+}
+
+// Used by flyway when gradle is used in command line mode
+flyway {
+    url = datasourceUrl
+    user = datasourceUsername
+    password = datasourcePassword
+    encoding = 'UTF-8'
+}
+
+war {
+    baseName = 'avocadoce'
+    version = version
+    archiveName = baseName + '-' + version + '.war'
+
+    doLast {
+        println "War build at: " + getTimestamp()
+    }
 }
 
 /**
@@ -74,21 +85,15 @@ task explodedWar(type: Copy) {
 }
 war.dependsOn explodedWar
 
-
 /**
  * Pre-process any needed resource file when copying it to WEB-INF/classes
  */
 processResources {
-    // Include Log4j configuration for specified profile
-    from "etc/env/$propertyDrivenProfile"
-
+    // Include Env configuration for specified profile
+    from "../avocado-config/etc/env/$propertyDrivenProfile"
     exclude "**/*.gradle"
-
-    // exclude('ecas-config-*.properties')
     filesMatching("**/*.properties") { fcd ->
-        if (!fcd.name.startsWith('ecas-config')) {
-            fcd.expand(project.properties)
-        }
+        fcd.expand(project.properties)
     }
 }
 
@@ -120,15 +125,11 @@ def configForActiveProfile() {
         // Used for acceptance environment
         activeProfile = 'acc'
         apply from: project.file(base + activeProfile + '/profile_acc.gradle');
-    } else if (project.hasProperty('dev')) {
-        // Used for test environment
-        activeProfile = 'dev'
-        apply from: project.file(base + activeProfile + '/profile_dev.gradle');
     } else {
         // Default when no profile property is specified, used for testing
         activeProfile = 'local'
         apply from: project.file(base + activeProfile + '/profile_local.gradle');
     }
-    println ">> Selected profile is: '${activeProfile}'"
+    println "Selected profile is: '${activeProfile}'"
     return activeProfile
 }
