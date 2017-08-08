@@ -1,15 +1,14 @@
 package eu.davidea.avocadoserver;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
-
+@Configuration
 @SpringBootApplication(exclude = JmxAutoConfiguration.class)
 @MapperScan("eu.davidea.avocadoserver.persistence.mybatis.mappers")
 public class Application extends SpringBootServletInitializer {
@@ -19,10 +18,14 @@ public class Application extends SpringBootServletInitializer {
         return application.sources(Application.class);
     }
 
-    @Bean(destroyMethod="")
-    public DataSource dataSource() throws Exception {
-        JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
-        return dataSourceLookup.getDataSource("java:comp/env/jdbc/avocadoDB");
+//    @Bean(destroyMethod="")
+//    public DataSource dataSource() throws Exception {
+//        JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
+//        return dataSourceLookup.getDataSource("java:comp/env/jdbc/avocadoDB");
+//    }
+
+    public static void main(final String[] args) {
+        SpringApplication.run(Application.class, args);
     }
 
 }

@@ -21,6 +21,16 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
+war {
+    baseName = 'avocadoce'
+    version =  version
+    archiveName = 'avocadoce.war'
+
+    doLast {
+        println "War build at: " + getTimestamp()
+    }
+}
+
 configurations {
     providedRuntime
     compile.exclude module: 'spring-boot-starter-tomcat'
@@ -34,7 +44,7 @@ dependencies {
     compile('org.flywaydb:flyway-core')
     compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:${myBatisBootVersion}")
     compile('org.springframework.boot:spring-boot-starter-web') {
-        exclude module: "spring-boot-starter-tomcat"
+        //exclude module: "spring-boot-starter-tomcat"
     }
 
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
@@ -45,12 +55,13 @@ dependencies {
     // https://mvnrepository.com/artifact/com.lmax/disruptor
     compile("com.lmax:disruptor:3.3.6")
 
+    compileOnly("javax.servlet:javax.servlet-api:3.1.0")
+    //providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
-    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
-
+    //testCompile("javax.servlet:javax.servlet-api:3.1.0")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     // Needed when testing Mybatis
-    testCompile('commons-dbcp:commons-dbcp:1.4')
+    //testCompile('commons-dbcp:commons-dbcp:1.4')
 }
 
 /**

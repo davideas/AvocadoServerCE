@@ -9,7 +9,7 @@ apply plugin: 'flyway'
 
 // Used by flyway when gradle is used in command line mode
 flyway {
-    url 'jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&amp;characterEncoding=UTF-8&amp;useSSL=false'
+    url 'jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&characterEncoding=UTF-8&useSSL=false'
     user 'avocado_ce'
     password 'avocado_ce'
     encoding = 'UTF-8'
