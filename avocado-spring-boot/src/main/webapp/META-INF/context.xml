@@ -25,9 +25,20 @@
 
 	<!-- url: The JDBC connection url for connecting to your MySQL database. -->
 
+	<!--<Resource name="jdbc/avocadoDB" auth="Container" type="javax.sql.DataSource"-->
+			  <!--maxTotal="100" maxIdle="30" maxWaitMillis="30000"-->
+			  <!--username="${spring.datasource.username}"-->
+			  <!--password="${spring.datasource.password}"-->
+			  <!--driverClassName="${spring.datasource.driver-class-name}"-->
+			  <!--url="${springDatasourceUrl}"-->
+			  <!--validationQuery="select 1">-->
+	<!--</Resource>-->
+
 	<Resource name="jdbc/avocadoDB" auth="Container" type="javax.sql.DataSource"
 			  maxTotal="100" maxIdle="30" maxWaitMillis="30000"
-			  username="avocado_ce" password="avocado_ce" driverClassName="com.mysql.cj.jdbc.Driver"
+			  username="avocado_ce"
+			  password="avocado_ce"
+			  driverClassName="com.mysql.cj.jdbc.Driver"
 			  url="jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&amp;characterEncoding=UTF-8&amp;useSSL=false"
 			  validationQuery="select 1">
 	</Resource>
