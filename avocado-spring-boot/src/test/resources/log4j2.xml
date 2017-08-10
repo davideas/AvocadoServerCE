@@ -11,8 +11,8 @@
 		</Console>
 
 		<!-- https://logging.apache.org/log4j/2.0/manual/appenders.html#RollingFileAppender -->
-		<RollingRandomAccessFile name="file" fileName="${baseDir}/avocadoserver-trace.log"
-								 filePattern="${baseDir}/avocadoserver-trace-%d{yyyy-MM-dd}.log.gz"
+		<RollingRandomAccessFile name="file" fileName="${baseDir}/avocadoserver-test.log"
+								 filePattern="${baseDir}/avocadoserver-test-%d{yyyy-MM-dd}.log.gz"
 								 immediateFlush="false" append="true">
 			<PatternLayout pattern="%d %-5p [%t] %c - %m%n"/>
 			<Policies>
@@ -22,7 +22,7 @@
 			</Policies>
 			<DefaultRolloverStrategy max="91">
 				<Delete basePath="${baseDir}" maxDepth="2">
-					<IfFileName glob="*/avocadoserver-trace*.log.gz">
+					<IfFileName glob="*/avocadoserver-test*.log.gz">
 						<IfLastModified age="60d">
 							<IfAny>
 								<IfAccumulatedFileSize exceeds="1 GB"/>

@@ -18,12 +18,6 @@ public class Application extends SpringBootServletInitializer {
         return application.sources(Application.class);
     }
 
-//    @Bean(destroyMethod="")
-//    public DataSource dataSource() throws Exception {
-//        JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
-//        return dataSourceLookup.getDataSource("java:comp/env/jdbc/avocadoDB");
-//    }
-
     public static void main(final String[] args) {
         SpringApplication.run(Application.class, args);
     }

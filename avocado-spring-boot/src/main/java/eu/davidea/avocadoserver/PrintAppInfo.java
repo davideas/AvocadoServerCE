@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 /**
- * Print information about the version of the application when the application is started.
+ * Print information about the version of the application when the it is started.
+ * Useful when working in team and to check the last version deployed by analysing the startup log.
  */
 @Component
 public class PrintAppInfo {
@@ -28,7 +29,7 @@ public class PrintAppInfo {
 
     @PostConstruct
     public void printInfo() {
-        logger.info("\nAppInfo:\n\tname: {},\n\tdescription: {},\n\tversion: {},\n\tbuilt by: {}\n",
+        logger.info("\n\nAppInfo:\n\tname: {}\n\tdescription: {}\n\tversion: {}\n\tbuilt by: {}\n",
                 buildName, buildDescription, buildVersion, builtBy);
     }
 }

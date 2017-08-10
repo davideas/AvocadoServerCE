@@ -5,8 +5,9 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 apply plugin: 'idea'
 
-group 'eu.davidea'
-version '0.0.1-SNAPSHOT'
+group = 'eu.davidea'
+version = '0.0.1-SNAPSHOT'
+description = 'An opinionated setup for a REST Server'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -53,9 +54,9 @@ dependencies {
 
     testCompile("javax.servlet:javax.servlet-api:3.1.0")
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:1.3.1-SNAPSHOT")
+    testCompile("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:1.3.0")
     // Needed when testing Mybatis
-    testCompile('commons-dbcp:commons-dbcp:1.4')
+    //testCompile('commons-dbcp:commons-dbcp:1.4')
 }
 
 // Used by flyway when gradle is used in command line mode
@@ -67,7 +68,7 @@ flyway {
 }
 
 war {
-    baseName = 'avocadoce'
+    baseName = 'avocado-spring-boot'
     version = version
     archiveName = baseName + '-' + version + '.war'
 
@@ -81,7 +82,7 @@ war {
  * Needed for local development when using Weblogic and deploying the exploded version
  */
 task explodedWar(type: Copy) {
-    into "$buildDir/exploded"
+    into "$buildDir/libs/exploded/" + war.archiveName
     with war
 }
 war.dependsOn explodedWar
@@ -121,15 +122,15 @@ def configForActiveProfile() {
     if (project.hasProperty('prod')) {
         // Used for production environment
         activeProfile = 'prod'
-        apply from: project.file(base + activeProfile + '/profile_prod.gradle');
+        apply from: project.file(base + activeProfile + '/profile_prod.gradle')
     } else if (project.hasProperty('acc')) {
         // Used for acceptance environment
         activeProfile = 'acc'
-        apply from: project.file(base + activeProfile + '/profile_acc.gradle');
+        apply from: project.file(base + activeProfile + '/profile_acc.gradle')
     } else {
         // Default when no profile property is specified, used for testing
         activeProfile = 'local'
-        apply from: project.file(base + activeProfile + '/profile_local.gradle');
+        apply from: project.file(base + activeProfile + '/profile_local.gradle')
     }
     println "Selected profile is: '${activeProfile}'"
     return activeProfile
