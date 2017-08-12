@@ -16,4 +16,4 @@ INSERT INTO RESTAURANT_STATUS (code, cre_date, mod_date, description) VALUES ('V
 INSERT INTO RESTAURANT_STATUS (code, cre_date, mod_date, description) VALUES ('DELETED', current_timestamp(), current_timestamp(), 'Restaurant has been removed and cannot be accessed by the owner. It can only be visible by the admin in the admin console.');
 
 INSERT INTO RESTAURANTS (cre_date, mod_date, name, tables, places, language_code, country_code, currency_code, display_city, display_email, login, password)
-VALUES (current_timestamp(), current_timestamp(), 'Avocado Restaurant', 10, 70, 'it_IT', 'IT', 'EUR', 'Milan', 'info@avocado.it', '$2a$10$6NZnC6xeVl2einvrpZEay.BAxscztPwiz.nHGnr9qC.jZant3skQi', '$2a$10$eFrnhYicQ.fmfopfZP7lnuA5sW5RRWtOAR9jWqbwrz55VjTIbmDA6');
+VALUES (current_timestamp(), current_timestamp(), 'Avocado Restaurant', 10, 70, 'it-IT', 'IT', 'EUR', 'Milan', 'info@avocado.it', '$2a$10$6NZnC6xeVl2einvrpZEay.BAxscztPwiz.nHGnr9qC.jZant3skQi', '$2a$10$eFrnhYicQ.fmfopfZP7lnuA5sW5RRWtOAR9jWqbwrz55VjTIbmDA6');

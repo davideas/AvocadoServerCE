@@ -1,6 +1,6 @@
 package eu.davidea.avocadoserver.business.restaurant;
 
-import eu.davidea.avocadoserver.business.audit.AuditableEntity;
+import eu.davidea.avocadoserver.infrastructure.audit.AuditableEntity;
 import eu.davidea.avocadoserver.business.enums.EnumDeleted;
 
 import java.io.Serializable;

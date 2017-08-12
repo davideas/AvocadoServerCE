@@ -1,4 +1,4 @@
-package eu.davidea.avocadoserver.business.audit;
+package eu.davidea.avocadoserver.infrastructure.audit;
 
 import java.util.Date;
 

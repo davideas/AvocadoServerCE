@@ -4,8 +4,4 @@
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings>
-	<!-- Register all interfaces in a package as mappers -->
-	<mappers>
-		<package name="eu.davidea.avocadoserver.persistence.mybatis.mappers"/>
-	</mappers>
 </configuration>

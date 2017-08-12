@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>AvocadoServerCE</name>
+	<groupId>eu.davidea</groupId>
+	<artifactId>AvocadoServerCE</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<packaging>pom</packaging>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<organization>
+		<name>Davidea Solutions</name>
+		<url>http://www.davidea.eu</url>
+	</organization>
+
+	<properties>
+		<build.timestamp>${maven.build.timestamp}</build.timestamp>
+		<maven.build.timestamp.format>yyyy.MM.dd HH:mm:ss</maven.build.timestamp.format>
+		<!-- Library versions for some of the libraries that have multiple artifacts -->
+		<spring-boot.version>2.0.0.M3</spring-boot.version>
+		<javax-validation.version>2.0.0.Final</javax-validation.version>
+	</properties>
+
+	<dependencyManagement>
+		<!-- Here we *declare* the versions and intended scope for all libraries used in the project.
+			 Note that you still have to reference a certain library in the module's pom.xml so that it is used. -->
+		<dependencies>
+			<!-- Javax Annotations Validation -->
+			<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>${javax-validation.version}</version>
+			</dependency>
+
+			<!-- Inherit defaults from Spring Boot -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<version>${spring-boot.version}</version>
+				<exclusions>
+					<!-- We want slf4j instead -->
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.tomcat</groupId>
+						<artifactId></artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.yaml</groupId>
+						<artifactId></artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.objenesis</groupId>
+						<artifactId></artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId></artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId></artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>junit</groupId>
+						<artifactId></artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<!-- Add typical dependencies for a web application -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+			</dependency>
+
+			<!-- jBCrypt -->
+			<!-- http://www.mindrot.org/projects/jBCrypt -->
+			<dependency>
+				<groupId>de.svenkubiak</groupId>
+				<artifactId>jBCrypt</artifactId>
+				<version>${jBcrypt.version}</version>
+			</dependency>
+
+		</dependencies>
+
+	</dependencyManagement>
+
+</project>

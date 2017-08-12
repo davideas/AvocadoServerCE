@@ -57,7 +57,7 @@
 
 	<Loggers>
 		<!-- AvocadoServer -->
-		<AsyncLogger name="eu.davidea.avocadoserver" level="debug" additivity="false">
+		<AsyncLogger name="eu.davidea.avocadoserver" level="trace" additivity="false">
 			<AppenderRef ref="console"/>
 			<Appender-ref ref="file"/>
 		</AsyncLogger>
