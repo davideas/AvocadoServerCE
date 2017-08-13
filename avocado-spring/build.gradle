@@ -1,0 +1,60 @@
+apply plugin: 'java'
+apply plugin: 'flyway'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'war'
+apply plugin: 'idea' // https://docs.gradle.org/3.3/userguide/idea_plugin.html
+
+group = 'eu.davidea'
+version = '0.0.1-SNAPSHOT'
+description = 'An opinionated setup for a modern RESTful Server'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    appName = 'Avocado Server Community Edition'
+    builtBy = System.properties['user.name'] + "@" + getTimestamp()
+}
+
+repositories {
+    mavenCentral()
+}
+
+// load config for active profile
+def propertyDrivenProfile = configForActiveProfile()
+
+
+
+/**
+ * Helper functions.
+ */
+
+/**
+ * @return current timestamp
+ */
+static def getTimestamp() {
+    def date = new Date()
+    return date.format('yyyy.MM.dd HH:mm')
+}
+
+/**
+ * Configure the needed properties depending on user specified profile ( using 'gradle task -PprofileName').
+ *
+ * @return active profile name
+ */
+def configForActiveProfile() {
+    def activeProfile
+    def base = '../avocado-config/env/'
+    if (project.hasProperty('prod')) {
+        // Used for production environment
+        activeProfile = 'prod'
+    } else if (project.hasProperty('acc')) {
+        // Used for acceptance environment
+        activeProfile = 'acc'
+    } else {
+        // Default when no profile property is specified, used for testing
+        activeProfile = 'local'
+    }
+    println "Selected profile is: '${activeProfile}'"
+    apply from: project.file(base + activeProfile + '/profile_' + activeProfile + '.gradle')
+    return activeProfile
+}

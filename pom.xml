@@ -387,6 +387,7 @@
 
 	<!-- List the sub-modules to be built as part of this project. -->
 	<modules>
+		<module>avocado-spring</module>
 		<module>avocado-spring-boot</module>
 	</modules>
 
