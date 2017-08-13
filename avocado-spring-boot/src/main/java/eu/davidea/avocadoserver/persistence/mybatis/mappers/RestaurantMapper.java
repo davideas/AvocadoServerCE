@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
+ * https://github.com/mybatis/mybatis-3/wiki/FAQ
+ *
  * @author Davide
  * @since 07/08/2017
  */

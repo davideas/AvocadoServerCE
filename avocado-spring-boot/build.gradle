@@ -52,7 +52,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     // http://www.mindrot.org/projects/jBCrypt
     compile("de.svenkubiak:jBCrypt:${jBCryptVersion}")
-    // Log4j2 via slf4j API. Configuration is per environment etc/env/<env>/log4j2.xml
+    // Log4j2 via slf4j API. Configuration is per environment env/<env>/log4j2.xml
     compile("org.slf4j:slf4j-api:${slf4jVersion}")
     runtimeOnly("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
     runtimeOnly("org.slf4j:log4j-over-slf4j:${slf4jVersion}")
@@ -74,7 +74,7 @@ dependencies {
      * - MySql Connector Driver is copied under ${CATALINA_BASE}/lib and is configured in META-INF/context.xml
      *   So we don't need to include it in our .war file, neither that is provided.
      *   https://mvnrepository.com/artifact/mysql/mysql-connector-java */
-    //providedRuntime("mysql:mysql-connector-java:${mysqlConnectorVersion}")
+    compileOnly("mysql:mysql-connector-java:${mysqlConnectorVersion}")
     /* - Hikari Connection Pool is configured in META-INF/context.xml
      *   Hikari is loaded on JNDI lookup by Tomcat and used when testing MyBatis to create a connection via JDBC.
      *   The library is already included in Spring Boot 2 but it is preferable to specify the latest version */
@@ -154,8 +154,9 @@ war.dependsOn explodedWar
  */
 processResources {
     // Include Env configuration for specified profile
-    from "../avocado-config/etc/env/$propertyDrivenProfile"
+    from "../avocado-config/env/$propertyDrivenProfile"
     exclude "**/*.gradle"
+    exclude "**/config.properties"
     filesMatching("**/*.properties") { fcd ->
         fcd.expand(project.properties)
     }
@@ -180,7 +181,7 @@ static def getTimestamp() {
  */
 def configForActiveProfile() {
     def activeProfile
-    def base = '../avocado-config/etc/env/'
+    def base = '../avocado-config/env/'
     if (project.hasProperty('prod')) {
         // Used for production environment
         activeProfile = 'prod'

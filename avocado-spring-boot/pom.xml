@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>eu.davidea</groupId>
+		<artifactId>AvocadoServerCE</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<name>avocado-spring-boot</name>
+	<artifactId>avocado-spring-boot</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<properties>
+		<!-- Compile but don't run tests -->
+		<skipTests>false</skipTests>
+	</properties>
+
+	<dependencies>
+		<!-- Javax Annotations Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<!-- Servlet API -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+
+		<!-- Database -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+
+		<!-- jBCrypt -->
+		<dependency>
+			<groupId>de.svenkubiak</groupId>
+			<artifactId>jBCrypt</artifactId>
+		</dependency>
+
+		<!-- Logging (slf4j) + Log4j2 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+		</dependency>
+
+		<!-- JUnit -->
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-runner</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<filters>
+			<filter>../avocado-config/env/${profile}/config.properties</filter>
+		</filters>
+	</build>
+
+	<profiles>
+		<!-- LOCAL -->
+		<profile>
+			<id>1-Local</id>
+			<properties>
+				<profile>local</profile>
+				<!--<buildBy>${user.name}@${build.timestamp}</buildBy>-->
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>src/test/resources</directory>
+						<targetPath>../test-classes</targetPath>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>../avocado-config/env/local</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>config.properties</exclude>
+							<exclude>*.gradle</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+
+		<!-- TEST -->
+		<profile>
+			<id>2-Test</id>
+			<properties>
+				<profile>test</profile>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>../avocado-config/env/test</directory>
+						<excludes>
+							<exclude>config.properties</exclude>
+							<exclude>*.gradle</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+
+		<!-- ACCEPTANCE -->
+		<profile>
+			<id>3-Acceptance</id>
+			<properties>
+				<profile>acc</profile>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>../avocado-config/env/acc</directory>
+						<excludes>
+							<exclude>config.properties</exclude>
+							<exclude>*.gradle</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+
+		<!-- PRODUCTION -->
+		<profile>
+			<id>4-Production</id>
+			<properties>
+				<profile>prod</profile>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>../avocado-config/env/prod</directory>
+						<excludes>
+							<exclude>config.properties</exclude>
+							<exclude>*.gradle</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+
+	</profiles>
+
+</project>
