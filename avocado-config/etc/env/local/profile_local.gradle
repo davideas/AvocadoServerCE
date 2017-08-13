@@ -5,7 +5,7 @@ ext {
     springActiveProfile = 'local'
     datasourceUrl = 'jdbc:mysql://127.0.0.1:3306/avocado_ce?serverTimezone=CET&characterEncoding=UTF-8&useSSL=false'
     datasourceDriverClassName = 'com.mysql.cj.jdbc.Driver'
-    datasourceJndiName = 'java:comp/env/jdbc/avocadoDB'
+    datasourceJndiName = 'java:comp/env/jdbc/AvocadoDB'
     datasourceUsername = 'avocado_ce'
     datasourcePassword = 'avocado_ce'
 }

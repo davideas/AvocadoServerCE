@@ -16,7 +16,7 @@ public interface RestaurantMapper {
 
     List<Restaurant> findRestaurantsNearby(Float latitude, Float longitude, Float radius);
 
-    @Select("select * from restaurants where name like #{name,jdbcType=VARCHAR} and status != 'DELETED' order by name asc")
+    @Select("select * from restaurants where lower(name) like #{name,jdbcType=VARCHAR} and status != 'DELETED' order by name asc")
     List<Restaurant> findRestaurantByName(String name);
 
     @Select("select * from restaurants where id = #{id}")

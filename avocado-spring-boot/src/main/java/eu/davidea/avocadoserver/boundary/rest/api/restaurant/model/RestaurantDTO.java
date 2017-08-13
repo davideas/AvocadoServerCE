@@ -1,6 +1,6 @@
 package eu.davidea.avocadoserver.boundary.rest.api.restaurant.model;
 
-import eu.davidea.avocadoserver.business.enums.EnumDeleted;
+import eu.davidea.avocadoserver.business.enums.EnumRestaurantStatus;
 
 import java.util.Date;
 
@@ -35,7 +35,7 @@ public class RestaurantDTO {
 
     private String openHours;
     private String description;
-    private EnumDeleted deleted;
+    private EnumRestaurantStatus status;
 
     public RestaurantDTO() {
         // Used by Jackson
@@ -217,12 +217,12 @@ public class RestaurantDTO {
         this.description = description;
     }
 
-    public EnumDeleted getDeleted() {
-        return deleted;
+    public EnumRestaurantStatus getStatus() {
+        return status;
     }
 
-    public void setDeleted(EnumDeleted deleted) {
-        this.deleted = deleted;
+    public void setStatus(EnumRestaurantStatus status) {
+        this.status = status;
     }
 
 }

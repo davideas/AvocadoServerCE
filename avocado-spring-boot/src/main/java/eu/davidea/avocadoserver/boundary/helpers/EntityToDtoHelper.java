@@ -45,7 +45,7 @@ public class EntityToDtoHelper {
         restaurantDto.setWebsite(restaurant.getWebsite());
         restaurantDto.setOpenHours(restaurant.getOpenHours());
         restaurantDto.setDescription(restaurant.getDescription());
-        restaurantDto.setDeleted(restaurant.getDeleted());
+        restaurantDto.setStatus(restaurant.getStatus());
 
         return restaurantDto;
     }

@@ -1,7 +1,7 @@
 package eu.davidea.avocadoserver.business.restaurant;
 
 import eu.davidea.avocadoserver.infrastructure.audit.AuditableEntity;
-import eu.davidea.avocadoserver.business.enums.EnumDeleted;
+import eu.davidea.avocadoserver.business.enums.EnumRestaurantStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -40,7 +40,7 @@ public class Restaurant implements AuditableEntity, Serializable {
 
     private String openHours;
     private String description;
-    private EnumDeleted deleted = EnumDeleted.F;
+    private EnumRestaurantStatus status;
 
 
     public Restaurant() {
@@ -218,12 +218,12 @@ public class Restaurant implements AuditableEntity, Serializable {
         this.description = description;
     }
 
-    public EnumDeleted getDeleted() {
-        return deleted;
+    public EnumRestaurantStatus getStatus() {
+        return status;
     }
 
-    public void setDeleted(EnumDeleted deleted) {
-        this.deleted = deleted;
+    public void setStatus(EnumRestaurantStatus status) {
+        this.status = status;
     }
 
 }

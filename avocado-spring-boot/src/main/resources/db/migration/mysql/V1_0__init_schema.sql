@@ -71,7 +71,6 @@ CREATE TABLE IF NOT EXISTS RESTAURANTS (
   cre_date         TIMESTAMP       NOT NULL,
   mod_date         TIMESTAMP       NOT NULL,
   status           VARCHAR(50)     DEFAULT 'CREATED',
-  last_login_date  TIMESTAMP,
   name             VARCHAR(255)    NOT NULL,
   tables           SMALLINT COMMENT 'Number of tables',
   places           SMALLINT COMMENT 'Number of places',
@@ -89,6 +88,7 @@ CREATE TABLE IF NOT EXISTS RESTAURANTS (
   website          VARCHAR(255),
   open_hours       VARCHAR(255),
   description      VARCHAR(255),
+  last_login_date  TIMESTAMP,
   login            VARCHAR(255)    NOT NULL,
   password         VARCHAR(255)    NOT NULL
 );

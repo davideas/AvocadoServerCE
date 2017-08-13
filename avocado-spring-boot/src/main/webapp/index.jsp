@@ -4,6 +4,6 @@
     <title>Avocado Server CE</title>
 </head>
 <body>
-<h1>Avocado Community is listening!</h1>
+<h1>Avocado Server is online!</h1>
 </body>
 </html>

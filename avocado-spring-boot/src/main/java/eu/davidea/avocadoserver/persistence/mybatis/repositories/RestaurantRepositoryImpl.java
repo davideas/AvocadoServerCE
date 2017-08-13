@@ -28,6 +28,7 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
     }
 
     public List<Restaurant> findRestaurantByName(String name) {
+        name = "%" + name.toLowerCase() + "%";
         return mapper.findRestaurantByName(name);
     }
 
