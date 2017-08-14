@@ -175,7 +175,8 @@ static def getTimestamp() {
 }
 
 /**
- * Configure the needed properties depending on user specified profile ( using 'gradle task -PprofileName').
+ * Configure the needed properties depending on user specified profile
+ * (using 'gradle task -P profileName').
  *
  * @return active profile name
  */

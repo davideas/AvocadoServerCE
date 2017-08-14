@@ -26,20 +26,21 @@ So those Apps are also a playground to experiment new frameworks and new feature
 - [Spring Boot 2](https://github.com/spring-projects/spring-boot)
 - [Spring 5](https://github.com/spring-projects/spring-framework)
 - RESTful web services with Spring
-- Logging [slf4j](https://www.slf4j.org/) + [Log4j2](https://logging.apache.org/log4j/2.x/) with gzip and rolling strategy
+- Logging via [slf4j](https://www.slf4j.org/) API + [Log4j2](https://logging.apache.org/log4j/2.x/) with gzip and rolling strategy
 - [MyBatis 3](http://www.mybatis.org/mybatis-3) SQL Mapping Framework for Java + Integration with Spring and Spring Boot
 - [FlyWay](https://flywaydb.org/) Database schema migrations made easy across all environments
-- SQL scripts for demo database schema
 - [jBCrypt](http://www.mindrot.org/projects/jBCrypt) One-Way Encryption
 - [Firebase](https://github.com/firebase/quickstart-android) Messaging with Notification manager!
+- [JUnit 5](http://junit.org/junit5/) Jupiter
+- [GrabVer](https://github.com/davideas/grabver) Gradle Automatic Build Versioning
+- SQL scripts for demo database schema
 - Environment configuration files (local-test-acc-prod)
 - Integration with IDE: Deployment and JUnit tests can be run via command line and via IDE!
-- [GrabVer](https://github.com/davideas/grabver) Gradle Automatic Build Versioning
-- [JUnit 5](http://junit.org/junit5/) (Jupiter)
+- Maven & Gradle build tools (see [Gradle vs Maven: Feature Comparison Chart](https://gradle.org/maven-vs-gradle/))
 
 
 # Contributions
-Everybody is welcome to improve existing solutions, to experiment basic and specific features.
+Everybody is welcome to improve existing solutions, to experiment basic, new and specific features and frameworks.
 
 # License
 
