@@ -72,7 +72,7 @@ dependencies {
      * Database libraries
      * - Database connection is retrieved via JNDI. A direct JDBC connection is used during JUnit testing
      * - MySql Connector Driver is copied under ${CATALINA_BASE}/lib and is configured in META-INF/context.xml
-     *   So we don't need to include it in our .war file, neither that is provided.
+     *   So we don't need to include it in our .war file, in theory, neither provided.
      *   https://mvnrepository.com/artifact/mysql/mysql-connector-java */
     compileOnly("mysql:mysql-connector-java:${mysqlConnectorVersion}")
     /* - Hikari Connection Pool is configured in META-INF/context.xml
@@ -154,7 +154,7 @@ war.dependsOn explodedWar
  */
 processResources {
     // Include Env configuration for specified profile
-    from "../avocado-config/env/$propertyDrivenProfile"
+    from "../avocado-config/env/${propertyDrivenProfile}"
     exclude "**/*.gradle"
     exclude "**/config.properties"
     filesMatching("**/*.properties") { fcd ->
