@@ -4,7 +4,7 @@ package eu.davidea.avocadoserver.infrastructure.exceptions;
  * @author Davide Steduto
  * @since 08/08/2016
  */
-public class ObjectNotFoundException extends BusinessException {
+public class ObjectNotFoundException extends ServiceException {
 
     private ObjectNotFoundException() {
         super(ExceptionCode.NOT_FOUND, null);

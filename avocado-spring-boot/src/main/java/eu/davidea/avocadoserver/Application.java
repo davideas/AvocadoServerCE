@@ -8,6 +8,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Main entry point for launching the SpringBoot application.
+ */
 @Configuration
 @SpringBootApplication(exclude = JmxAutoConfiguration.class)
 @MapperScan("eu.davidea.avocadoserver.persistence.mybatis.mappers")

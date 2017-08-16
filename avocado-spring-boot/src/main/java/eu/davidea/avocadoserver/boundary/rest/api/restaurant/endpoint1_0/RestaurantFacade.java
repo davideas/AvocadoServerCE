@@ -18,15 +18,15 @@ import java.util.Objects;
  * @since 07/08/2017
  */
 @Service
-public class GetRestaurantFacade {
+public class RestaurantFacade {
 
-    private final static Logger logger = LoggerFactory.getLogger(GetRestaurantFacade.class);
+    private final static Logger logger = LoggerFactory.getLogger(RestaurantFacade.class);
 
     private GetRestaurantUseCase getRestaurantUseCase;
     private EntityToDtoHelper dtoHelper;
 
     @Autowired
-    public GetRestaurantFacade(GetRestaurantUseCase getRestaurantUseCase, EntityToDtoHelper dtoHelper) {
+    public RestaurantFacade(GetRestaurantUseCase getRestaurantUseCase, EntityToDtoHelper dtoHelper) {
         this.getRestaurantUseCase = getRestaurantUseCase;
         this.dtoHelper = dtoHelper;
     }

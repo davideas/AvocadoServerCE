@@ -20,10 +20,10 @@ import java.util.List;
 public class RestaurantResource {
 
     private final static Logger logger = LoggerFactory.getLogger(RestaurantResource.class);
-    private GetRestaurantFacade restaurantFacade;
+    private RestaurantFacade restaurantFacade;
 
     @Autowired
-    public RestaurantResource(GetRestaurantFacade restaurantFacade) {
+    public RestaurantResource(RestaurantFacade restaurantFacade) {
         this.restaurantFacade = restaurantFacade;
     }
 

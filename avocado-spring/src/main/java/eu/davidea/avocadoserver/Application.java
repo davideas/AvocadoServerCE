@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.web.WebApplicationInitializer;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
-import java.text.SimpleDateFormat;
 
 @Configuration
 @ComponentScan
@@ -69,14 +67,6 @@ public class Application implements WebApplicationInitializer {
         ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher", new DispatcherServlet(dispatcherServlet));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
-    }
-
-    @Bean
-    public Jackson2ObjectMapperBuilder objectMapperBuilder() {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        builder.indentOutput(true)
-                .dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-        return builder;
     }
 
 }

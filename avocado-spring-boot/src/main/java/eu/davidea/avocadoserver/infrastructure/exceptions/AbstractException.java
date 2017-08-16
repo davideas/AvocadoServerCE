@@ -9,23 +9,23 @@ import java.util.List;
  */
 abstract class AbstractException extends RuntimeException {
 
-    private String code;
+    private ExceptionCode code;
     private String friendlyMessage;
     private String target;
     private List<String> details;
 
     AbstractException(ExceptionCode code, String technicalMessage) {
         super(technicalMessage);
-        this.code = code.toString();
+        this.code = code;
         this.friendlyMessage = code.getFriendlyMessage();
     }
 
     public String getCode() {
-        return code;
+        return code.toString();
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public ExceptionCode getExceptionCode() {
+        return code;
     }
 
     public String getFriendlyMessage() {
