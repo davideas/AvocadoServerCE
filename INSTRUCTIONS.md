@@ -20,11 +20,19 @@
   ```
 
 # Tomcat Servlet Container
-It's always preferable to use a standalone Tomcat with custom configuration, so we can upgrade, maintain, advanced customize and keep installed the instance on the server.<br>
-We will deploy and transfer to the server only the .war file. Also we can easily associate the IDE with the server local instance.
+Despite many website and people like and suggest an embedded Tomcat, it's always preferable to use a standalone Tomcat.
+We have always to keep in mind that our application will be deployed in production, I believe that is a custom environment all the time.
+Having a .jar does not actually help when we know since the beginning we will need a .war. So, why having different deployment approach from dev to prod?
+Installation is easy:
+- Install tomcat & copy MySql connector jar library in server lib folder
+- Compile the project
+- Deploy the war (preferable via IDE)
 
-- Configure JNDI connection pool in Tomcat (Note: this is already done in META-INF/context.xml)
-- Logs will be generated under project folder via Log4J2 configuration.
+Advantages are evident since the development phase!! Especially if it's a web application.
+If requested I can list them here but also Internet is full of questions and articles to compare why is better a standalone server.
+
+- JNDI connection pool in Tomcat is configured in META-INF/context.xml
+- Logs will be generated under server logs folder via Log4J2 configuration, while console is displayed in a sub window of the IDE (another advantage!).
 
 # IDE
 - Using _IntelliJ IDEA™_: File > New > Project from Version Control > GitHub.

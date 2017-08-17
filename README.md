@@ -22,19 +22,21 @@ So those Apps are also a playground to experiment new frameworks and new feature
 **Note:** _All features are under deep analysis with continuous development; Features will be added step by step._
 
 - [Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html) by Uncle Bob
-- API (Key generation or Token generation with JWT)
-- [Spring Boot 2](https://github.com/spring-projects/spring-boot)
-- [Spring 5](https://github.com/spring-projects/spring-framework)
-- RESTful web services with Spring
+- API (Key generation or Token generation with JWT) - **Not yet started**
+- [Spring Boot 2](https://github.com/spring-projects/spring-boot/wiki) & [Spring 5](https://github.com/spring-projects/spring-framework)
+- RESTful web services with Spring - **Not fully done**
+- CORS filter - **Not started**
+- Logging filter - **Started**
+- Exception handler Advice - **Started**
 - Logging via [slf4j](https://www.slf4j.org/) API + [Log4j2](https://logging.apache.org/log4j/2.x/) with gzip and rolling strategy
-- [MyBatis 3](http://www.mybatis.org/mybatis-3) SQL Mapping Framework for Java + Integration with Spring and Spring Boot
+- [MyBatis 3](http://www.mybatis.org/mybatis-3) SQL Mapping Framework for Java + Integration with Spring Boot
 - [FlyWay](https://flywaydb.org/) Database schema migrations made easy across all environments
 - [jBCrypt](http://www.mindrot.org/projects/jBCrypt) One-Way Encryption
-- [Firebase](https://github.com/firebase/quickstart-android) Messaging with Notification manager!
-- [JUnit 5](http://junit.org/junit5/) Jupiter
-- [GrabVer](https://github.com/davideas/grabver) Gradle Automatic Build Versioning
+- [Firebase](https://github.com/firebase/quickstart-android) Messaging with Notification manager! - **Not started**
+- [JUnit 5](http://junit.org/junit5/) Jupiter - **Not fully done**
+- [GrabVer](https://github.com/davideas/grabver) Gradle Automatic Build Versioning - **Not yet applied**
 - SQL scripts for demo database schema
-- Environment configuration files (local-test-acc-prod)
+- Environment configuration files (local-acc-prod)
 - Integration with IDE: Deployment and JUnit tests can be run via command line and via IDE!
 - Maven & Gradle build tools (see [Gradle vs Maven: Feature Comparison Chart](https://gradle.org/maven-vs-gradle/))
 
