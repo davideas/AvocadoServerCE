@@ -4,9 +4,10 @@ package eu.davidea.avocadoserver.infrastructure.utilities;
  * This routine calculates the distance between two points (given the latitude/longitude of those points).
  * <p>
  * Definitions:<br>
- * - South latitudes are <i>negative</i>, east longitudes are <i>positive</i>
+ * - South latitudes are <i>negative</i><br>
+ * - East longitudes are <i>positive</i>
  * <p>
- * Passed to function:
+ * Parameters to provide:
  * <pre>
  *   lat1, lon1 = Latitude and Longitude of point 1 (in decimal degrees)
  *   lat2, lon2 = Latitude and Longitude of point 2 (in decimal degrees)
@@ -28,12 +29,21 @@ public class DistanceCalculator {
         MILE, KILOMETER, NAUTICAL_MILE
     }
 
-    public static void main(String[] args) throws java.lang.Exception {
-        System.out.println(distance(32.9697, -96.80322, 29.46786, -98.53506, Unit.MILE) + " Miles\n");
-        System.out.println(distance(32.9697, -96.80322, 29.46786, -98.53506, Unit.KILOMETER) + " Kilometers\n");
-        System.out.println(distance(32.9697, -96.80322, 29.46786, -98.53506, Unit.NAUTICAL_MILE) + " Nautical Miles\n");
-    }
-
+    /**
+     * Calculates the distance between 2 points.
+     * <p>Best for short distances and on 64bit systems.
+     * More details on <a href="https://en.wikipedia.org/wiki/Great-circle_distance">Great circle distance</a> Wikipedia page.</p>
+     * <b>Definitions:</b><br>
+     * - South latitudes are <i>negative</i><br>
+     * - East longitudes are <i>positive</i>
+     *
+     * @param lat1 Latitude of point 1 (in decimal degrees)
+     * @param lon1 Longitude of point 1 (in decimal degrees)
+     * @param lat2 Latitude of point 2 (in decimal degrees)
+     * @param lon2 Longitude of point 2 (in decimal degrees)
+     * @param unit the unit you desire for results. Possible values {@link Unit#MILE}; {@link Unit#KILOMETER}; {@link Unit#NAUTICAL_MILE}
+     * @return the distance in the unit of measure requested
+     */
     public static double distance(double lat1, double lon1, double lat2, double lon2, Unit unit) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
