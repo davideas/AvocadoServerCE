@@ -8,7 +8,7 @@ import org.slf4j.MDC;
  * @author Davide Steduto
  * @since 08/08/2016
  */
-final class LoggingMDC {
+public final class LoggingMDC {
 
     private static final String ARG_REQ_ID = "requestId";
 
@@ -18,15 +18,19 @@ final class LoggingMDC {
      * @param requestId The value to be set. Cannot be {@code null}.
      * @throws IllegalArgumentException if {@code requestId} is {@code null}
      */
-    static void setRequestId(String requestId) {
+    public static void setRequestId(String requestId) {
         MDC.put(ARG_REQ_ID, requestId);
     }
 
     /**
      * Remove any previously set {@code requestId} key from MDC.
      */
-    static void removeRequestId() {
+    public static void removeRequestId() {
         MDC.remove(ARG_REQ_ID);
+    }
+
+    public static String getRequestId() {
+        return MDC.get(ARG_REQ_ID);
     }
 
 }

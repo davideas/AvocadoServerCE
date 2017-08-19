@@ -1,7 +1,8 @@
 package eu.davidea.avocadoserver.infrastructure.exceptions;
 
+import eu.davidea.avocadoserver.infrastructure.filters.LoggingMDC;
+
 import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * @author Davide Steduto
@@ -16,13 +17,20 @@ public class ErrorResponse {
     private String[] details;
 
     public ErrorResponse() {
-        //needs empty for Test class
+        // Needs empty for Test class
     }
 
     public ErrorResponse(String code, String message) {
-        this.id = UUID.randomUUID().toString();
+        this.id = LoggingMDC.getRequestId();
         this.code = code;
         this.message = message;
+    }
+
+    public ErrorResponse(String code, String message, String target, String... details) {
+        this(code, message);
+        // Optimize the output json
+        if (target != null) this.target = target;
+        if (details != null) this.details = details;
     }
 
     public String getId() {
@@ -72,8 +80,8 @@ public class ErrorResponse {
         return "ErrorResponse={id:\"" + id
                 + "\", code:\"" + code
                 + "\", message:\"" + message
-                + "\", target:\"" + target
-                + "\", details:\"" + Arrays.toString(details)
+                + (target != null ? "\", target:\"" + target : "")
+                + (details != null ? "\", details:\"" + Arrays.toString(details) : "")
                 + "\"}";
     }
 

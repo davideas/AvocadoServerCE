@@ -7,7 +7,7 @@ package eu.davidea.avocadoserver.infrastructure.exceptions;
 public class ObjectNotFoundException extends ServiceException {
 
     private ObjectNotFoundException() {
-        super(ExceptionCode.NOT_FOUND, null);
+        super(ExceptionCode.OBJECT_NOT_FOUND, null);
     }
 
     public static ObjectNotFoundException noRestaurantFound(Long restaurantId) {

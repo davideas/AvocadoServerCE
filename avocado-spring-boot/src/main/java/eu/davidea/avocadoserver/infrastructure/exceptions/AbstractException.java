@@ -21,7 +21,7 @@ abstract class AbstractException extends RuntimeException {
     }
 
     public String getCode() {
-        return code.toString();
+        return code.name();
     }
 
     public ExceptionCode getExceptionCode() {

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -49,30 +50,48 @@ public class LogRequestIDFilter extends AbstractRequestLoggingFilter {
 //    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpRequest, HttpServletResponse response,
-                                    FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        // Create request unique Id.
+        // This will be also used in the ResponseEntity in case of error.
         final String requestId = UUID.randomUUID().toString();
         final long startTime = System.currentTimeMillis();
         LoggingMDC.setRequestId(requestId);
 
-        logStartRequest(requestId, httpRequest);
+        // Proceed with body caching
+        boolean isFirstRequest = !isAsyncDispatch(request);
+        HttpServletRequest requestToUse = request;
+
+        if (isIncludePayload() && isFirstRequest && !(request instanceof ContentCachingRequestWrapper)) {
+            requestToUse = new ContentCachingRequestWrapper(request, getMaxPayloadLength());
+        }
+
+        boolean shouldLog = shouldLog(requestToUse);
+        if (shouldLog && isFirstRequest) {
+            logStartRequest(requestId, request);
+        }
 
         try {
-            chain.doFilter(httpRequest, response);
+            // Continue with the Request!
+            filterChain.doFilter(requestToUse, response);
         } finally {
+            // Clear the requestId
             LoggingMDC.removeRequestId();
-            logEndRequest(requestId, response.getStatus(), startTime);
+            if (shouldLog && !isAsyncStarted(requestToUse)) {
+                logEndRequest(requestId, response.getStatus(), startTime);
+            }
         }
     }
 
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
-
+        // Not used
     }
 
     @Override
     protected void afterRequest(HttpServletRequest request, String message) {
-
+        // Not used
     }
 
     @Override
@@ -82,13 +101,6 @@ public class LogRequestIDFilter extends AbstractRequestLoggingFilter {
             return excludePattern.matcher(path).find();
         }
         return false;
-    }
-
-    private void logEndRequest(String requestId, int status, long startTime) {
-        long elapsed = System.currentTimeMillis() - startTime;
-        LOGGER.debug("<<< END processing HTTP request {} in {} seconds with status {}", requestId,
-                String.format(Locale.ENGLISH, "%.3f", elapsed / 1000.0),
-                status);
     }
 
     private void logStartRequest(String requestId, HttpServletRequest httpRequest) {
@@ -103,6 +115,13 @@ public class LogRequestIDFilter extends AbstractRequestLoggingFilter {
                     getMethodAndRequestURL(httpRequest),
                     getUserAgent(httpRequest));
         }
+    }
+
+    private void logEndRequest(String requestId, int status, long startTime) {
+        long elapsed = System.currentTimeMillis() - startTime;
+        LOGGER.debug("<<< END processing HTTP request {} in {} seconds with status {}", requestId,
+                String.format(Locale.ENGLISH, "%.3f", elapsed / 1000.0),
+                status);
     }
 
     private String getUserAgent(HttpServletRequest httpRequest) {

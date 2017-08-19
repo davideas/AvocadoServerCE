@@ -29,7 +29,7 @@ public class RestaurantResource {
 
     @GetMapping
     @RequestMapping()
-    public ResponseEntity findRestaurantsNearby(@RequestParam(name = "name", required = false) String name,
+    public ResponseEntity findRestaurantsNearby(@RequestParam(name = "name", required = false, value = "") String name,
                                                 @RequestParam(name = "lat", required = false) Float latitude,
                                                 @RequestParam(name = "long", required = false) Float longitude,
                                                 @RequestParam(name = "radius", required = false) Float radius)

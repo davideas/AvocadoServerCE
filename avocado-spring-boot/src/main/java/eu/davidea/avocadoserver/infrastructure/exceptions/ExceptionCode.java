@@ -1,27 +1,48 @@
 package eu.davidea.avocadoserver.infrastructure.exceptions;
 
+import org.springframework.http.HttpStatus;
+
 /**
+ * Enumeration dedicated to Error codes where a friendly message and an Http Status are preset.
+ * <p>
+ * For more info about Http Status codes:
+ * <a href="http://racksburg.com/choosing-an-http-status-code/">http://racksburg.com/choosing-an-http-status-code/</a>
+ *
  * @author Davide Steduto
  * @since 08/08/2016
  */
 public enum ExceptionCode {
 
-    INVALID_PARAMETER("Required parameter not valid or not present"),
-    UNAUTHORIZED("Unauthorized"),
-    NOT_FOUND("Not found"),
-    NOT_IMPLEMENTED("Not implemented"),
+    INVALID_PARAMETER(
+            HttpStatus.BAD_REQUEST,
+            "Required parameter not valid or not present"),
+    UNAUTHORIZED(
+            HttpStatus.UNAUTHORIZED,
+            "Invalid userId or password"),
+    OBJECT_NOT_FOUND(
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            "No entity found"),
+    NOT_IMPLEMENTED(
+            HttpStatus.NOT_IMPLEMENTED,
+            "Not implemented"),
+    TECHNICAL_ERROR(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Server encountered a technical error :-( Please see server logs");
 
-    TECHNICAL_ERROR("Server encountered a technical error :-(");
-
-
+    private HttpStatus status;
     private String friendlyMessage;
 
-    ExceptionCode(String friendlyMessage) {
+    ExceptionCode(HttpStatus status, String friendlyMessage) {
+        this.status = status;
         this.friendlyMessage = friendlyMessage;
     }
 
     public String getFriendlyMessage() {
         return friendlyMessage;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return status;
     }
 
 }
