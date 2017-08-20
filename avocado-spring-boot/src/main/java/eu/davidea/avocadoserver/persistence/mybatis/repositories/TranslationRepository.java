@@ -35,8 +35,8 @@ public class TranslationRepository {
         return mapper.getTranslationEntry(id, languageCode);
     }
 
-    public List<TranslationEntry> getTranslationsForMenuId(Long menuId) {
-        return mapper.getTranslationsForMenuId(menuId);
+    public List<TranslationEntry> getTranslationsForId(Long id) {
+        return mapper.getTranslationsForId(id);
     }
 
 }

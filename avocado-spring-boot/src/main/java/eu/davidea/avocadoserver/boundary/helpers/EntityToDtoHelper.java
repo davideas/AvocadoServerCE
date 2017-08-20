@@ -1,6 +1,8 @@
 package eu.davidea.avocadoserver.boundary.helpers;
 
+import eu.davidea.avocadoserver.boundary.rest.api.menu.MenuDTO;
 import eu.davidea.avocadoserver.boundary.rest.api.restaurant.model.RestaurantDTO;
+import eu.davidea.avocadoserver.business.menu.Menu;
 import eu.davidea.avocadoserver.business.restaurant.Restaurant;
 import org.springframework.stereotype.Component;
 
@@ -50,4 +52,7 @@ public class EntityToDtoHelper {
         return restaurantDto;
     }
 
+    public List<MenuDTO> toDto(List<Menu> menus) {
+        return null;
+    }
 }

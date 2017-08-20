@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Davide
@@ -36,6 +37,7 @@ public class GetRestaurantUseCase {
     }
 
     public List<Restaurant> findRestaurantByName(String restaurantName) {
+        Objects.requireNonNull(restaurantName);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("findRestaurantByName");
 
@@ -54,6 +56,8 @@ public class GetRestaurantUseCase {
     }
 
     public Restaurant getRestaurantById(Long restaurantId) {
+        Objects.requireNonNull(restaurantId);
+
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("getRestaurantById");
 

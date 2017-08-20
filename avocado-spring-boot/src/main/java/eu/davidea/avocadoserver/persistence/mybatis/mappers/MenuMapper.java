@@ -16,4 +16,11 @@ public interface MenuMapper {
             " order by order_id asc")
     List<Menu> getMenus(@Param("restaurantId") Long restaurantId, @Param("languageCode") String languageCode);
 
+    @Results(value = {
+            @Result(property = "title", column = "text"),
+    })
+    @Select("select m.*, te.text from menus m inner join translation_entry te on m.title = te.id" +
+            " where m.id = #{menuId} and status != 'DELETED' and language_code = #{languageCode,jdbcType=VARCHAR}")
+    Menu getMenu(@Param("menuId") Long menuId, @Param("languageCode") String languageCode);
+
 }

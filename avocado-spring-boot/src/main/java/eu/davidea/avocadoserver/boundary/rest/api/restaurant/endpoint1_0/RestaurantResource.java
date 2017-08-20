@@ -58,9 +58,18 @@ public class RestaurantResource {
     @GetMapping
     @RequestMapping("/{restaurantId}")
     public ResponseEntity getRestaurantById(@PathVariable Long restaurantId) {
-        logger.trace("getRestaurantById(id={}", restaurantId);
+        logger.trace("getRestaurantById(restaurantId={})", restaurantId);
 
         RestaurantDTO restaurantDTO = restaurantFacade.getRestaurantById(restaurantId);
+        return ResponseEntity.ok().body(restaurantDTO);
+    }
+
+    @GetMapping
+    @RequestMapping("/{restaurantId}/menus")
+    public ResponseEntity getRestaurantMenu(@PathVariable Long restaurantId) {
+        logger.trace("getRestaurantMenu(restaurantId={})", restaurantId);
+
+        RestaurantDTO restaurantDTO = restaurantFacade.getMenus(restaurantId);
         return ResponseEntity.ok().body(restaurantDTO);
     }
 

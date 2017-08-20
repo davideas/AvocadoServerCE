@@ -22,11 +22,13 @@ public interface TranslationMapper {
     @Results(value = {
             @Result(property = "languageCode", column = "language_code"),
     })
-    @Select("select * from translation_entry where id = #{id} and language_code = #{code,jdbcType=VARCHAR}")
-    TranslationEntry getTranslationEntry(@Param("id") Long id, @Param("code") String languageCode);
+    @Select("select * from translation_entry where id = #{id} and language_code = #{languageCode,jdbcType=VARCHAR}")
+    TranslationEntry getTranslationEntry(@Param("id") Long id, @Param("languageCode") String languageCode);
 
-    @Select("select te.* from menus m inner join translation_entry te on m.title = te.id" +
-            " where m.id = #{menuId} and status != 'DELETED' order by te.language_code asc")
-    List<TranslationEntry> getTranslationsForMenuId(Long menuId);
+    @Select("select * from translation_entry where id = #{id} order by te.language_code asc")
+    List<TranslationEntry> getTranslationsForId(Long id);
+
+    @Update("update translation_entry set text = #{text,jdbcType=VARCHAR} where id = #{id} and language_code = #{languageCode,jdbcType=VARCHAR}")
+    List<TranslationEntry> updateTranslation(@Param("id") Long id, @Param("languageCode") String languageCode, @Param("text") String text);
 
 }

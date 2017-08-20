@@ -1,7 +1,10 @@
 package eu.davidea.avocadoserver.boundary.rest.api.restaurant.endpoint1_0;
 
 import eu.davidea.avocadoserver.boundary.helpers.EntityToDtoHelper;
+import eu.davidea.avocadoserver.boundary.rest.api.menu.MenuDTO;
 import eu.davidea.avocadoserver.boundary.rest.api.restaurant.model.RestaurantDTO;
+import eu.davidea.avocadoserver.business.menu.GetMenuUseCase;
+import eu.davidea.avocadoserver.business.menu.Menu;
 import eu.davidea.avocadoserver.business.restaurant.GetRestaurantUseCase;
 import eu.davidea.avocadoserver.business.restaurant.Restaurant;
 import org.slf4j.Logger;
@@ -23,11 +26,14 @@ public class RestaurantFacade {
     private final static Logger logger = LoggerFactory.getLogger(RestaurantFacade.class);
 
     private GetRestaurantUseCase getRestaurantUseCase;
+    private GetMenuUseCase getMenuUseCase;
     private EntityToDtoHelper dtoHelper;
 
     @Autowired
-    public RestaurantFacade(GetRestaurantUseCase getRestaurantUseCase, EntityToDtoHelper dtoHelper) {
+    public RestaurantFacade(GetRestaurantUseCase getRestaurantUseCase,
+                            GetMenuUseCase getMenuUseCase, EntityToDtoHelper dtoHelper) {
         this.getRestaurantUseCase = getRestaurantUseCase;
+        this.getMenuUseCase = getMenuUseCase;
         this.dtoHelper = dtoHelper;
     }
 
@@ -50,11 +56,19 @@ public class RestaurantFacade {
     }
 
     @Transactional(readOnly = true)
-    public RestaurantDTO getRestaurantById(Long id) {
-        Objects.requireNonNull(id);
+    public RestaurantDTO getRestaurantById(Long restaurantId) {
+        Objects.requireNonNull(restaurantId);
 
-        Restaurant restaurant = getRestaurantUseCase.getRestaurantById(id);
+        Restaurant restaurant = getRestaurantUseCase.getRestaurantById(restaurantId);
         return dtoHelper.toDto(restaurant);
     }
 
+    public List<MenuDTO> getMenus(Long restaurantId, String languageCode) {
+        Objects.requireNonNull(restaurantId);
+        Objects.requireNonNull(languageCode);
+
+        List<Menu> menus = getMenuUseCase.getMenus(restaurantId, languageCode);
+        return dtoHelper.toDto(menus);
+
+    }
 }
