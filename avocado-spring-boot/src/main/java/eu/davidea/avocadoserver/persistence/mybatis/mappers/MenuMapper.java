@@ -9,6 +9,7 @@ import java.util.List;
 public interface MenuMapper {
 
     @Results(value = {
+            @Result(property = "translationId", column = "title"),
             @Result(property = "title", column = "text"),
     })
     @Select("select m.*, te.text from menus m inner join translation_entry te on m.title = te.id" +
@@ -17,6 +18,7 @@ public interface MenuMapper {
     List<Menu> getMenus(@Param("restaurantId") Long restaurantId, @Param("languageCode") String languageCode);
 
     @Results(value = {
+            @Result(property = "translationId", column = "title"),
             @Result(property = "title", column = "text"),
     })
     @Select("select m.*, te.text from menus m inner join translation_entry te on m.title = te.id" +

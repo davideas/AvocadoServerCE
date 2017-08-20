@@ -8,8 +8,9 @@ import java.util.Date;
 public class Menu implements AuditableEntity {
 
     private Long id;
-    private Long restaurant_id;
-    private short order_id;
+    private Long restaurantId;
+    private Long translationId;
+    private short orderId;
     private Date creDate;
     private Date modDate;
     private String title;
@@ -27,20 +28,28 @@ public class Menu implements AuditableEntity {
         this.id = id;
     }
 
-    public Long getRestaurant_id() {
-        return restaurant_id;
+    public Long getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setRestaurant_id(Long restaurant_id) {
-        this.restaurant_id = restaurant_id;
+    public void setRestaurantId(Long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
-    public short getOrder_id() {
-        return order_id;
+    public Long getTranslationId() {
+        return translationId;
     }
 
-    public void setOrder_id(short order_id) {
-        this.order_id = order_id;
+    public void setTranslationId(Long translationId) {
+        this.translationId = translationId;
+    }
+
+    public short getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(short orderId) {
+        this.orderId = orderId;
     }
 
     public String getTitle() {

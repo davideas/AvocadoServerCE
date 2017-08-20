@@ -1,5 +1,6 @@
 package eu.davidea.avocadoserver.boundary.rest.api.restaurant.endpoint1_0;
 
+import eu.davidea.avocadoserver.boundary.rest.api.menu.MenuDTO;
 import eu.davidea.avocadoserver.boundary.rest.api.restaurant.model.RestaurantDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,11 +67,11 @@ public class RestaurantResource {
 
     @GetMapping
     @RequestMapping("/{restaurantId}/menus")
-    public ResponseEntity getRestaurantMenu(@PathVariable Long restaurantId) {
+    public ResponseEntity getRestaurantMenu(@PathVariable Long restaurantId, @RequestParam String languageCode) {
         logger.trace("getRestaurantMenu(restaurantId={})", restaurantId);
 
-        RestaurantDTO restaurantDTO = restaurantFacade.getMenus(restaurantId);
-        return ResponseEntity.ok().body(restaurantDTO);
+        List<MenuDTO> menuDTOs = restaurantFacade.getMenus(restaurantId, languageCode);
+        return ResponseEntity.ok().body(menuDTOs);
     }
 
 }

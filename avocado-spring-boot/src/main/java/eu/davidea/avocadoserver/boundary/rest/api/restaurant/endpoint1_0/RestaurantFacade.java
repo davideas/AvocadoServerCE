@@ -63,9 +63,12 @@ public class RestaurantFacade {
         return dtoHelper.toDto(restaurant);
     }
 
+    @Transactional(readOnly = true)
     public List<MenuDTO> getMenus(Long restaurantId, String languageCode) {
         Objects.requireNonNull(restaurantId);
-        Objects.requireNonNull(languageCode);
+        if (languageCode == null) {
+            languageCode = "en-UK";
+        }
 
         List<Menu> menus = getMenuUseCase.getMenus(restaurantId, languageCode);
         return dtoHelper.toDto(menus);

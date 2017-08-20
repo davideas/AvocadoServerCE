@@ -55,4 +55,8 @@ public class EntityToDtoHelper {
     public List<MenuDTO> toDto(List<Menu> menus) {
         return null;
     }
+
+    public MenuDTO toDto(Menu menu) {
+        return null;
+    }
 }
