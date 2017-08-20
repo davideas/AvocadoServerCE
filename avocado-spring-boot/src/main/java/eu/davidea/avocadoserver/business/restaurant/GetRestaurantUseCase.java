@@ -3,6 +3,7 @@ package eu.davidea.avocadoserver.business.restaurant;
 import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.ObjectNotFoundException;
 import eu.davidea.avocadoserver.infrastructure.statistics.StatsLogger;
+import eu.davidea.avocadoserver.persistence.mybatis.repositories.RestaurantRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

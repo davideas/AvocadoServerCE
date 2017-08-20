@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface RestaurantMapper {
 
-
+    // https://developers.google.com/maps/solutions/store-locator/clothing-store-locator
     List<Restaurant> findRestaurantsNearby(Float latitude, Float longitude, Float radius);
 
     @Select("select * from restaurants where lower(name) like #{name,jdbcType=VARCHAR} and status != 'DELETED' order by name asc")

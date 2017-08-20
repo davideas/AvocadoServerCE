@@ -68,13 +68,6 @@ dependencies {
     // We don't need to specify and include Tomcat library in our .war, neither that is provided
     //providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
-    /*
-     * Database libraries
-     * - Database connection is retrieved via JNDI. A direct JDBC connection is used during JUnit testing
-     * - MySql Connector Driver is copied under ${CATALINA_BASE}/lib and is configured in META-INF/context.xml
-     *   So we don't need to include it in our .war file, in theory, neither provided.
-     *   https://mvnrepository.com/artifact/mysql/mysql-connector-java */
-    compileOnly("mysql:mysql-connector-java:${mysqlConnectorVersion}")
     /* - Hikari Connection Pool is configured in META-INF/context.xml
      *   Hikari is loaded on JNDI lookup by Tomcat and used when testing MyBatis to create a connection via JDBC.
      *   The library is already included in Spring Boot 2 but it is preferable to specify the latest version */
@@ -103,11 +96,12 @@ dependencies {
 }
 
 // Used by Flyway when Gradle is used in command line mode
+// https://flywaydb.org/documentation/gradle/migrate
 flyway {
     url = datasourceUrl
+    driver = datasourceDriverClassName
     user = datasourceUsername
     password = datasourcePassword
-    encoding = 'UTF-8'
 }
 
 junitPlatform {

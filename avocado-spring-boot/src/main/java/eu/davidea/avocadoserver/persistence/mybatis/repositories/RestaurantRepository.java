@@ -1,7 +1,6 @@
 package eu.davidea.avocadoserver.persistence.mybatis.repositories;
 
 import eu.davidea.avocadoserver.business.restaurant.Restaurant;
-import eu.davidea.avocadoserver.business.restaurant.RestaurantRepository;
 import eu.davidea.avocadoserver.persistence.mybatis.mappers.RestaurantMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,13 +12,13 @@ import java.util.List;
  * @since 17/08/2016
  */
 @Repository("restaurantRepository")
-class RestaurantRepositoryImpl implements RestaurantRepository {
+public class RestaurantRepository {
 
     private final RestaurantMapper mapper;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    RestaurantRepositoryImpl(RestaurantMapper mapper) {
+    RestaurantRepository(RestaurantMapper mapper) {
         this.mapper = mapper;
     }
 

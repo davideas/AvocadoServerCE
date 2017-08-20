@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS CURRENCY_CODE (
  */
 CREATE TABLE IF NOT EXISTS RESTAURANT_STATUS (
   code        VARCHAR(50) PRIMARY KEY,
-  cre_date    TIMESTAMP    NOT NULL,
-  mod_date    TIMESTAMP    NOT NULL,
+  cre_date    TIMESTAMP NOT NULL,
+  mod_date    TIMESTAMP NOT NULL,
   description VARCHAR(255)
 );
 
@@ -68,29 +68,29 @@ CREATE TABLE IF NOT EXISTS RESTAURANT_STATUS (
  */
 CREATE TABLE IF NOT EXISTS RESTAURANTS (
   id               BIGINT PRIMARY KEY       AUTO_INCREMENT,
-  cre_date         TIMESTAMP       NOT NULL,
-  mod_date         TIMESTAMP       NOT NULL,
-  status           VARCHAR(50)     DEFAULT 'CREATED',
-  name             VARCHAR(255)    NOT NULL,
-  tables           SMALLINT COMMENT 'Number of tables',
-  places           SMALLINT COMMENT 'Number of places',
-  language_code    VARCHAR(5)      NOT NULL,
-  country_code     VARCHAR(2)      NOT NULL,
-  currency_code    VARCHAR(3)      NOT NULL,
-  latitude         FLOAT,
-  longitude        FLOAT,
+  cre_date         TIMESTAMP    NOT NULL,
+  mod_date         TIMESTAMP    NOT NULL,
+  status           VARCHAR(50)              DEFAULT 'CREATED',
+  name             VARCHAR(255) NOT NULL,
+  country_code     VARCHAR(2)   NOT NULL,
+  language_code    VARCHAR(5)   NOT NULL,
+  currency_code    VARCHAR(3)   NOT NULL,
+  latitude         FLOAT(10, 6),
+  longitude        FLOAT(10, 6),
   display_address  VARCHAR(255),
   display_zip      VARCHAR(10),
-  display_city     VARCHAR(255)    NOT NULL,
+  display_city     VARCHAR(255) NOT NULL,
   display_province VARCHAR(255),
-  display_email    VARCHAR(255)    NOT NULL,
+  display_email    VARCHAR(255) NOT NULL,
   display_phone    VARCHAR(50),
   website          VARCHAR(255),
+  tables           SMALLINT COMMENT 'Number of tables',
+  places           SMALLINT COMMENT 'Number of places',
   open_hours       VARCHAR(255),
   description      VARCHAR(255),
   last_login_date  TIMESTAMP,
-  login            VARCHAR(255)    NOT NULL,
-  password         VARCHAR(255)    NOT NULL
+  login            VARCHAR(255) NOT NULL,
+  password         VARCHAR(255) NOT NULL
 );
 
 /* ========== CONSTRAINTS ========== */
