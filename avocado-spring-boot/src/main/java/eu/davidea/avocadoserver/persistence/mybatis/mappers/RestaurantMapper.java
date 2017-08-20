@@ -1,6 +1,7 @@
 package eu.davidea.avocadoserver.persistence.mybatis.mappers;
 
 import eu.davidea.avocadoserver.business.restaurant.Restaurant;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @since 07/08/2017
  */
 @Mapper
+@CacheNamespace(flushInterval = 60000 * 10) // 10 minutes
 public interface RestaurantMapper {
 
     // https://developers.google.com/maps/solutions/store-locator/clothing-store-locator

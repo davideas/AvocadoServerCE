@@ -44,6 +44,7 @@ public class Restaurant implements AuditableEntity, Serializable {
 
 
     public Restaurant() {
+        creDate = modDate = new Date();
     }
 
     public Long getId() {

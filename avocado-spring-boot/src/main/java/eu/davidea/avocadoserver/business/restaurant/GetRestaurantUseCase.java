@@ -2,7 +2,7 @@ package eu.davidea.avocadoserver.business.restaurant;
 
 import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.ObjectNotFoundException;
-import eu.davidea.avocadoserver.infrastructure.statistics.StatsLogger;
+import eu.davidea.avocadoserver.infrastructure.statistics.QueryStatsLogger;
 import eu.davidea.avocadoserver.persistence.mybatis.repositories.RestaurantRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +22,13 @@ public class GetRestaurantUseCase {
     private static final Logger logger = LoggerFactory.getLogger(GetRestaurantUseCase.class);
 
     private RestaurantRepository restaurantRepository;
-    private StatsLogger statsLogger;
+    private QueryStatsLogger queryStatsLogger;
 
     @Autowired
     public GetRestaurantUseCase(RestaurantRepository restaurantRepository,
-                                StatsLogger statsLogger) {
+                                QueryStatsLogger queryStatsLogger) {
         this.restaurantRepository = restaurantRepository;
-        this.statsLogger = statsLogger;
+        this.queryStatsLogger = queryStatsLogger;
     }
 
     public List<Restaurant> findRestaurantsNearby(Float latitude, Float longitude, Float radius) {
@@ -49,7 +49,7 @@ public class GetRestaurantUseCase {
 
         } finally {
             stopWatch.stop();
-            statsLogger.logQueryStats(stopWatch);
+            queryStatsLogger.logQueryStats(stopWatch);
         }
     }
 
@@ -66,7 +66,7 @@ public class GetRestaurantUseCase {
 
         } finally {
             stopWatch.stop();
-            statsLogger.logQueryStats(stopWatch);
+            queryStatsLogger.logQueryStats(stopWatch);
         }
     }
 

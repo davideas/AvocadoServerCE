@@ -10,7 +10,7 @@ import org.springframework.util.StopWatch;
  * @since 07/08/2017
  */
 @Component
-public class StatsLogger {
+public class QueryStatsLogger {
 
     private static final Logger QUERY_STATS_LOGGER = LoggerFactory.getLogger("QUERY-STATS");
 

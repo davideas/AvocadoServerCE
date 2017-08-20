@@ -22,16 +22,16 @@ CREATE TABLE IF NOT EXISTS LANGUAGE_CODE (
 );
 
 CREATE TABLE IF NOT EXISTS TRANSLATION (
-  id BIGINT PRIMARY KEY
+  id BIGINT PRIMARY KEY AUTO_INCREMENT
 );
 
 CREATE TABLE IF NOT EXISTS TRANSLATION_ENTRY (
-  id             BIGINT,
-  languange_code VARCHAR(5),
-  cre_date       TIMESTAMP NOT NULL,
-  mod_date       TIMESTAMP NOT NULL,
-  name           VARCHAR(100) COMMENT 'English name',
-  description    BLOB
+  id            BIGINT,
+  language_code VARCHAR(5),
+  cre_date      TIMESTAMP NOT NULL,
+  mod_date      TIMESTAMP NOT NULL,
+  name          VARCHAR(100) COMMENT 'English name',
+  text          VARCHAR(4000)
 );
 
 CREATE TABLE IF NOT EXISTS COUNTRY_CODE (
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS CURRENCY_CODE (
 /* ========== RESTAURANTS ========== */
 
 /**
- * Statuses to manage the restaurant visibility.
+ * Statuses to manage the Restaurant visibility.
  */
 CREATE TABLE IF NOT EXISTS RESTAURANT_STATUS (
   code        VARCHAR(50) PRIMARY KEY,
@@ -93,12 +93,39 @@ CREATE TABLE IF NOT EXISTS RESTAURANTS (
   password         VARCHAR(255) NOT NULL
 );
 
+/* ========== MENUS ========== */
+
+/**
+ * Statuses to manage the Menu & Item visibility.
+ */
+CREATE TABLE IF NOT EXISTS MENU_STATUS (
+  code        VARCHAR(50) PRIMARY KEY,
+  cre_date    TIMESTAMP NOT NULL,
+  mod_date    TIMESTAMP NOT NULL,
+  description VARCHAR(255)
+);
+
+/**
+ * Menu list of the Restaurants.
+ */
+CREATE TABLE IF NOT EXISTS MENUS (
+  id            BIGINT PRIMARY KEY       AUTO_INCREMENT,
+  restaurant_id BIGINT,
+  order_id      TINYINT   NOT NULL
+  COMMENT 'Sorting number for the menu',
+  cre_date      TIMESTAMP NOT NULL,
+  mod_date      TIMESTAMP NOT NULL,
+  title         BIGINT
+  COMMENT 'Menu title ref. translation id',
+  status        VARCHAR(50)              DEFAULT 'CREATED'
+);
+
 /* ========== CONSTRAINTS ========== */
 
 ALTER TABLE TRANSLATION_ENTRY
-  ADD CONSTRAINT PK_TRE_ID_LAN_CODE PRIMARY KEY (id, languange_code),
+  ADD CONSTRAINT PK_TRE_ID_LAN_CODE PRIMARY KEY (id, language_code),
   ADD CONSTRAINT FK_TRE_ID_TRN_ID FOREIGN KEY (id) REFERENCES TRANSLATION (id),
-  ADD CONSTRAINT FK_TRE_ID_LAN_CODE FOREIGN KEY (languange_code) REFERENCES LANGUAGE_CODE (code);
+  ADD CONSTRAINT FK_TRE_ID_LAN_CODE FOREIGN KEY (language_code) REFERENCES LANGUAGE_CODE (code);
 
 ALTER TABLE COUNTRY_CODE
   ADD CONSTRAINT FK_CCD_DESC FOREIGN KEY (description) REFERENCES TRANSLATION (id);
@@ -121,3 +148,7 @@ CREATE INDEX IDX_RST_LONG
   ON RESTAURANTS (longitude);
 CREATE INDEX IDX_RST_CITY
   ON RESTAURANTS (display_city);
+
+ALTER TABLE MENUS
+  ADD CONSTRAINT FK_MNU_TITLE FOREIGN KEY (title) REFERENCES TRANSLATION (id),
+  ADD CONSTRAINT FK_MNU_STATUS FOREIGN KEY (status) REFERENCES MENU_STATUS (code);

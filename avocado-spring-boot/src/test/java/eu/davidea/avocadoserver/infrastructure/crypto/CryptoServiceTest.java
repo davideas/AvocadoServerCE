@@ -2,25 +2,24 @@ package eu.davidea.avocadoserver.infrastructure.crypto;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.StopWatch;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * Not extending from SpringBootTest so the tests are faster.
+ *
  * @author Davide
  * @since 12/08/2017
  */
-@ExtendWith(SpringExtension.class)
 public class CryptoServiceTest {
 
     @Test
     @DisplayName("BCrypt password matches")
     public void checkPasswordTest_OK() throws Exception {
         CryptoService cryptoService = new CryptoService();
-        String password = "thisIsSuperLong69CharsPasswordWithSome[*#ò+_@£$%&/()StrangeCharacter!";
+        String password = "ThisIsSuperLong69CharsPasswordWithSome[*#ò+_@£$&/()StrangeCharacters!";
 
         StopWatch watch = new StopWatch("checkPasswordTest_OK");
         watch.start("hashPassword");
