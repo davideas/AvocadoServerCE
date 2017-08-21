@@ -1,11 +1,13 @@
 package eu.davidea.avocadoserver.persistence.mybatis.repositories;
 
-import eu.davidea.avocadoserver.business.translation.TranslationEntry;
-import eu.davidea.avocadoserver.persistence.mybatis.mappers.TranslationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import eu.davidea.avocadoserver.business.translation.Translation;
+import eu.davidea.avocadoserver.business.translation.TranslationEntry;
+import eu.davidea.avocadoserver.persistence.mybatis.mappers.TranslationMapper;
 
 /**
  * @author Davide
@@ -22,9 +24,15 @@ public class TranslationRepository {
         this.mapper = mapper;
     }
 
-    public long createNewTranslation() {
-        mapper.newTranslationPk();
-        return mapper.getLastInsertId();
+    public Long insertNewTranslation(Translation translation) {
+        mapper.insertNewTranslation(translation);
+        Long pk = mapper.getLastInsertId();
+        translation.setId(pk);
+        return pk;
+    }
+
+    public Translation getTranslation(Long id) {
+        return mapper.getTranslation(id);
     }
 
     public void insertTranslationEntry(TranslationEntry entry) {
@@ -35,8 +43,12 @@ public class TranslationRepository {
         return mapper.getTranslationEntry(id, languageCode);
     }
 
-    public List<TranslationEntry> getTranslationsForId(Long id) {
-        return mapper.getTranslationsForId(id);
+    public List<TranslationEntry> getTranslationEntriesForId(Long id) {
+        return mapper.getTranslationEntriesForId(id);
+    }
+
+    public int updateTranslationEntry(TranslationEntry entry) {
+        return mapper.updateTranslationEntry(entry.getId(), entry.getLanguageCode(), entry.getText());
     }
 
 }

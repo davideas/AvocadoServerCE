@@ -1,14 +1,15 @@
 package eu.davidea.avocadoserver.business.translation;
 
-import eu.davidea.avocadoserver.business.restaurant.GetRestaurantUseCase;
-import eu.davidea.avocadoserver.infrastructure.statistics.QueryStatsLogger;
-import eu.davidea.avocadoserver.persistence.mybatis.repositories.TranslationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import eu.davidea.avocadoserver.business.restaurant.GetRestaurantUseCase;
+import eu.davidea.avocadoserver.infrastructure.statistics.QueryStatsLogger;
+import eu.davidea.avocadoserver.persistence.mybatis.repositories.TranslationRepository;
 
 /**
  * @author Davide
@@ -28,8 +29,8 @@ public class GetTranslationUseCase {
         this.queryStatsLogger = queryStatsLogger;
     }
 
-    public List<TranslationEntry> getTranslationForId(Long translationId) {
-        return translationRepository.getTranslationsForId(translationId);
+    public List<TranslationEntry> getTranslationsForId(Long translationId) {
+        return translationRepository.getTranslationEntriesForId(translationId);
     }
 
 }

@@ -1,17 +1,18 @@
 package eu.davidea.avocadoserver.persistence.mybatis.repositories;
 
-import eu.davidea.avocadoserver.business.menu.Menu;
-import eu.davidea.avocadoserver.persistence.mybatis.mappers.MenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import eu.davidea.avocadoserver.business.menu.Menu;
+import eu.davidea.avocadoserver.persistence.mybatis.mappers.MenuMapper;
+
 /**
  * @author Davide
  * @since 17/08/2016
  */
-@Repository("restaurantRepository")
+@Repository("menuRepository")
 public class MenuRepository {
 
     private final MenuMapper mapper;

@@ -9,43 +9,46 @@ set global innodb_file_per_table = true;
 CREATE TABLE IF NOT EXISTS CONFIGURATION (
   code     VARCHAR(128)  NOT NULL PRIMARY KEY,
   cre_date TIMESTAMP     NOT NULL,
-  mod_dt   TIMESTAMP     NOT NULL,
+  mod_date TIMESTAMP     NOT NULL,
   value    VARCHAR(4000) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS LANGUAGE_CODE (
   code        VARCHAR(5) PRIMARY KEY,
-  cre_date    TIMESTAMP    NOT NULL,
-  mod_date    TIMESTAMP    NOT NULL,
   name        VARCHAR(100) NOT NULL,
   name_native VARCHAR(100)
 );
 
+/*
+ * Type of the translation (Menu, Ingredient, Dish, Custom)
+ */
+CREATE TABLE IF NOT EXISTS TRANSLATION_TYPE (
+  name        VARCHAR(50) PRIMARY KEY,
+  description VARCHAR(100)
+);
+
 CREATE TABLE IF NOT EXISTS TRANSLATION (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT
+  id   BIGINT PRIMARY KEY AUTO_INCREMENT,
+  type VARCHAR(50)  NOT NULL
+  COMMENT 'Type of the translation (Menu, Ingredient, Dish, Custom)',
+  name VARCHAR(100) NOT NULL
+  COMMENT 'English name of the translation'
 );
 
 CREATE TABLE IF NOT EXISTS TRANSLATION_ENTRY (
   id            BIGINT,
   language_code VARCHAR(5),
-  cre_date      TIMESTAMP NOT NULL,
-  mod_date      TIMESTAMP NOT NULL,
-  name          VARCHAR(100) COMMENT 'English name',
   text          VARCHAR(4000)
 );
 
 CREATE TABLE IF NOT EXISTS COUNTRY_CODE (
   code        VARCHAR(2) PRIMARY KEY,
-  cre_date    TIMESTAMP    NOT NULL,
-  mod_date    TIMESTAMP    NOT NULL,
   name        VARCHAR(100) NOT NULL,
   description BIGINT COMMENT 'Country translation name'
 );
 
 CREATE TABLE IF NOT EXISTS CURRENCY_CODE (
   code        VARCHAR(3) PRIMARY KEY,
-  cre_date    TIMESTAMP    NOT NULL,
-  mod_date    TIMESTAMP    NOT NULL,
   symbol      VARCHAR(10)  NOT NULL,
   name        VARCHAR(100) NOT NULL,
   description BIGINT COMMENT 'Currency translation name'
@@ -58,8 +61,6 @@ CREATE TABLE IF NOT EXISTS CURRENCY_CODE (
  */
 CREATE TABLE IF NOT EXISTS RESTAURANT_STATUS (
   code        VARCHAR(50) PRIMARY KEY,
-  cre_date    TIMESTAMP NOT NULL,
-  mod_date    TIMESTAMP NOT NULL,
   description VARCHAR(255)
 );
 
@@ -100,8 +101,6 @@ CREATE TABLE IF NOT EXISTS RESTAURANTS (
  */
 CREATE TABLE IF NOT EXISTS MENU_STATUS (
   code        VARCHAR(50) PRIMARY KEY,
-  cre_date    TIMESTAMP NOT NULL,
-  mod_date    TIMESTAMP NOT NULL,
   description VARCHAR(255)
 );
 
@@ -121,6 +120,9 @@ CREATE TABLE IF NOT EXISTS MENUS (
 );
 
 /* ========== CONSTRAINTS ========== */
+
+ALTER TABLE TRANSLATION
+  ADD CONSTRAINT FK_TRA_TYPE FOREIGN KEY (type) REFERENCES TRANSLATION_TYPE (name);
 
 ALTER TABLE TRANSLATION_ENTRY
   ADD CONSTRAINT PK_TRE_ID_LAN_CODE PRIMARY KEY (id, language_code),

@@ -1,9 +1,9 @@
 package eu.davidea.avocadoserver.business.menu;
 
+import java.util.Date;
+
 import eu.davidea.avocadoserver.business.audit.AuditableEntity;
 import eu.davidea.avocadoserver.business.enums.EnumMenuStatus;
-
-import java.util.Date;
 
 public class Menu implements AuditableEntity {
 
@@ -13,7 +13,7 @@ public class Menu implements AuditableEntity {
     private short orderId;
     private Date creDate;
     private Date modDate;
-    private String title;
+    private String title; //This is actually the title of the menu translated
     private EnumMenuStatus status;
 
     public Menu() {
