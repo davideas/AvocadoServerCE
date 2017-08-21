@@ -1,20 +1,15 @@
 package eu.davidea.avocadoserver.persistence.mybatis.mappers;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import eu.davidea.avocadoserver.business.translation.Translation;
+import eu.davidea.avocadoserver.business.translation.TranslationEntry;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
-import eu.davidea.avocadoserver.business.translation.Translation;
-import eu.davidea.avocadoserver.business.translation.TranslationEntry;
-
 @Mapper
 public interface TranslationMapper {
+
+    /* TRANSLATION */
 
     @Insert("insert into translation (type, name) values (#{type,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})")
     void insertNewTranslation(Translation translation);
@@ -25,6 +20,8 @@ public interface TranslationMapper {
     // https://stackoverflow.com/a/45786973/3397345
     @Select("select last_insert_id()")
     Long getLastInsertId();
+
+    /* TRANSLATION ENTRY */
 
     @Insert("insert into translation_entry (id, language_code, text) " +
             "values (#{id}, #{languageCode,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR})")

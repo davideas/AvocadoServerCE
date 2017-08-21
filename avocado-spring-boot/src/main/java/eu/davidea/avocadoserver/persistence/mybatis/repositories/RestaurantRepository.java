@@ -1,5 +1,6 @@
 package eu.davidea.avocadoserver.persistence.mybatis.repositories;
 
+import eu.davidea.avocadoserver.business.audit.LogQueryStats;
 import eu.davidea.avocadoserver.business.restaurant.Restaurant;
 import eu.davidea.avocadoserver.persistence.mybatis.mappers.RestaurantMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,13 @@ public class RestaurantRepository {
         return null;
     }
 
+    @LogQueryStats
     public List<Restaurant> findRestaurantByName(String name) {
         name = "%" + name.toLowerCase() + "%";
         return mapper.findRestaurantByName(name);
     }
 
+    @LogQueryStats
     public Restaurant getRestaurantById(Long id) {
         return mapper.getRestaurantById(id);
     }

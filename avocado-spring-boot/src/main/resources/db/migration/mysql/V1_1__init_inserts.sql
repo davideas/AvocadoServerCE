@@ -34,4 +34,4 @@ INSERT INTO MENU_STATUS (code, description) VALUES ('VISIBLE', 'Menu is currentl
 INSERT INTO MENU_STATUS (code, description) VALUES ('INVISIBLE', 'Menu is invisible to the public but still visible to the owner.');
 INSERT INTO MENU_STATUS (code, description) VALUES ('DELETED', 'Menu has been removed and cannot be accessed by the owner. It can only be visible by the admin in the admin console.');
 
-INSERT INTO MENUS (restaurant_id, order_id, cre_date, mod_date, title, status) VALUES (1, 1, current_timestamp(), current_timestamp(), 1, 'CREATED');
+INSERT INTO MENUS (restaurant_id, order_id, cre_date, mod_date, title_trans_id, status) VALUES (1, 1, current_timestamp(), current_timestamp(), 1, 'CREATED');

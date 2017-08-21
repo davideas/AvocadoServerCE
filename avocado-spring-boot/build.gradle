@@ -50,6 +50,7 @@ dependencies {
      */
     compileOnly("javax.validation:validation-api:${javaxValidationVersion}")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-aop")
     // http://www.mindrot.org/projects/jBCrypt
     compile("de.svenkubiak:jBCrypt:${jBCryptVersion}")
     // Log4j2 via slf4j API. Configuration is per environment env/<env>/log4j2.xml

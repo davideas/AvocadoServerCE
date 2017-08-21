@@ -26,7 +26,7 @@ So those Apps are also a playground to experiment new frameworks and new feature
 - [Spring Boot 2](https://github.com/spring-projects/spring-boot/wiki) & [Spring 5](https://github.com/spring-projects/spring-framework)
 - RESTful web services with Spring - **Not fully done**
 - CORS filter - **Not started**
-- Logging filter
+- Logging filter and query stats with Spring AOP
 - Exception handler advice
 - Logging via [slf4j](https://www.slf4j.org/) API + [Log4j2](https://logging.apache.org/log4j/2.x/) with gzip and rolling strategy
 - [MyBatis 3](http://www.mybatis.org/mybatis-3) SQL Mapping Framework for Java + Integration with Spring Boot

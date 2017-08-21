@@ -1,12 +1,12 @@
 package eu.davidea.avocadoserver.persistence.mybatis.repositories;
 
+import eu.davidea.avocadoserver.business.audit.LogQueryStats;
+import eu.davidea.avocadoserver.business.menu.Menu;
+import eu.davidea.avocadoserver.persistence.mybatis.mappers.MenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-import eu.davidea.avocadoserver.business.menu.Menu;
-import eu.davidea.avocadoserver.persistence.mybatis.mappers.MenuMapper;
 
 /**
  * @author Davide
@@ -23,12 +23,9 @@ public class MenuRepository {
         this.mapper = mapper;
     }
 
+    @LogQueryStats
     public List<Menu> getMenus(Long restaurantId, String languageCode) {
         return mapper.getMenus(restaurantId, languageCode);
-    }
-
-    public Menu getMenu(Long menuId, String languageCode) {
-        return mapper.getMenu(menuId, languageCode);
     }
 
 }

@@ -1,18 +1,18 @@
 package eu.davidea.avocadoserver.business.menu;
 
-import java.util.Date;
-
 import eu.davidea.avocadoserver.business.audit.AuditableEntity;
 import eu.davidea.avocadoserver.business.enums.EnumMenuStatus;
+
+import java.util.Date;
 
 public class Menu implements AuditableEntity {
 
     private Long id;
     private Long restaurantId;
-    private Long translationId;
     private short orderId;
     private Date creDate;
     private Date modDate;
+    private Long translationId; //This is the title linked as translation id
     private String title; //This is actually the title of the menu translated
     private EnumMenuStatus status;
 
