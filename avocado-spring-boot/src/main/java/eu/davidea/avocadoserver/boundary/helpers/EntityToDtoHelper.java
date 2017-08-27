@@ -1,7 +1,7 @@
 package eu.davidea.avocadoserver.boundary.helpers;
 
 import eu.davidea.avocadoserver.boundary.rest.api.menu.MenuDTO;
-import eu.davidea.avocadoserver.boundary.rest.api.restaurant.model.RestaurantDTO;
+import eu.davidea.avocadoserver.boundary.rest.api.restaurant.RestaurantDTO;
 import eu.davidea.avocadoserver.business.menu.Menu;
 import eu.davidea.avocadoserver.business.restaurant.Restaurant;
 import org.springframework.stereotype.Component;
@@ -27,10 +27,10 @@ public class EntityToDtoHelper {
         RestaurantDTO restaurantDto = new RestaurantDTO();
 
         restaurantDto.setId(restaurant.getId());
+        restaurantDto.setUserId(restaurant.getUserId());
         restaurantDto.setCreDate(restaurant.getCreDate());
         restaurantDto.setModDate(restaurant.getModDate());
         restaurantDto.setName(restaurant.getName());
-        restaurantDto.setLastLoginDate(restaurant.getLastLoginDate());
         restaurantDto.setTables(restaurant.getTables());
         restaurantDto.setPlaces(restaurant.getPlaces());
         restaurantDto.setLanguageCode(restaurant.getLanguageCode());
@@ -38,14 +38,14 @@ public class EntityToDtoHelper {
         restaurantDto.setCurrencyCode(restaurant.getCurrencyCode());
         restaurantDto.setLatitude(restaurant.getLatitude());
         restaurantDto.setLongitude(restaurant.getLongitude());
-        restaurantDto.setAddress(restaurant.getAddress());
-        restaurantDto.setZip(restaurant.getZip());
-        restaurantDto.setCity(restaurant.getCity());
-        restaurantDto.setProvince(restaurant.getProvince());
-        restaurantDto.setEmail(restaurant.getEmail());
-        restaurantDto.setPhone(restaurant.getPhone());
+        restaurantDto.setDistance(restaurant.getDistance());
+        restaurantDto.setDisplayAddress(restaurant.getDisplayAddress());
+        restaurantDto.setDisplayZip(restaurant.getDisplayZip());
+        restaurantDto.setDisplayCity(restaurant.getDisplayCity());
+        restaurantDto.setDisplayProvince(restaurant.getDisplayProvince());
+        restaurantDto.setDisplayEmail(restaurant.getDisplayEmail());
+        restaurantDto.setDisplayPhone(restaurant.getDisplayPhone());
         restaurantDto.setWebsite(restaurant.getWebsite());
-        restaurantDto.setOpenHours(restaurant.getOpenHours());
         restaurantDto.setDescription(restaurant.getDescription());
         restaurantDto.setStatus(restaurant.getStatus());
 

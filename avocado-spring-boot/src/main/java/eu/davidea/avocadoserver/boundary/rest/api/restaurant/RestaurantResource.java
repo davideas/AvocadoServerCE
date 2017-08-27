@@ -1,7 +1,6 @@
-package eu.davidea.avocadoserver.boundary.rest.api.restaurant.endpoint1_0;
+package eu.davidea.avocadoserver.boundary.rest.api.restaurant;
 
-import eu.davidea.avocadoserver.boundary.rest.api.menu.MenuDTO;
-import eu.davidea.avocadoserver.boundary.rest.api.restaurant.model.RestaurantDTO;
+import eu.davidea.avocadoserver.business.enums.EnumUnitMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,8 @@ public class RestaurantResource {
     public ResponseEntity findRestaurantsNearby(@RequestParam(name = "name", required = false, value = "") String name,
                                                 @RequestParam(name = "lat", required = false) Float latitude,
                                                 @RequestParam(name = "long", required = false) Float longitude,
-                                                @RequestParam(name = "radius", required = false) Float radius)
+                                                @RequestParam(name = "radius", required = false) Short radius,
+                                                @RequestParam(name = "unit", required = false) EnumUnitMeasure unit)
             throws MissingServletRequestParameterException {
 
         List<RestaurantDTO> restaurantDtoList;
@@ -47,10 +47,10 @@ public class RestaurantResource {
         } else if (longitude == null) {
             throw new MissingServletRequestParameterException("long", "Float");
         } else if (radius == null) {
-            throw new MissingServletRequestParameterException("radius", "Float");
+            throw new MissingServletRequestParameterException("radius", "Short");
         } else {
-            logger.trace("findRestaurantsNearby(lat={}, long={}, radius={})", latitude, longitude, radius);
-            restaurantDtoList = restaurantFacade.findRestaurantsNearby(latitude, longitude, radius);
+            logger.trace("findRestaurantsNearby(lat={}, long={}, radius={}, unit={})", latitude, longitude, radius, unit);
+            restaurantDtoList = restaurantFacade.findRestaurantsNearby(latitude, longitude, radius, unit);
         }
 
         return ResponseEntity.ok().body(restaurantDtoList);
@@ -63,15 +63,6 @@ public class RestaurantResource {
 
         RestaurantDTO restaurantDTO = restaurantFacade.getRestaurantById(restaurantId);
         return ResponseEntity.ok().body(restaurantDTO);
-    }
-
-    @GetMapping
-    @RequestMapping("/{restaurantId}/menus")
-    public ResponseEntity getRestaurantMenu(@PathVariable Long restaurantId, @RequestParam String languageCode) {
-        logger.trace("getRestaurantMenu(restaurantId={})", restaurantId);
-
-        List<MenuDTO> menuDTOs = restaurantFacade.getMenus(restaurantId, languageCode);
-        return ResponseEntity.ok().body(menuDTOs);
     }
 
 }

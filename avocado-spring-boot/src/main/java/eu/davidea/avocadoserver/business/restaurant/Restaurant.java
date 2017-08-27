@@ -12,36 +12,31 @@ import java.util.Date;
  */
 public class Restaurant implements AuditableEntity, Serializable {
 
-    private static final long serialVersionUID = 5838467921776717987L;
+    private static final long serialVersionUID = -1772933895066564128L;
 
     private Long id;
-
     private Date creDate;
     private Date modDate;
-    private Date lastLoginDate;
-
+    private Long userId;
     private String name;
-    private Integer tables;
-    private Integer places;
+    private EnumRestaurantStatus status;
     private String languageCode;
     private String countryCode;
     private String currencyCode;
     private Float latitude;
     private Float longitude;
+    private Short distance;
 
-    private String address;
-    private String zip;
-    private String city;
-    private String province;
-
-    private String email;
-    private String phone;
+    private String displayAddress;
+    private String displayZip;
+    private String displayCity;
+    private String displayProvince;
+    private String displayEmail;
+    private String displayPhone;
     private String website;
-
-    private String openHours;
+    private Short tables;
+    private Short places;
     private String description;
-    private EnumRestaurantStatus status;
-
 
     public Restaurant() {
         creDate = modDate = new Date();
@@ -75,12 +70,12 @@ public class Restaurant implements AuditableEntity, Serializable {
         this.modDate = modDate;
     }
 
-    public Date getLastLoginDate() {
-        return lastLoginDate;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setLastLoginDate(Date lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -91,28 +86,20 @@ public class Restaurant implements AuditableEntity, Serializable {
         this.name = name;
     }
 
-    public Integer getTables() {
-        return tables;
+    public EnumRestaurantStatus getStatus() {
+        return status;
     }
 
-    public void setTables(Integer tables) {
-        this.tables = tables;
-    }
-
-    public Integer getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(Integer places) {
-        this.places = places;
+    public void setStatus(EnumRestaurantStatus status) {
+        this.status = status;
     }
 
     public String getLanguageCode() {
         return languageCode;
     }
 
-    public void setLanguageCode(String localeCode) {
-        this.languageCode = localeCode;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getCountryCode() {
@@ -147,52 +134,60 @@ public class Restaurant implements AuditableEntity, Serializable {
         this.longitude = longitude;
     }
 
-    public String getAddress() {
-        return address;
+    public Short getDistance() {
+        return distance;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDistance(Short distance) {
+        this.distance = distance;
     }
 
-    public String getZip() {
-        return zip;
+    public String getDisplayAddress() {
+        return displayAddress;
     }
 
-    public void setZip(String zip) {
-        this.zip = zip;
+    public void setDisplayAddress(String displayAddress) {
+        this.displayAddress = displayAddress;
     }
 
-    public String getCity() {
-        return city;
+    public String getDisplayZip() {
+        return displayZip;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setDisplayZip(String displayZip) {
+        this.displayZip = displayZip;
     }
 
-    public String getProvince() {
-        return province;
+    public String getDisplayCity() {
+        return displayCity;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setDisplayCity(String displayCity) {
+        this.displayCity = displayCity;
     }
 
-    public String getEmail() {
-        return email;
+    public String getDisplayProvince() {
+        return displayProvince;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDisplayProvince(String displayProvince) {
+        this.displayProvince = displayProvince;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getDisplayEmail() {
+        return displayEmail;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setDisplayEmail(String displayEmail) {
+        this.displayEmail = displayEmail;
+    }
+
+    public String getDisplayPhone() {
+        return displayPhone;
+    }
+
+    public void setDisplayPhone(String displayPhone) {
+        this.displayPhone = displayPhone;
     }
 
     public String getWebsite() {
@@ -203,12 +198,20 @@ public class Restaurant implements AuditableEntity, Serializable {
         this.website = website;
     }
 
-    public String getOpenHours() {
-        return openHours;
+    public Short getTables() {
+        return tables;
     }
 
-    public void setOpenHours(String openHours) {
-        this.openHours = openHours;
+    public void setTables(Short tables) {
+        this.tables = tables;
+    }
+
+    public Short getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(Short places) {
+        this.places = places;
     }
 
     public String getDescription() {
@@ -217,14 +220,6 @@ public class Restaurant implements AuditableEntity, Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public EnumRestaurantStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EnumRestaurantStatus status) {
-        this.status = status;
     }
 
 }

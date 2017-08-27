@@ -7,7 +7,7 @@
 	<Appenders>
 		<!-- Console appender -->
 		<Console name="console" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d %-5p [%t] %c{1} - %m%n"/>
+			<PatternLayout pattern="%d %-5p [%t] %c - %m%n"/>
 		</Console>
 
 		<!-- https://logging.apache.org/log4j/2.0/manual/appenders.html#RollingFileAppender -->
@@ -15,7 +15,7 @@
 		<RollingRandomAccessFile name="file" fileName="${baseDir}/avocadoserver-trace.log"
 								 filePattern="${baseDir}/avocadoserver-trace-%d{yyyy-MM-dd}.log.gz"
 								 immediateFlush="false" append="true">
-			<PatternLayout pattern="%d %-5p [%t] %c{1} - %m%n"/>
+			<PatternLayout pattern="%d %-5p [%t] %c - %m%n"/>
 			<Policies>
 				<!--<OnStartupTriggeringPolicy/>-->
 				<!--<SizeBasedTriggeringPolicy size="100 MB"/>-->
@@ -38,7 +38,7 @@
 		<RollingRandomAccessFile name="file-sql" fileName="${baseDir}/avocadoserver-sql.log"
 								 filePattern="${baseDir}/avocadoserver-sql-%d{yyyy-MM-dd}.log.gz"
 								 immediateFlush="false" append="true">
-			<PatternLayout pattern="%d %-5p [%t] %c{1} - %m%n"/>
+			<PatternLayout pattern="%d %-5p [%t] %c - %m%n"/>
 			<Policies>
 				<!--<OnStartupTriggeringPolicy/>-->
 				<!--<SizeBasedTriggeringPolicy size="100 MB" />-->
@@ -58,9 +58,13 @@
 
 	<Loggers>
 		<!-- AvocadoServer -->
-		<AsyncLogger name="eu.davidea.avocadoserver" level="trace" additivity="false">
+		<AsyncLogger name="eu.davidea.avocadoserver" level="debug" additivity="false">
 			<AppenderRef ref="console"/>
 			<Appender-ref ref="file"/>
+		</AsyncLogger>
+		<AsyncLogger name="eu.davidea.avocadoserver.persistence" level="debug" additivity="false">
+			<AppenderRef ref="console"/>
+			<Appender-ref ref="file-sql"/>
 		</AsyncLogger>
 		<AsyncLogger name="QUERY-STATS" level="trace" additivity="false">
 			<AppenderRef ref="console"/>
@@ -76,17 +80,9 @@
 			<AppenderRef ref="console"/>
 			<AppenderRef ref="file"/>
 		</AsyncLogger>
-		<!--<AsyncLogger name="org.hibernate.SQL" level="debug" additivity="false">-->
-		<!--<AppenderRef ref="console"/>-->
-		<!--<AppenderRef ref="file-sql"/>-->
-		<!--</AsyncLogger>-->
-		<!--<AsyncLogger name="org.hibernate.type" level="trace" additivity="false">-->
-		<!--<AppenderRef ref="console"/>-->
-		<!--<AppenderRef ref="file-sql"/>-->
-		<!--</AsyncLogger>-->
 		<!--<AsyncLogger name="org.springframework.transaction" level="trace" additivity="false">-->
-		<!--<AppenderRef ref="console"/>-->
-		<!--<AppenderRef ref="file-sql"/>-->
+			<!--<AppenderRef ref="console"/>-->
+			<!--<AppenderRef ref="file-sql"/>-->
 		<!--</AsyncLogger>-->
 
 		<!-- Root -->

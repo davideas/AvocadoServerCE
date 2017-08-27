@@ -1,5 +1,6 @@
 package eu.davidea.avocadoserver.business.restaurant;
 
+import eu.davidea.avocadoserver.business.enums.EnumUnitMeasure;
 import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.ObjectNotFoundException;
 import eu.davidea.avocadoserver.persistence.mybatis.repositories.RestaurantRepository;
@@ -27,7 +28,19 @@ public class GetRestaurantUseCase {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public List<Restaurant> findRestaurantsNearby(Float latitude, Float longitude, Float radius) {
+    /**
+     * Retrieves the first 20 restaurants nearby to the current user location identified by its latitude and longitude.
+     * <p>This use case adopts the SQL formula as shown in this
+     * <a href="https://developers.google.com/maps/solutions/store-locator/clothing-store-locator">Google
+     * Store Locator example</a>.</p>
+     *
+     * @param latitude  the Earth latitude
+     * @param longitude the Earth longitude
+     * @param radius    the distance in km or miles depends by the unit of measure
+     * @param unit      the unit of measure to apply into the calculation
+     * @return the list of restaurants found min=0, max=20
+     */
+    public List<Restaurant> findRestaurantsNearby(Float latitude, Float longitude, short radius, EnumUnitMeasure unit) {
         throw new NotImplementedException("findRestaurantsNearby");
     }
 

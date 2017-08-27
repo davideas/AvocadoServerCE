@@ -1,8 +1,8 @@
-package eu.davidea.avocadoserver.boundary.rest.api.restaurant.endpoint1_0;
+package eu.davidea.avocadoserver.boundary.rest.api.restaurant;
 
 import eu.davidea.avocadoserver.boundary.helpers.EntityToDtoHelper;
 import eu.davidea.avocadoserver.boundary.rest.api.menu.MenuDTO;
-import eu.davidea.avocadoserver.boundary.rest.api.restaurant.model.RestaurantDTO;
+import eu.davidea.avocadoserver.business.enums.EnumUnitMeasure;
 import eu.davidea.avocadoserver.business.menu.GetMenuUseCase;
 import eu.davidea.avocadoserver.business.menu.Menu;
 import eu.davidea.avocadoserver.business.restaurant.GetRestaurantUseCase;
@@ -38,12 +38,15 @@ public class RestaurantFacade {
     }
 
     @Transactional(readOnly = true)
-    public List<RestaurantDTO> findRestaurantsNearby(Float latitude, Float longitude, Float radius) {
+    public List<RestaurantDTO> findRestaurantsNearby(Float latitude, Float longitude, Short radius, EnumUnitMeasure unit) {
         Objects.requireNonNull(latitude);
         Objects.requireNonNull(longitude);
         Objects.requireNonNull(radius);
+        if (unit == null) {
+            unit = EnumUnitMeasure.KM;
+        }
 
-        List<Restaurant> restaurants = getRestaurantUseCase.findRestaurantsNearby(latitude, longitude, radius);
+        List<Restaurant> restaurants = getRestaurantUseCase.findRestaurantsNearby(latitude, longitude, radius, unit);
         return dtoHelper.toDtos(restaurants);
     }
 

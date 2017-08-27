@@ -11,12 +11,12 @@ import org.springframework.util.StopWatch;
 
 @Aspect
 @Component
-public class LogQueryStatsAOP {
+public class LogQueryStatsAop {
 
     private QueryStatsLogger queryStatsLogger;
 
     @Autowired
-    public LogQueryStatsAOP(QueryStatsLogger queryStatsLogger) {
+    public LogQueryStatsAop(QueryStatsLogger queryStatsLogger) {
         this.queryStatsLogger = queryStatsLogger;
     }
 

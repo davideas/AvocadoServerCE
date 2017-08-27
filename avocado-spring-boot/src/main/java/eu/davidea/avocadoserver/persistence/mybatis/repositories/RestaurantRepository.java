@@ -23,8 +23,8 @@ public class RestaurantRepository {
         this.mapper = mapper;
     }
 
-    public List<Restaurant> findRestaurantsNearby(Float latitude, Float longitude, Float radius) {
-        return null;
+    public List<Restaurant> findRestaurantsNearby(Float latitude, Float longitude, short radius, short unit) {
+        return mapper.findRestaurantsNearby(latitude, longitude, radius, unit);
     }
 
     @LogQueryStats
