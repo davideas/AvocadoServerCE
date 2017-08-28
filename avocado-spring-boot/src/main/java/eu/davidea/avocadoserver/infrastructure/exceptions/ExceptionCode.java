@@ -16,12 +16,12 @@ public enum ExceptionCode {
     INVALID_PARAMETER(
             HttpStatus.BAD_REQUEST,
             "Required parameter not valid or not present"),
-    INVALID_LENGTH(
-            HttpStatus.UNAUTHORIZED,
-            "Invalid login length"),
     UNAUTHORIZED(
             HttpStatus.UNAUTHORIZED,
             "Invalid username or password"),
+    FORBIDDEN(
+            HttpStatus.FORBIDDEN,
+            "Access denied"),
     OBJECT_NOT_FOUND(
             HttpStatus.UNPROCESSABLE_ENTITY,
             "No entity found"),

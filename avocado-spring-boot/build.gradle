@@ -51,11 +51,13 @@ dependencies {
     compileOnly("javax.validation:validation-api:${javaxValidationVersion}")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-aop")
-    compile("org.springframework.boot:spring-boot-starter-security")
+    //compile("org.springframework.boot:spring-boot-starter-security")
+    // http://www.mindrot.org/projects/jBCrypt
+    compile("de.svenkubiak:jBCrypt:0.4")
     // JWT implementation
     // https://github.com/auth0/java-jwt
-    compile("com.auth0:auth0-spring-security-api:${auth0SpringVersion}")
-    compile("com.auth0:java-jwt:${auth0Version}")
+    //compile("com.auth0:auth0-spring-security-api:${auth0SpringVersion}")
+    //compile("com.auth0:java-jwt:${auth0Version}")
     // https://github.com/jwtk/jjwt
     compile("io.jsonwebtoken:jjwt:${jjwtVersion}")
     // Log4j2 via slf4j API. Configuration is per environment env/<env>/log4j2.xml

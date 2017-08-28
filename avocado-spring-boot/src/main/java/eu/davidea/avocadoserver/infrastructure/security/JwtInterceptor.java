@@ -2,7 +2,6 @@ package eu.davidea.avocadoserver.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
-import eu.davidea.avocadoserver.business.user.JwtToken;
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.ErrorResponse;
 import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
@@ -17,15 +16,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
-public class JWTInterceptor extends HandlerInterceptorAdapter {
+public class JwtInterceptor extends HandlerInterceptorAdapter {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    public static final String LOGGED_IN_USER_REQ_ATTR = "loggedInUser";
+    public static final String USER_TOKEN_REQ_ATTR = "userToken";
 
     private LoginFacade loginFacade;
     private ObjectMapper jsonMapper = new ObjectMapper();
 
-    public JWTInterceptor(LoginFacade loginFacade) {
+    public JwtInterceptor(LoginFacade loginFacade) {
         this.loginFacade = loginFacade;
     }
 
@@ -34,14 +33,15 @@ public class JWTInterceptor extends HandlerInterceptorAdapter {
         RequestAttributes requestAttributes = new RequestAttributes(request);
         String token = requestAttributes.getToken();
         try {
-            if (token != null) {
-                JwtToken tokenObject = loginFacade.validateToken(token);
-                request.setAttribute(LOGGED_IN_USER_REQ_ATTR, tokenObject);
+            if (token == null) {
+                throw new AuthenticationException("Invalid Token: null");
             }
+            JwtUserToken userToken = loginFacade.validateToken(token);
+            request.setAttribute(USER_TOKEN_REQ_ATTR, userToken);
             return true;
         } catch (AuthenticationException e) {
             // 401 - for invalid token
-            logger.warn("Invalid authentication token {} for URI {}", token, request.getRequestURI(), e);
+            logger.warn("Invalid authentication token for URI {}", request.getRequestURI());
             handleUnauthorized(response, e.getLocalizedMessage());
         }
         return false;

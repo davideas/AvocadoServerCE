@@ -1,14 +1,16 @@
 package eu.davidea.avocadoserver.infrastructure.crypto;
 
+import eu.davidea.avocadoserver.infrastructure.security.BCryptPasswordEncoder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StopWatch;
 
 import java.security.SecureRandom;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Not extending from SpringBootTest so the tests are faster.

@@ -8,10 +8,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private JWTInterceptor jwtInterceptor;
+    private JwtInterceptor jwtInterceptor;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    public WebMvcConfig(JWTInterceptor jwtInterceptor) {
+    public WebMvcConfig(JwtInterceptor jwtInterceptor) {
         this.jwtInterceptor = jwtInterceptor;
     }
 
@@ -20,8 +21,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns(
                         "/api/v1/**"
-                ).excludePathPatterns(
-                        "/api/auth/**"
+                ).
+                excludePathPatterns(
+                        "/api/v1/auth/login",
+                        "/api/v1/auth/signup"
                 );
     }
 

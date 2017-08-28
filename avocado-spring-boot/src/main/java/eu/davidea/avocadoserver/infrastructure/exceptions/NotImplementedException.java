@@ -8,8 +8,8 @@ public class NotImplementedException extends ServiceException {
 
     private static final String NOT_IMPL = " not implemented";
 
-    public NotImplementedException(String function) {
-        super(ExceptionCode.NOT_IMPLEMENTED, function + NOT_IMPL);
+    public NotImplementedException(String functionName) {
+        super(ExceptionCode.NOT_IMPLEMENTED, functionName + NOT_IMPL);
     }
 
 }

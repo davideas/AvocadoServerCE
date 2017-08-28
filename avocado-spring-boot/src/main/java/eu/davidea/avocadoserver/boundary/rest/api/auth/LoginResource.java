@@ -1,6 +1,8 @@
 package eu.davidea.avocadoserver.boundary.rest.api.auth;
 
 import eu.davidea.avocadoserver.boundary.rest.api.restaurant.RestaurantResource;
+import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
+import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,36 +15,40 @@ import org.springframework.web.bind.annotation.*;
  * @since 27/08/2017
  */
 @RestController
-@RequestMapping(value = "api/v1/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(
+        value = "api/v1/auth",
+        consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class LoginResource {
 
     private final static Logger logger = LoggerFactory.getLogger(RestaurantResource.class);
 
+    private LoginFacade loginFacade;
+
     @Autowired
-    public LoginResource() {
+    public LoginResource(LoginFacade loginFacade) {
+        this.loginFacade = loginFacade;
     }
 
     @PostMapping
-    @RequestMapping("/restaurant")
-    public ResponseEntity loginRestaurant(@RequestAttribute("authentication") Authentication authentication) {
-        logger.trace("loginRestaurant()");
-
-        return ResponseEntity.ok().build();
+    @RequestMapping("/signup")
+    public ResponseEntity signup() {
+        throw new NotImplementedException("signup");
     }
 
     @PostMapping
-    @RequestMapping("/user")
-    public ResponseEntity loginUser(@RequestAttribute("authentication") Authentication authentication) {
-        logger.trace("loginUser()");
-
-        return ResponseEntity.ok().build();
+    @RequestMapping("/login")
+    public ResponseEntity login(@RequestBody AuthenticationRequest authentication) {
+        logger.trace("login()");
+        JwtToken jwtToken = loginFacade.login(authentication);
+        return ResponseEntity.ok().body(jwtToken.getToken());
     }
 
     @PostMapping
     @RequestMapping("/logout")
-    public ResponseEntity logout(@RequestAttribute("authentication") Authentication authentication) {
+    public ResponseEntity logout(@RequestBody AuthenticationRequest authentication) {
         logger.trace("logout()");
-
+        loginFacade.logout(authentication);
         return ResponseEntity.ok().build();
     }
 

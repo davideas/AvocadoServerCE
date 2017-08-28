@@ -12,6 +12,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -20,6 +21,7 @@ import org.springframework.web.filter.CorsFilter;
  * Main entry point for launching the SpringBoot application.
  */
 @Configuration
+@EnableAsync
 @EnableAspectJAutoProxy
 @SpringBootApplication(exclude = JmxAutoConfiguration.class)
 @MapperScan("eu.davidea.avocadoserver.persistence.mybatis.mappers")
@@ -60,10 +62,10 @@ public class Application extends SpringBootServletInitializer {
 
         config.addAllowedHeader("*");
 
-        // REST /api is used by the mobile clients and /api/admin is used by admin web UI
+        // REST '/api' is used by the mobile clients and /api/admin is used by admin web UI
         source.registerCorsConfiguration("/api/**", config);
 
-        // enable Actuator endpoint to be used by mobile client for checking if server is app
+        // Enable Actuator endpoint to be used by mobile client for checking if server is app
         //source.registerCorsConfiguration("/health", config);
 
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));

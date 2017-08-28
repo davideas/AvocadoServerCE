@@ -23,7 +23,7 @@ public class User implements AuditableEntity, Serializable {
     private String firstname;
     private String lastname;
     private String email;
-    private CharSequence password;
+    private String password;
     private boolean termsAccepted;
     private EnumAuthority authority;
     private EnumUserStatus status;
@@ -101,11 +101,11 @@ public class User implements AuditableEntity, Serializable {
         this.email = email;
     }
 
-    public CharSequence getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(CharSequence password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
