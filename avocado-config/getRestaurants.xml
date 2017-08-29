@@ -1,0 +1,38 @@
+<RestClientRequest>
+  <option name="biscuits">
+    <list />
+  </option>
+  <option name="httpMethod" value="GET" />
+  <option name="urlBase" value="http://localhost:8080" />
+  <option name="urlPath" value="/avocado/api/v1/restaurants" />
+  <option name="headers">
+    <list>
+      <KeyValuePair>
+        <option name="key" value="Accept" />
+        <option name="value" value="*/*" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Cache-Control" />
+        <option name="value" value="no-cache" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Authorization" />
+        <option name="value" value="Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhY2I5OThhNS1mOGFjLTRlM2EtOTNlZS03ZWQ2YTM2ZGU1MDQiLCJzdWIiOiJkYXZpZGVhcyIsImF1dCI6IlJPTEVfUkVTVEFVUkFOVCIsImlhdCI6MTUwMzk2MzMzMywiZXhwIjoxNTM1NDk5MzMzfQ.SWpiBabSUQvdVPrX0ijFHiN8BLowg2RXU4mPY8IA06Jpq-x0wHSkeB3HknRQ5GsXpMR21ObNLis946J5bAMnPg" />
+      </KeyValuePair>
+    </list>
+  </option>
+  <option name="parameters">
+    <list>
+      <KeyValuePair>
+        <option name="key" value="name" />
+        <option name="value" value="il" />
+      </KeyValuePair>
+    </list>
+  </option>
+  <option name="parametersEnabled" value="true" />
+  <option name="haveTextToSend" value="false" />
+  <option name="haveFileToSend" value="false" />
+  <option name="isFileUpload" value="false" />
+  <option name="textToSend" value="{ &quot;username&quot;: &quot;davideas&quot;, &quot;password&quot;: &quot;avocado_ce&quot; }" />
+  <option name="filesToSend" value="" />
+</RestClientRequest>
