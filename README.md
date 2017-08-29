@@ -22,10 +22,10 @@ So those Apps are also a playground to experiment new frameworks and new feature
 **Note:** _All features are under deep analysis with continuous development; Features will be added step by step._
 
 - [Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html) by Uncle Bob
-- API (Key generation or Token generation with JWT) - **Not yet started**
+- API (Token generation with JWT) - **Started**
 - [Spring Boot 2](https://github.com/spring-projects/spring-boot/wiki) & [Spring 5](https://github.com/spring-projects/spring-framework)
 - RESTful web services with Spring - **Not fully done**
-- CORS filter - **Not started**
+- CORS filter - **Started**
 - Logging filter and query stats with Spring AOP
 - Exception handler advice
 - Logging via [slf4j](https://www.slf4j.org/) API + [Log4j2](https://logging.apache.org/log4j/2.x/) with gzip and rolling strategy
