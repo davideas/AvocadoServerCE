@@ -13,9 +13,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.DispatcherServlet;
+
+import javax.servlet.*;
+import javax.servlet.annotation.ServletSecurity;
 
 /**
  * Main entry point for launching the SpringBoot application.
@@ -27,9 +32,33 @@ import org.springframework.web.filter.CorsFilter;
 @MapperScan("eu.davidea.avocadoserver.persistence.mybatis.mappers")
 public class Application extends SpringBootServletInitializer {
 
+    private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
+    private static final String DISPATCHER_SERVLET_MAPPING = "/";
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(Application.class);
+    }
+
+    @Override
+    public void onStartup(ServletContext container) throws ServletException {
+        super.onStartup(container);
+
+        // Create the dispatcher servlet's Spring application context
+        AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
+        dispatcherContext.register(Application.class);
+
+        // Register and map the dispatcher servlet
+        ServletRegistration.Dynamic dispatcher = container.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(dispatcherContext));
+        dispatcher.setLoadOnStartup(1);
+        dispatcher.addMapping(DISPATCHER_SERVLET_MAPPING);
+
+        // Force HTTPS, and don't specify any roles for this constraint
+        HttpConstraintElement forceHttpsConstraint = new HttpConstraintElement(ServletSecurity.TransportGuarantee.CONFIDENTIAL);
+        ServletSecurityElement securityElement = new ServletSecurityElement(forceHttpsConstraint);
+
+        // Add the security element to the servlet
+        dispatcher.setServletSecurity(securityElement);
     }
 
     @Bean
