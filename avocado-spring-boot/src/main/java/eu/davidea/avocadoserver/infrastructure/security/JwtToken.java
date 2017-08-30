@@ -1,17 +1,35 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 import java.util.Date;
 
-public class JwtToken {
+public class JwtToken extends UsernamePasswordAuthenticationToken {
 
     private String jti;
     private String token;
     private Date expiresAt;
 
+    public JwtToken(String token) {
+        super(null, null);
+        this.token = token;
+    }
+
     public JwtToken(String jti, String token, Date expiresAt) {
+        super(null, null);
         this.jti = jti;
         this.token = token;
         this.expiresAt = expiresAt;
+    }
+
+    public JwtToken(Object principal, Object credentials) {
+        super(principal, credentials);
+    }
+
+    public JwtToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+        super(principal, credentials, authorities);
     }
 
     public String getJti() {

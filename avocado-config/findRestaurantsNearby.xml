@@ -2,9 +2,9 @@
   <option name="biscuits">
     <list />
   </option>
-  <option name="httpMethod" value="POST" />
+  <option name="httpMethod" value="GET" />
   <option name="urlBase" value="https://localhost:8443" />
-  <option name="urlPath" value="/avocado/api/v1/auth/login" />
+  <option name="urlPath" value="/avocado/api/v1/restaurants/findNearby" />
   <option name="headers">
     <list>
       <KeyValuePair>
@@ -19,13 +19,17 @@
         <option name="key" value="Content-Type" />
         <option name="value" value="application/json;charset=UTF-8" />
       </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Authorization" />
+        <option name="value" value="Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIwYzVmZjU0ZS0yMzkzLTQ3NTctYTExYi0zY2ZhMjNmNjdjYjQiLCJzdWIiOiJkYXZpZGVhcyIsImF1dCI6IlJPTEVfUkVTVEFVUkFOVCIsImlhdCI6MTUwNDAzMTM2MywiZXhwIjoxNTM1NTY3MzYzfQ.ZBX-t99p52pXc9HOsBurzC2OLmaXzIWZuYEMNOz5fs_72FjCIDcU8G4tVjcxpX7cr3o7jql6z2V5YxT4Z8XWRw" />
+      </KeyValuePair>
     </list>
   </option>
   <option name="parameters">
     <list />
   </option>
   <option name="parametersEnabled" value="true" />
-  <option name="haveTextToSend" value="true" />
+  <option name="haveTextToSend" value="false" />
   <option name="haveFileToSend" value="false" />
   <option name="isFileUpload" value="false" />
   <option name="textToSend" value="{ &quot;username&quot;: &quot;davideas&quot;, &quot;password&quot;: &quot;avocado_ce&quot; }" />

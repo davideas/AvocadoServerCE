@@ -15,6 +15,7 @@
  */
 package eu.davidea.avocadoserver;
 
+import eu.davidea.avocadoserver.infrastructure.filters.RequestLoggingFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,8 +33,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.ServletContext;
-
-import eu.davidea.avocadoserver.infrastructure.filters.RequestLoggingFilter;
 
 /**
  * Main entry point for launching the SpringBoot application.
@@ -57,7 +56,9 @@ public class Application extends SpringBootServletInitializer {
         return super.createRootApplicationContext(servletContext);
     }
 
-// To use without Spring Security
+// Force HTTPS:
+// HTTP redirects to HTTPS when using Spring Boot and External Tomcat.
+// Use this code when no Spring Security is added and configured!
 //    @Override
 //    public void onStartup(ServletContext container) throws ServletException {
 //        super.onStartup(container);
@@ -90,7 +91,7 @@ public class Application extends SpringBootServletInitializer {
 
     @Bean
     @ConditionalOnWebApplication
-    public FilterRegistrationBean corsFilter() {
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(false); // you USUALLY want this
@@ -109,10 +110,7 @@ public class Application extends SpringBootServletInitializer {
         // Enable Actuator endpoint to be used by mobile client for checking if server is app
         //source.registerCorsConfiguration("/health", config);
 
-        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(1);
-
-        return bean;
+        return new CorsFilter(source);
     }
 
     public static void main(final String[] args) {

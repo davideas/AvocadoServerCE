@@ -3,15 +3,18 @@ package eu.davidea.avocadoserver.business.user;
 import eu.davidea.avocadoserver.business.audit.AuditableEntity;
 import eu.davidea.avocadoserver.business.enums.EnumAuthority;
 import eu.davidea.avocadoserver.business.enums.EnumUserStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 /**
  * @author Davide
  * @since 27/08/2017
  */
-public class User implements AuditableEntity, Serializable {
+public class User implements AuditableEntity, Serializable, UserDetails {
 
     private static final long serialVersionUID = -15273229800392269L;
 
@@ -65,6 +68,31 @@ public class User implements AuditableEntity, Serializable {
         return username;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return status != EnumUserStatus.DELETED;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return status != EnumUserStatus.BLOCKED;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return status == EnumUserStatus.ACTIVE || status == EnumUserStatus.REGISTERED;
+    }
+
+    @Override
+    public String getName() {
+        return firstname;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -99,6 +127,11 @@ public class User implements AuditableEntity, Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
     public String getPassword() {

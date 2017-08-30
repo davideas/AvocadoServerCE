@@ -2,35 +2,34 @@
   <option name="biscuits">
     <list />
   </option>
-  <option name="httpMethod" value="GET" />
-  <option name="urlBase" value="http://localhost:8080" />
-  <option name="urlPath" value="/avocado/api/v1/restaurants" />
+  <option name="httpMethod" value="POST" />
+  <option name="urlBase" value="https://localhost:8443" />
+  <option name="urlPath" value="/avocado/api/v1/auth/logout" />
   <option name="headers">
     <list>
       <KeyValuePair>
         <option name="key" value="Accept" />
-        <option name="value" value="*/*" />
+        <option name="value" value="application/json;charset=UTF-8" />
       </KeyValuePair>
       <KeyValuePair>
         <option name="key" value="Cache-Control" />
         <option name="value" value="no-cache" />
       </KeyValuePair>
       <KeyValuePair>
+        <option name="key" value="Content-Type" />
+        <option name="value" value="application/json;charset=UTF-8" />
+      </KeyValuePair>
+      <KeyValuePair>
         <option name="key" value="Authorization" />
-        <option name="value" value="Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhY2I5OThhNS1mOGFjLTRlM2EtOTNlZS03ZWQ2YTM2ZGU1MDQiLCJzdWIiOiJkYXZpZGVhcyIsImF1dCI6IlJPTEVfUkVTVEFVUkFOVCIsImlhdCI6MTUwMzk2MzMzMywiZXhwIjoxNTM1NDk5MzMzfQ.SWpiBabSUQvdVPrX0ijFHiN8BLowg2RXU4mPY8IA06Jpq-x0wHSkeB3HknRQ5GsXpMR21ObNLis946J5bAMnPg" />
+        <option name="value" value="Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI2ZDNhM2NlNS04YzJiLTRjZjktYmFkNi02Mjk5NDU1Y2YzYjUiLCJzdWIiOiJkYXZpZGVhcyIsImF1dCI6IlJPTEVfUkVTVEFVUkFOVCIsImlhdCI6MTUwNDEyMTkzNSwiZXhwIjoxNTM1NjU3OTM1fQ.V4bN4vxVSWqoMbxo4MFpE1jEY2468YcmsZSTU035LW559OOEOAp25Mhb0T_PjEfY6Vg7Tn_B9Wram7YliQudaA" />
       </KeyValuePair>
     </list>
   </option>
   <option name="parameters">
-    <list>
-      <KeyValuePair>
-        <option name="key" value="name" />
-        <option name="value" value="il" />
-      </KeyValuePair>
-    </list>
+    <list />
   </option>
   <option name="parametersEnabled" value="true" />
-  <option name="haveTextToSend" value="false" />
+  <option name="haveTextToSend" value="true" />
   <option name="haveFileToSend" value="false" />
   <option name="isFileUpload" value="false" />
   <option name="textToSend" value="{ &quot;username&quot;: &quot;davideas&quot;, &quot;password&quot;: &quot;avocado_ce&quot; }" />
