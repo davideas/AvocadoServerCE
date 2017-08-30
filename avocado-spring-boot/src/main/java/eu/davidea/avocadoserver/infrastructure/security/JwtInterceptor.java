@@ -1,31 +1,36 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
-import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
-import eu.davidea.avocadoserver.infrastructure.exceptions.ErrorResponse;
-import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.exceptions.ErrorResponse;
+import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
+
+import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.USER_TOKEN_REQ_ATTR;
 
 @Component
 public class JwtInterceptor extends HandlerInterceptorAdapter {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-    public static final String USER_TOKEN_REQ_ATTR = "userToken";
+    private static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class);
 
     private LoginFacade loginFacade;
-    private ObjectMapper jsonMapper = new ObjectMapper();
+    private ObjectMapper jsonMapper;
 
     public JwtInterceptor(LoginFacade loginFacade) {
         this.loginFacade = loginFacade;
+        this.jsonMapper = new ObjectMapper();
     }
 
     @Override
@@ -34,7 +39,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         String token = requestAttributes.getToken();
         try {
             if (token == null) {
-                throw new AuthenticationException("Invalid Token: null");
+                throw new AuthenticationException("Token was not provided");
             }
             JwtUserToken userToken = loginFacade.validateToken(token);
             request.setAttribute(USER_TOKEN_REQ_ATTR, userToken);

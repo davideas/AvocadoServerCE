@@ -34,6 +34,32 @@ If requested I can list them here but also Internet is full of questions and art
 - JNDI connection pool in Tomcat is configured in META-INF/context.xml
 - Logs will be generated under server logs folder via Log4J2 configuration, while console is displayed in a sub window of the IDE (another advantage!).
 
+# SSL
+This must be done once for the server configuration.
+For the purpose of this project we only create a _self-signed_ certificate.
+For a real certificate you must buy it from a certification authority.
+
+Full article here: https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html
+
+##### Part I
+1. Execute `$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA
+   -keystore [/preferred/keystore/path]` (-keystore is optional).
+2. You must fill all the requested fields from the keytool.
+3. If you didn't specify a keystore path, the file `".keystore"` will be generated under
+   user home (in Windows `C:\Users\<user>\.keystore"`).
+##### Part II
+1. Edit the file `$CATALINA_BASE/conf/server.xml`.
+2. Identify the property `<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" .../>`
+3. Uncomment it and modify the full element as following:
+``` xml
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+    	   maxThreads="150" scheme="https" secure="true" SSLEnabled="true"
+    	   keystoreFile="path/to/your/keystore" keystorePass="YourKeystorePassword"
+    	   clientAuth="false" keyAlias="tomcat" sslProtocol="TLS">
+</Connector>
+```
+4. Restart Tomcat!
+
 # IDE
 - Using _IntelliJ IDEA™_: File > New > Project from Version Control > GitHub.
 - Associate DDL data source to the IDE, so all SQL scripts can reference the tables and fields names in real time.
