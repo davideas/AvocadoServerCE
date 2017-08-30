@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 Davidea Solutions Sprl
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package eu.davidea.avocadoserver;
 
 import org.mybatis.spring.annotation.MapperScan;
@@ -16,12 +31,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.servlet.HttpConstraintElement;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.ServletSecurityElement;
-import javax.servlet.annotation.ServletSecurity;
 
 import eu.davidea.avocadoserver.infrastructure.filters.RequestLoggingFilter;
 
@@ -47,20 +57,21 @@ public class Application extends SpringBootServletInitializer {
         return super.createRootApplicationContext(servletContext);
     }
 
-    @Override
-    public void onStartup(ServletContext container) throws ServletException {
-        super.onStartup(container);
-
-        // Get the existing dispatcher servlet
-        ServletRegistration.Dynamic dispatcher = (ServletRegistration.Dynamic) container.getServletRegistration(DISPATCHER_SERVLET_NAME);
-
-        // Force HTTPS, and don't specify any roles for this constraint
-        HttpConstraintElement forceHttpsConstraint = new HttpConstraintElement(ServletSecurity.TransportGuarantee.CONFIDENTIAL);
-        ServletSecurityElement securityElement = new ServletSecurityElement(forceHttpsConstraint);
-
-        // Add the security element to the servlet
-        dispatcher.setServletSecurity(securityElement);
-    }
+// To use without Spring Security
+//    @Override
+//    public void onStartup(ServletContext container) throws ServletException {
+//        super.onStartup(container);
+//
+//        // Get the existing dispatcher servlet
+//        ServletRegistration.Dynamic dispatcher = (ServletRegistration.Dynamic) container.getServletRegistration(DISPATCHER_SERVLET_NAME);
+//
+//        // Force HTTPS, and don't specify any roles for this constraint
+//        HttpConstraintElement forceHttpsConstraint = new HttpConstraintElement(ServletSecurity.TransportGuarantee.CONFIDENTIAL);
+//        ServletSecurityElement securityElement = new ServletSecurityElement(forceHttpsConstraint);
+//
+//        // Add the security element to the servlet
+//        dispatcher.setServletSecurity(securityElement);
+//    }
 
     @Bean
     @ConditionalOnWebApplication

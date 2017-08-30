@@ -1,17 +1,18 @@
 package eu.davidea.avocadoserver.business.user;
 
-import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
-import eu.davidea.avocadoserver.infrastructure.security.BCryptPasswordEncoder;
-import eu.davidea.avocadoserver.infrastructure.utilities.EmailValidator;
-import eu.davidea.avocadoserver.persistence.mybatis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.validation.constraints.NotNull;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
+
+import javax.validation.constraints.NotNull;
+
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.utilities.EmailValidator;
+import eu.davidea.avocadoserver.persistence.mybatis.repositories.UserRepository;
 
 @Service
 public class LoginUseCase {

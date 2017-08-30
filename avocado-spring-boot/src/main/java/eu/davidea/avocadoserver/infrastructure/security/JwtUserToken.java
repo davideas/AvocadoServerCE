@@ -1,9 +1,9 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
+import java.util.Date;
+
 import eu.davidea.avocadoserver.business.enums.EnumAuthority;
 import io.jsonwebtoken.Claims;
-
-import java.util.Date;
 
 public class JwtUserToken {
 
@@ -18,7 +18,7 @@ public class JwtUserToken {
         this.jti = claims.getId();
         this.username = claims.getSubject();
         this.audience = claims.getAudience();
-        this.authority = EnumAuthority.valueOf((String) claims.get(JwtTokenService.AUTHORITY));
+        this.authority = EnumAuthority.valueOf((String) claims.get(RequestAttributes.AUTHORITY));
         this.issuedAt = claims.getIssuedAt();
         this.expiresAt = claims.getExpiration();
     }

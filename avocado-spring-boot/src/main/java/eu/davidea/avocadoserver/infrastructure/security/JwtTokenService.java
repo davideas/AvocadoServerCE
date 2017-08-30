@@ -1,23 +1,32 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
-import eu.davidea.avocadoserver.business.user.User;
-import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
-import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
-import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
+
+import javax.annotation.PostConstruct;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
+import eu.davidea.avocadoserver.business.user.User;
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
+import io.jsonwebtoken.ClaimJwtException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.AUTHORITY;
 
 /**
  * Created by morujca on 29/04/2016.
@@ -26,7 +35,6 @@ import java.util.UUID;
 public class JwtTokenService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    static final String AUTHORITY = "aut";
 
     private final String jwtSecret;
     private Key key;
