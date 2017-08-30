@@ -1,6 +1,5 @@
 package eu.davidea.avocadoserver;
 
-import eu.davidea.avocadoserver.infrastructure.filters.RequestLoggingFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,28 +11,31 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.*;
+import javax.servlet.HttpConstraintElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.ServletSecurityElement;
 import javax.servlet.annotation.ServletSecurity;
+
+import eu.davidea.avocadoserver.infrastructure.filters.RequestLoggingFilter;
 
 /**
  * Main entry point for launching the SpringBoot application.
  */
+//@EnableAsync
 @Configuration
-@EnableAsync
 @EnableAspectJAutoProxy
 @SpringBootApplication(exclude = JmxAutoConfiguration.class)
 @MapperScan("eu.davidea.avocadoserver.persistence.mybatis.mappers")
 public class Application extends SpringBootServletInitializer {
 
-    private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
-    private static final String DISPATCHER_SERVLET_MAPPING = "/";
+    private static final String DISPATCHER_SERVLET_NAME = "dispatcherServlet";
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -41,17 +43,16 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Override
+    protected WebApplicationContext createRootApplicationContext(ServletContext servletContext) {
+        return super.createRootApplicationContext(servletContext);
+    }
+
+    @Override
     public void onStartup(ServletContext container) throws ServletException {
         super.onStartup(container);
 
-        // Create the dispatcher servlet's Spring application context
-        AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
-        dispatcherContext.register(Application.class);
-
-        // Register and map the dispatcher servlet
-        ServletRegistration.Dynamic dispatcher = container.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(dispatcherContext));
-        dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping(DISPATCHER_SERVLET_MAPPING);
+        // Get the existing dispatcher servlet
+        ServletRegistration.Dynamic dispatcher = (ServletRegistration.Dynamic) container.getServletRegistration(DISPATCHER_SERVLET_NAME);
 
         // Force HTTPS, and don't specify any roles for this constraint
         HttpConstraintElement forceHttpsConstraint = new HttpConstraintElement(ServletSecurity.TransportGuarantee.CONFIDENTIAL);
