@@ -3,7 +3,13 @@ package eu.davidea.avocadoserver.business.user;
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
 import eu.davidea.avocadoserver.infrastructure.utilities.EmailValidator;
 import eu.davidea.avocadoserver.persistence.mybatis.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +23,7 @@ import java.util.Objects;
 @Service
 public class LoginUseCase implements UserDetailsService {
 
+    private final static Logger logger = LoggerFactory.getLogger(LoginUseCase.class);
     private static final int USERNAME_MIN_LENGTH = 5;
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
@@ -48,15 +55,40 @@ public class LoginUseCase implements UserDetailsService {
         } else {
             user = userRepository.findByUsername(login);
         }
+        // Performs checks on User
+        //performChecks(user, rawPassword);
+        // Erase credential from memory
+        //rawPassword = null;
 
-//        if (user == null) {
-//            throw new AuthenticationException("Invalid username");
-//        } else if (verifyPassword(rawPassword, user.getPassword())) {
-//            return user;
-//        } else {
-//            throw new AuthenticationException("Invalid password");
-//        }
         return user;
+    }
+
+    public void performChecks(User user, String rawPassword) {
+        if (user == null) {
+            logger.debug("User not found");
+            throw new AuthenticationException("Invalid username or password");
+        }
+        logger.info("Found user {}", user.getUsername());
+        if (!user.isAccountNonLocked()) {
+            logger.debug("User account is locked");
+            throw new LockedException("User account is locked");
+        }
+        if (!user.isEnabled()) {
+            logger.debug("User account is disabled");
+            throw new DisabledException("User is disabled");
+        }
+        if (!user.isAccountNonExpired()) {
+            logger.debug("User account is expired");
+            throw new AccountExpiredException("User account is expired");
+        }
+        if (!user.isCredentialsNonExpired()) {
+            logger.debug("User account credentials have expired");
+            throw new CredentialsExpiredException("User credentials have expired");
+        }
+        if (!verifyPassword(rawPassword, user.getPassword())) {
+            logger.debug("Password doesn't match");
+            throw new AuthenticationException("Invalid username or password");
+        }
     }
 
     private boolean verifyPassword(CharSequence rawPassword, String encodedPassword) {
