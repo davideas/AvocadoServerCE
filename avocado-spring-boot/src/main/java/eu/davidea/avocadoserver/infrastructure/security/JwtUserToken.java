@@ -1,13 +1,15 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
-import eu.davidea.avocadoserver.business.enums.EnumAuthority;
-import io.jsonwebtoken.Claims;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+
+import eu.davidea.avocadoserver.business.enums.EnumAuthority;
+import io.jsonwebtoken.Claims;
 
 public class JwtUserToken implements UserDetails {
 
@@ -50,22 +52,31 @@ public class JwtUserToken implements UserDetails {
     }
 
     @Override
+    public String getName() {
+        // TODO: Need to check database
+        return getUsername();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
+        // TODO: Need to check database
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
+        // TODO: Need to check database
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return expiresAt == null || expiresAt.toInstant().isAfter(Instant.now());
     }
 
     @Override
     public boolean isEnabled() {
+        // TODO: Need to check database
         return true;
     }
 

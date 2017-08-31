@@ -31,7 +31,7 @@ public class RestExceptionHandlerAdvice {
                 e.getCode(), e.getFriendlyMessage(),
                 e.getTarget(), e.getDetailsAsArray());
 
-        logger.debug("HttpStatus={}, {}", status, errorResponse, e);
+        logger.debug("HttpStatus={}, {}", status, errorResponse);
         return ResponseEntity.status(status).body(errorResponse);
     }
 
@@ -78,7 +78,7 @@ public class RestExceptionHandlerAdvice {
         ErrorResponse errorResponse = createCustomResponse(
                 ExceptionCode.INVALID_PARAMETER.name(),
                 e.getLocalizedMessage(), target, details);
-        logger.debug("HttpStatus={}, {}", HttpStatus.BAD_REQUEST, errorResponse, e);
+        logger.debug("HttpStatus={}, {}", HttpStatus.BAD_REQUEST, errorResponse);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 

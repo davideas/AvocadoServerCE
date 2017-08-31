@@ -1,14 +1,19 @@
 package eu.davidea.avocadoserver.business.user;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
+
+import java.io.Serializable;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+
 import eu.davidea.avocadoserver.business.audit.AuditableEntity;
 import eu.davidea.avocadoserver.business.enums.EnumAuthority;
 import eu.davidea.avocadoserver.business.enums.EnumUserStatus;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
 
 /**
  * @author Davide
@@ -80,7 +85,10 @@ public class User implements AuditableEntity, Serializable, UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return lastPasswordChangeDate == null ||
+                lastPasswordChangeDate.toInstant()
+                        .plus(6, ChronoUnit.MONTHS)
+                        .isBefore(Instant.now());
     }
 
     @Override
@@ -90,7 +98,10 @@ public class User implements AuditableEntity, Serializable, UserDetails {
 
     @Override
     public String getName() {
-        return firstname;
+        if (StringUtils.hasText(firstname) && StringUtils.hasText(lastname)) {
+            return firstname + " " + lastname;
+        }
+        return getUsername();
     }
 
     public void setUsername(String username) {
@@ -131,7 +142,7 @@ public class User implements AuditableEntity, Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList((GrantedAuthority) () -> authority.name());
     }
 
     public String getPassword() {

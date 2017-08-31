@@ -1,61 +1,57 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
-import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
+
+import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.USER_TOKEN_REQ_ATTR;
 
 /**
  * Filter that orchestrates authentication by using supplied JWT token
  *
  * @author pascal alma
  */
-public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-     public JwtAuthenticationTokenFilter() {
-        super("/**");
-    }
+    private final static Logger logger = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
-    /**
-     * Attempt to authenticate request - basically just pass over to another method to authenticate request headers
-     */
+    @Autowired
+    private LoginFacade loginFacade;
+
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String header = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (header == null || !header.startsWith("Bearer ")) {
-            throw new AuthenticationException("No JWT token found in request headers");
+        RequestAttributes requestAttributes = new RequestAttributes(request);
+        String token = requestAttributes.getToken();
+
+        if (token != null) {
+            JwtUserToken userToken = loginFacade.validateToken(token);
+
+            if (userToken != null) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userToken, null, userToken.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                request.setAttribute(USER_TOKEN_REQ_ATTR, userToken);
+                logger.debug("Authenticated user {}", userToken.getUsername());
+            }
         }
 
-        String authToken = header.substring(7);
-
-        JwtToken authRequest = new JwtToken(authToken);
-
-        return getAuthenticationManager().authenticate(authRequest);
+        filterChain.doFilter(request, response);
     }
 
-    /**
-     * Make sure the rest of the filterchain is satisfied
-     *
-     * @param request
-     * @param response
-     * @param chain
-     * @param authResult
-     * @throws IOException
-     * @throws ServletException
-     */
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
-            throws IOException, ServletException {
-        super.successfulAuthentication(request, response, chain, authResult);
-
-        // As this authentication is in HTTP header, after success we need to continue the request normally
-        // and return the response as if the resource was not secured at all
-        chain.doFilter(request, response);
-    }
 }

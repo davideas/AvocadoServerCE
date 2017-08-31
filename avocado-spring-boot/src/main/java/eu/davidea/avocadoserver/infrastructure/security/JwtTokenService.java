@@ -17,8 +17,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 import eu.davidea.avocadoserver.business.user.User;
-import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
-import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
 import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -83,13 +81,14 @@ public class JwtTokenService {
             logger.debug("Built user token: {} ", userToken.toShortString());
             return userToken;
         } catch (ClaimJwtException expired) {
-            logger.debug("Invalid/Expired token for user={}, jti={}, issuedAt={}, expiredAt={}",
+            logger.warn("Invalid/Expired token for user={}, jti={}, issuedAt={}, expiredAt={}",
                     expired.getClaims().getId(), expired.getClaims().getSubject(), expired.getClaims().getExpiration());
-            throw new AuthenticationException(ExceptionCode.FORBIDDEN, "Token is expired");
+            //throw new AuthenticationException(ExceptionCode.FORBIDDEN, "Token is expired");
         } catch (IllegalArgumentException | JwtException e) {
             logger.warn("Invalid token: {}", e.getLocalizedMessage());
-            throw new AuthenticationException(ExceptionCode.FORBIDDEN, "Token is invalid");
+            //throw new AuthenticationException(ExceptionCode.FORBIDDEN, "Token is invalid");
         }
+        return null;
     }
 
     private JwtUserToken buildUserToken(String token) {

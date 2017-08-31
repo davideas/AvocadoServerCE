@@ -39,7 +39,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         String token = requestAttributes.getToken();
         try {
             if (token == null) {
-                throw new AuthenticationException("Token was not provided");
+                throw new AuthenticationException("No JWT token found in request headers");
             }
             JwtUserToken userToken = loginFacade.validateToken(token);
             request.setAttribute(USER_TOKEN_REQ_ATTR, userToken);

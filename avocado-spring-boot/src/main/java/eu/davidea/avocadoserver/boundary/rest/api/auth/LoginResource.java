@@ -1,14 +1,22 @@
 package eu.davidea.avocadoserver.boundary.rest.api.auth;
 
-import eu.davidea.avocadoserver.boundary.rest.api.restaurant.RestaurantResource;
-import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
-import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import eu.davidea.avocadoserver.boundary.rest.api.restaurant.RestaurantResource;
+import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
+import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
 
 /**
  * @author Davide
@@ -24,10 +32,12 @@ public class LoginResource {
     private final static Logger logger = LoggerFactory.getLogger(RestaurantResource.class);
 
     private LoginFacade loginFacade;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    public LoginResource(LoginFacade loginFacade) {
+    public LoginResource(LoginFacade loginFacade, AuthenticationManager authenticationManager) {
         this.loginFacade = loginFacade;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping
@@ -38,9 +48,17 @@ public class LoginResource {
 
     @PostMapping
     @RequestMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequest authentication) {
+    public ResponseEntity login(@RequestBody AuthenticationRequest authenticationRequest) {
         logger.trace("login()");
-        JwtToken jwtToken = loginFacade.login(authentication);
+        // Perform the security
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getUsername(),
+                        authenticationRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        JwtToken jwtToken = loginFacade.login(authenticationRequest);
         return ResponseEntity.ok().body(jwtToken.getToken());
     }
 
