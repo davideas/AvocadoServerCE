@@ -40,11 +40,13 @@ public class MenuResource {
 
     @GetMapping
     @RequestMapping("/{restaurantId}/menus/{menuId}")
-    public ResponseEntity gettMenu(@PathVariable Long restaurantId, @PathVariable Long menuId,
+    public ResponseEntity getMenu(@PathVariable Long restaurantId, @PathVariable Long menuId,
                                             @RequestParam String languageCode) {
         logger.trace("getMenu(restaurantId={}, menuId={})", restaurantId, menuId);
 
         return ResponseEntity.ok().body("");
     }
+
+    //TODO: AOP for user roles
 
 }

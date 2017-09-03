@@ -1,24 +1,19 @@
 package eu.davidea.avocadoserver.boundary.rest.api.restaurant;
 
+import eu.davidea.avocadoserver.business.enums.EnumAuthority;
+import eu.davidea.avocadoserver.business.enums.EnumUnitMeasure;
+import eu.davidea.avocadoserver.infrastructure.security.JwtUserToken;
+import eu.davidea.avocadoserver.infrastructure.security.PreAuthorize;
+import eu.davidea.avocadoserver.infrastructure.security.RequestAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import eu.davidea.avocadoserver.business.enums.EnumUnitMeasure;
-import eu.davidea.avocadoserver.infrastructure.security.JwtUserToken;
-import eu.davidea.avocadoserver.infrastructure.security.RequestAttributes;
 
 /**
  * @author Davide
@@ -38,7 +33,7 @@ public class RestaurantResource {
 
     @GetMapping
     @RequestMapping("/findByName")
-    public ResponseEntity findRestaurantsNearby(@RequestAttribute(RequestAttributes.USER_TOKEN_REQ_ATTR) JwtUserToken userToken,
+    public ResponseEntity findRestaurantsByName(@RequestAttribute(RequestAttributes.USER_TOKEN_REQ_ATTR) JwtUserToken userToken,
                                                 @RequestParam(name = "name") String name) {
 
         logger.trace("findRestaurantByName(name={})", name);
@@ -64,7 +59,7 @@ public class RestaurantResource {
 
     @GetMapping
     @RequestMapping("/{restaurantId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(EnumAuthority.ROLE_RESTAURANT)
     public ResponseEntity getRestaurantById(@RequestAttribute(RequestAttributes.USER_TOKEN_REQ_ATTR) JwtUserToken userToken,
                                             @PathVariable Long restaurantId) {
         logger.trace("getRestaurantById(restaurantId={})", restaurantId);

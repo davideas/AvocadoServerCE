@@ -1,5 +1,7 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
+import eu.davidea.avocadoserver.business.enums.EnumAuthority;
+import io.jsonwebtoken.Claims;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,10 +10,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-import eu.davidea.avocadoserver.business.enums.EnumAuthority;
-import io.jsonwebtoken.Claims;
-
 public class JwtUserToken implements UserDetails {
+
+    private static final long serialVersionUID = 2553667606374752409L;
 
     private String jti;
     private String username;
@@ -24,7 +25,7 @@ public class JwtUserToken implements UserDetails {
         this.jti = claims.getId();
         this.username = claims.getSubject();
         this.audience = claims.getAudience();
-        this.authority = EnumAuthority.valueOf((String) claims.get(RequestAttributes.AUTHORITY));
+        this.authority = EnumAuthority.valueOf(claims.getAudience());
         this.issuedAt = claims.getIssuedAt();
         this.expiresAt = claims.getExpiration();
     }

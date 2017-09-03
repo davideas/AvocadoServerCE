@@ -1,10 +1,17 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
+import eu.davidea.avocadoserver.business.user.User;
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.crypto.spec.SecretKeySpec;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,27 +19,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-
-import eu.davidea.avocadoserver.business.user.User;
-import io.jsonwebtoken.ClaimJwtException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
-import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.AUTHORITY;
-
 /**
  * Created by morujca on 29/04/2016.
  */
 @Service
 public class JwtTokenService {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
     private final String jwtSecret;
     private Key key;
@@ -47,6 +40,7 @@ public class JwtTokenService {
         this.key = new SecretKeySpec(jwtSecretBytes, SignatureAlgorithm.HS512.getJcaName());
     }
 
+    @NotNull
     public JwtToken generateToken(User user) {
         LocalDateTime now = LocalDateTime.now();
         Date issueAt = Date.from(now
@@ -61,18 +55,16 @@ public class JwtTokenService {
         String token = Jwts.builder()
                 .setId(jti)
                 .setSubject(user.getUsername())
-                //.setAudience()
-                .claim(AUTHORITY, user.getAuthority())
+                .setAudience(user.getAuthority().name())
                 .setIssuedAt(issueAt)
                 .setExpiration(expireAt)
                 .signWith(SignatureAlgorithm.HS512, this.key)
                 .compact();
 
-        JwtToken userToken = new JwtToken(jti, token, expireAt);
+        JwtToken jwtToken = new JwtToken(jti, token, issueAt, expireAt);
+        logger.debug("Generated token is: {}", jwtToken);
 
-        logger.debug("Generated user token is: {}", userToken);
-
-        return userToken;
+        return jwtToken;
     }
 
     public JwtUserToken validateToken(String token) {
@@ -83,12 +75,15 @@ public class JwtTokenService {
         } catch (ClaimJwtException expired) {
             logger.warn("Invalid/Expired token for user={}, jti={}, issuedAt={}, expiredAt={}",
                     expired.getClaims().getId(), expired.getClaims().getSubject(), expired.getClaims().getExpiration());
-            //throw new AuthenticationException(ExceptionCode.FORBIDDEN, "Token is expired");
+            // With JWT Interceptor:
+            throw new AuthenticationException("Token is expired");
         } catch (IllegalArgumentException | JwtException e) {
             logger.warn("Invalid token: {}", e.getLocalizedMessage());
-            //throw new AuthenticationException(ExceptionCode.FORBIDDEN, "Token is invalid");
+            // With JWT Interceptor:
+            throw new AuthenticationException("Token is invalid");
         }
-        return null;
+        // With Spring Security:
+        //return null;
     }
 
     private JwtUserToken buildUserToken(String token) {

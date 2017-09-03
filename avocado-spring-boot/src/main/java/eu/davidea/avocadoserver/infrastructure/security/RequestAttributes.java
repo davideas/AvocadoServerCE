@@ -6,9 +6,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 import static org.springframework.util.StringUtils.hasLength;
 
@@ -21,7 +20,6 @@ public class RequestAttributes {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static final String USER_TOKEN_REQ_ATTR = "userToken";
-    static final String AUTHORITY = "aut";
 
     private final HttpServletRequest request;
 

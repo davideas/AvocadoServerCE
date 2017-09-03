@@ -21,6 +21,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -32,7 +33,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.servlet.ServletContext;
+import javax.servlet.*;
+import javax.servlet.annotation.ServletSecurity;
 
 /**
  * Main entry point for launching the SpringBoot application.
@@ -40,7 +42,10 @@ import javax.servlet.ServletContext;
 //@EnableAsync
 @Configuration
 @EnableAspectJAutoProxy
-@SpringBootApplication(exclude = JmxAutoConfiguration.class)
+@SpringBootApplication(exclude = {
+        JmxAutoConfiguration.class,
+        SecurityAutoConfiguration.class
+})
 @MapperScan("eu.davidea.avocadoserver.persistence.mybatis.mappers")
 public class Application extends SpringBootServletInitializer {
 
@@ -59,20 +64,20 @@ public class Application extends SpringBootServletInitializer {
 // Force HTTPS:
 // HTTP redirects to HTTPS when using Spring Boot and External Tomcat.
 // Use this code when no Spring Security is added and configured!
-//    @Override
-//    public void onStartup(ServletContext container) throws ServletException {
-//        super.onStartup(container);
-//
-//        // Get the existing dispatcher servlet
-//        ServletRegistration.Dynamic dispatcher = (ServletRegistration.Dynamic) container.getServletRegistration(DISPATCHER_SERVLET_NAME);
-//
-//        // Force HTTPS, and don't specify any roles for this constraint
-//        HttpConstraintElement forceHttpsConstraint = new HttpConstraintElement(ServletSecurity.TransportGuarantee.CONFIDENTIAL);
-//        ServletSecurityElement securityElement = new ServletSecurityElement(forceHttpsConstraint);
-//
-//        // Add the security element to the servlet
-//        dispatcher.setServletSecurity(securityElement);
-//    }
+    @Override
+    public void onStartup(ServletContext container) throws ServletException {
+        super.onStartup(container);
+
+        // Get the existing dispatcher servlet
+        ServletRegistration.Dynamic dispatcher = (ServletRegistration.Dynamic) container.getServletRegistration(DISPATCHER_SERVLET_NAME);
+
+        // Force HTTPS, and don't specify any roles for this constraint
+        HttpConstraintElement forceHttpsConstraint = new HttpConstraintElement(ServletSecurity.TransportGuarantee.CONFIDENTIAL);
+        ServletSecurityElement securityElement = new ServletSecurityElement(forceHttpsConstraint);
+
+        // Add the security element to the servlet
+        dispatcher.setServletSecurity(securityElement);
+    }
 
     @Bean
     @ConditionalOnWebApplication

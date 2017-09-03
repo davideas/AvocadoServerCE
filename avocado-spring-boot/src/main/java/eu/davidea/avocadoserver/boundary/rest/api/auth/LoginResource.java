@@ -1,7 +1,6 @@
 package eu.davidea.avocadoserver.boundary.rest.api.auth;
 
 import eu.davidea.avocadoserver.boundary.rest.api.restaurant.RestaurantResource;
-import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,9 @@ public class LoginResource {
     @PostMapping
     @RequestMapping("/signup")
     public ResponseEntity signup() {
-        throw new NotImplementedException("signup");
+        logger.trace("signup()");
+        loginFacade.signup();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping

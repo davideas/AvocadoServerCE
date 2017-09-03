@@ -1,35 +1,22 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
 import java.util.Date;
 
 public class JwtToken extends UsernamePasswordAuthenticationToken {
 
     private String jti;
     private String token;
+    private Date issuedAt;
     private Date expiresAt;
 
-    public JwtToken(String token) {
-        super(null, null);
-        this.token = token;
-    }
-
-    public JwtToken(String jti, String token, Date expiresAt) {
+    public JwtToken(String jti, String token, Date issuedAt, Date expiresAt) {
         super(null, null);
         this.jti = jti;
         this.token = token;
+        this.issuedAt = issuedAt;
         this.expiresAt = expiresAt;
-    }
-
-    public JwtToken(Object principal, Object credentials) {
-        super(principal, credentials);
-    }
-
-    public JwtToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
-        super(principal, credentials, authorities);
     }
 
     public String getJti() {
@@ -48,6 +35,14 @@ public class JwtToken extends UsernamePasswordAuthenticationToken {
         this.token = token;
     }
 
+    public Date getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(Date issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
     public Date getExpiresAt() {
         return expiresAt;
     }
@@ -59,6 +54,7 @@ public class JwtToken extends UsernamePasswordAuthenticationToken {
     @Override
     public String toString() {
         return "Token{jti=" + jti +
+                ", issuedAt=" + issuedAt +
                 ", expiresAt=" + expiresAt +
                 ", token=" + token +
                 "}";

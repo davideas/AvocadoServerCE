@@ -51,6 +51,7 @@ abstract class AbstractException extends RuntimeException {
     }
 
     public String[] getDetailsAsArray() {
+        if (details == null) return null;
         return details.toArray(new String[0]);
     }
 

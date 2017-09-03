@@ -2,9 +2,12 @@ package eu.davidea.avocadoserver.persistence.mybatis.repositories;
 
 import eu.davidea.avocadoserver.business.audit.LogQueryStats;
 import eu.davidea.avocadoserver.business.user.User;
+import eu.davidea.avocadoserver.business.user.UserToken;
 import eu.davidea.avocadoserver.persistence.mybatis.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Davide
@@ -36,4 +39,18 @@ public class UserRepository {
         return mapper.findByEmail(email.toLowerCase());
     }
 
+    @LogQueryStats
+    public UserToken findByJti(String jti) {
+        return mapper.findByJti(jti);
+    }
+
+    @LogQueryStats
+    public List<UserToken> getUserTokens(Long userId) {
+        return mapper.getUserTokens(userId);
+    }
+
+    @LogQueryStats
+    public int saveUserToken(UserToken userToken) {
+        return mapper.insertUserToken(userToken);
+    }
 }

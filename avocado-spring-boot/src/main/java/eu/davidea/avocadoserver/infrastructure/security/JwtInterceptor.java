@@ -1,22 +1,19 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.exceptions.ErrorResponse;
+import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
-import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
-import eu.davidea.avocadoserver.infrastructure.exceptions.ErrorResponse;
-import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.USER_TOKEN_REQ_ATTR;
 
@@ -39,9 +36,12 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         String token = requestAttributes.getToken();
         try {
             if (token == null) {
-                throw new AuthenticationException("No JWT token found in request headers");
+                throw new AuthenticationException("No JWT token found in request header");
             }
             JwtUserToken userToken = loginFacade.validateToken(token);
+            if (userToken == null) {
+                throw new AuthenticationException("Token is invalid");
+            }
             request.setAttribute(USER_TOKEN_REQ_ATTR, userToken);
             return true;
         } catch (AuthenticationException e) {

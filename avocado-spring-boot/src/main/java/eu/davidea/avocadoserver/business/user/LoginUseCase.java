@@ -1,6 +1,9 @@
 package eu.davidea.avocadoserver.business.user;
 
+import eu.davidea.avocadoserver.business.enums.EnumUserStatus;
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
+import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
 import eu.davidea.avocadoserver.infrastructure.utilities.EmailValidator;
 import eu.davidea.avocadoserver.persistence.mybatis.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.security.NoSuchAlgorithmException;
@@ -43,9 +47,9 @@ public class LoginUseCase implements UserDetailsService {
     public User loginUser(String login, CharSequence rawPassword) {
         Objects.requireNonNull(login);
 
-//        if (!StringUtils.hasText(rawPassword)) {
-//            throw new AuthenticationException("Password has invalid length");
-//        }
+        if (!StringUtils.hasText(rawPassword)) {
+            throw new AuthenticationException("Password has invalid length");
+        }
 
         User user;
         if (EmailValidator.isValidEmailAddress(login)) {
@@ -56,14 +60,15 @@ public class LoginUseCase implements UserDetailsService {
             user = userRepository.findByUsername(login);
         }
         // Performs checks on User
-        //performChecks(user, rawPassword);
+        performChecks(user, rawPassword);
+
         // Erase credential from memory
-        //rawPassword = null;
+        user.eraseCredentials();
 
         return user;
     }
 
-    public void performChecks(User user, String rawPassword) {
+    private void performChecks(User user, CharSequence rawPassword) {
         if (user == null) {
             logger.debug("User not found");
             throw new AuthenticationException("Invalid username or password");
@@ -95,4 +100,22 @@ public class LoginUseCase implements UserDetailsService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
+    public void validateUserStatus(String jti) {
+        UserToken userToken = userRepository.findByJti(jti);
+        // TODO: validateUserStatus
+        if (userToken.getStatus() == EnumUserStatus.BLOCKED) {
+            throw new AuthenticationException(ExceptionCode.FORBIDDEN, "User account is locked");
+        }
+    }
+
+    public void saveUserToken(User user, JwtToken token) {
+        Objects.requireNonNull(user);
+        Objects.requireNonNull(token);
+
+        UserToken userToken = new UserToken(user.getId(), user.getAuthority(), token.getJti());
+        userToken.setExpDate(token.getExpiresAt());
+        if (userRepository.saveUserToken(userToken) == 0) {
+            throw new RuntimeException("No token was saved. Check server log");
+        }
+    }
 }

@@ -1,5 +1,9 @@
 package eu.davidea.avocadoserver.business.user;
 
+import eu.davidea.avocadoserver.business.audit.AuditableEntity;
+import eu.davidea.avocadoserver.business.enums.EnumAuthority;
+import eu.davidea.avocadoserver.business.enums.EnumUserStatus;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
@@ -11,15 +15,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-import eu.davidea.avocadoserver.business.audit.AuditableEntity;
-import eu.davidea.avocadoserver.business.enums.EnumAuthority;
-import eu.davidea.avocadoserver.business.enums.EnumUserStatus;
-
 /**
  * @author Davide
  * @since 27/08/2017
  */
-public class User implements AuditableEntity, Serializable, UserDetails {
+public class User implements AuditableEntity, Serializable, UserDetails, CredentialsContainer {
 
     private static final long serialVersionUID = -15273229800392269L;
 
@@ -183,6 +183,11 @@ public class User implements AuditableEntity, Serializable, UserDetails {
 
     public void setLastPasswordChangeDate(Date lastPasswordChangeDate) {
         this.lastPasswordChangeDate = lastPasswordChangeDate;
+    }
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null;
     }
 
 }
