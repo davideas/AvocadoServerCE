@@ -50,7 +50,7 @@ Full article here: https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html
 ##### Part II
 1. Edit the file `$CATALINA_BASE/conf/server.xml`.
 2. Identify the property `<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" .../>`
-3. Uncomment it and modify the full element as following:
+3. Uncomment it and modify the full element as following, then restart Tomcat:
 ``` xml
 <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
     	   maxThreads="150" scheme="https" secure="true" SSLEnabled="true"
@@ -58,7 +58,6 @@ Full article here: https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html
     	   clientAuth="false" keyAlias="tomcat" sslProtocol="TLS">
 </Connector>
 ```
-4. Restart Tomcat!
 
 # IDE
 - Using _IntelliJ IDEA™_: File > New > Project from Version Control > GitHub.
@@ -67,3 +66,11 @@ Full article here: https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html
   - You associate the generated exploded folder (use `avocado-spring-boot/build/libs/exploded`) from .war file as deployment Artifact.
   - In the deployment tab, use Application context "/avocado".
   - Use Run Gradle task (skip tests with: -x test) so local configuration can be copied into the spring properties.
+  
+# A note on Spring Security _vs_ JwtInterceptor
+The project has both profiles, currently _Spring Security_ is commented out. To activate it, uncomment relevant parts
+and comment the class exclusion in `Application.java` as well as the `JwtInterceptor` invocation.<br>
+Pojo classes already extend from _Spring Security_ interfaces.
+
+At the moment the complexity and the over head of _Spring Security_ doesn't convince me
+and I suggest to adopt a good custom `JwtInterceptor` and few checks in the `LoginUseCase`.

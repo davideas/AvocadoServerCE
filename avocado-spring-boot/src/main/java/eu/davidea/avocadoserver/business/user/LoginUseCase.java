@@ -1,8 +1,9 @@
 package eu.davidea.avocadoserver.business.user;
 
-import eu.davidea.avocadoserver.business.enums.EnumUserStatus;
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthorizationException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
+import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
 import eu.davidea.avocadoserver.infrastructure.utilities.EmailValidator;
 import eu.davidea.avocadoserver.persistence.mybatis.repositories.UserRepository;
@@ -24,6 +25,10 @@ import javax.validation.constraints.NotNull;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
+/**
+ * @author Davide Steduto
+ * @since 28/08/2017
+ */
 @Service
 public class LoginUseCase implements UserDetailsService {
 
@@ -38,11 +43,19 @@ public class LoginUseCase implements UserDetailsService {
         this.passwordEncoder = new BCryptPasswordEncoder(10, java.security.SecureRandom.getInstanceStrong());
     }
 
+    /* With Spring Security */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return loginUser(username, null);
+        if (EmailValidator.isValidEmailAddress(username)) {
+            return userRepository.findByEmail(username);
+        } else if (username.trim().length() < USERNAME_MIN_LENGTH) {
+            throw new AuthenticationException("Username has invalid length");
+        } else {
+            return userRepository.findByUsername(username);
+        }
     }
 
+    /* With JWT Interceptor */
     @NotNull
     public User loginUser(String login, CharSequence rawPassword) {
         Objects.requireNonNull(login);
@@ -60,7 +73,7 @@ public class LoginUseCase implements UserDetailsService {
             user = userRepository.findByUsername(login);
         }
         // Performs checks on User
-        performChecks(user, rawPassword);
+        performUserChecks(user, rawPassword);
 
         // Erase credential from memory
         user.eraseCredentials();
@@ -68,7 +81,8 @@ public class LoginUseCase implements UserDetailsService {
         return user;
     }
 
-    private void performChecks(User user, CharSequence rawPassword) {
+    /* With JWT Interceptor */
+    private void performUserChecks(User user, CharSequence rawPassword) {
         if (user == null) {
             logger.debug("User not found");
             throw new AuthenticationException("Invalid username or password");
@@ -92,20 +106,13 @@ public class LoginUseCase implements UserDetailsService {
         }
         if (!verifyPassword(rawPassword, user.getPassword())) {
             logger.debug("Password doesn't match");
-            throw new AuthenticationException("Invalid username or password");
+            throw new AuthenticationException("Invalid password");
         }
     }
 
+    /* With JWT Interceptor */
     private boolean verifyPassword(CharSequence rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
-    }
-
-    public void validateUserStatus(String jti) {
-        UserToken userToken = userRepository.findByJti(jti);
-        // TODO: validateUserStatus
-        if (userToken.getStatus() == EnumUserStatus.BLOCKED) {
-            throw new AuthenticationException(ExceptionCode.FORBIDDEN, "User account is locked");
-        }
     }
 
     public void saveUserToken(User user, JwtToken token) {
@@ -114,8 +121,41 @@ public class LoginUseCase implements UserDetailsService {
 
         UserToken userToken = new UserToken(user.getId(), user.getAuthority(), token.getJti());
         userToken.setExpDate(token.getExpiresAt());
-        if (userRepository.saveUserToken(userToken) == 0) {
-            throw new RuntimeException("No token was saved. Check server log");
+        userRepository.saveUserToken(userToken);
+    }
+
+    /**
+     * Provides a 2nd step validation for JWT Token against Repository's data.
+     * <p>Here we check account and token status.</p>
+     *
+     * @param jwtToken the JWT Token object
+     * @throws AuthenticationException if token not found
+     * @throws AuthorizationException if account or token status is locked
+     */
+    public void validateUserToken(JwtToken jwtToken) throws AuthenticationException, AuthorizationException {
+        UserToken userToken = userRepository.findByJti(jwtToken.getJti());
+
+        if (userToken == null) {
+            // There's a problem finding the token or token was removed from Repository
+            // In any case, token cannot pass 2nd step validation
+            throw new AuthenticationException(ExceptionCode.INVALID_TOKEN, "Token not found");
+        }
+        if (!userToken.isAccountNonLocked()) {
+            throw AuthorizationException.userLocked(jwtToken.getSubject());
+        }
+        if (!userToken.isEnabled()) {
+            throw AuthorizationException.tokenDisabled(jwtToken.getSubject(), userToken.getJti());
         }
     }
+
+    public void registerLogin(JwtToken jwtToken) {
+        // TODO: Update user last login date
+        throw new NotImplementedException("registerLogin");
+    }
+
+    public void logout(JwtToken jwtToken) {
+        // TODO: Implement logout
+        throw new NotImplementedException("logout");
+    }
+
 }

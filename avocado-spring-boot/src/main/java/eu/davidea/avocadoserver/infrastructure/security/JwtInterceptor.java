@@ -15,8 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.USER_TOKEN_REQ_ATTR;
+import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.TOKEN_REQ_ATTR;
 
+/**
+ * @author Davide Steduto
+ * @since 28/08/2017
+ */
 @Component
 public class JwtInterceptor extends HandlerInterceptorAdapter {
 
@@ -38,18 +42,17 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             if (token == null) {
                 throw new AuthenticationException("No JWT token found in request header");
             }
-            JwtUserToken userToken = loginFacade.validateToken(token);
-            if (userToken == null) {
-                throw new AuthenticationException("Token is invalid");
-            }
-            request.setAttribute(USER_TOKEN_REQ_ATTR, userToken);
+            // Validate incoming Token
+            JwtToken jwtToken = loginFacade.validateToken(token);
+            request.setAttribute(TOKEN_REQ_ATTR, jwtToken);
             return true;
         } catch (AuthenticationException e) {
             // 401 - for invalid token
-            logger.warn("Invalid authentication token for URI {}", request.getRequestURI());
-            handleUnauthorized(response, e.getLocalizedMessage());
+            logger.warn("Invalid authentication token for URI {}", request.getRequestURI(), e);
+            throw e;
+            //handleUnauthorized(response, e.getLocalizedMessage());
         }
-        return false;
+        //return false;
     }
 
     private void handleUnauthorized(HttpServletResponse response, String message) throws IOException {

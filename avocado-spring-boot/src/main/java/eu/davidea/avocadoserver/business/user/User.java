@@ -23,19 +23,19 @@ public class User implements AuditableEntity, Serializable, UserDetails, Credent
 
     private static final long serialVersionUID = -15273229800392269L;
 
-    private Long id;
-    private Date creDate;
-    private Date modDate;
-    private String username;
-    private String nickname;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String password;
-    private boolean termsAccepted;
-    private EnumAuthority authority;
-    private EnumUserStatus status;
-    private Date lastPasswordChangeDate;
+    protected Long id;
+    protected Date creDate;
+    protected Date modDate;
+    protected String username;
+    protected String nickname;
+    protected String firstname;
+    protected String lastname;
+    protected String email;
+    protected String password;
+    protected boolean termsAccepted;
+    protected EnumAuthority authority;
+    protected EnumUserStatus status;
+    protected Date lastPasswordChangeDate;
 
     public User() {
         creDate = modDate = new Date();
@@ -69,8 +69,9 @@ public class User implements AuditableEntity, Serializable, UserDetails, Credent
         this.modDate = modDate;
     }
 
-    public String getUsername() {
-        return username;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList((GrantedAuthority) () -> authority.name());
     }
 
     @Override
@@ -102,6 +103,10 @@ public class User implements AuditableEntity, Serializable, UserDetails, Credent
             return firstname + " " + lastname;
         }
         return getUsername();
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String username) {
@@ -138,11 +143,6 @@ public class User implements AuditableEntity, Serializable, UserDetails, Credent
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList((GrantedAuthority) () -> authority.name());
     }
 
     public String getPassword() {

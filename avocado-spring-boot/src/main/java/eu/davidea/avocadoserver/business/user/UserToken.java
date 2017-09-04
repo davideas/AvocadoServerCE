@@ -1,18 +1,20 @@
 package eu.davidea.avocadoserver.business.user;
 
 import eu.davidea.avocadoserver.business.enums.EnumAuthority;
-import eu.davidea.avocadoserver.business.enums.EnumUserStatus;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserToken implements Serializable {
+/**
+ * @author Davide Steduto
+ * @since 04/09/2017
+ */
+public class UserToken extends User implements Serializable {
 
     private static final long serialVersionUID = -6248231325212580059L;
 
     private Long id;
     private Long userId;
-    private EnumUserStatus status;
     private String jti;
     private String osName;
     private String osVersion;
@@ -48,14 +50,6 @@ public class UserToken implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public EnumUserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EnumUserStatus status) {
-        this.status = status;
     }
 
     public String getJti() {

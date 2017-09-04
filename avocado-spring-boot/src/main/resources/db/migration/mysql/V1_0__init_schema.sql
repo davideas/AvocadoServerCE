@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS USER_TOKENS (
   os_version      VARCHAR(64),
   user_agent      VARCHAR(256),
   cre_date        TIMESTAMP,
-  exp_date        TIMESTAMP,
+  exp_date        TIMESTAMP NULL,
   last_login_date TIMESTAMP,
   CONSTRAINT PK_USER_TOKENS PRIMARY KEY (id),
   CONSTRAINT FK_TKN_USER_ID FOREIGN KEY (user_id) REFERENCES USERS (id)

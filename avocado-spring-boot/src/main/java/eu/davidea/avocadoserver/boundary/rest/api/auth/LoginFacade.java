@@ -2,10 +2,11 @@ package eu.davidea.avocadoserver.boundary.rest.api.auth;
 
 import eu.davidea.avocadoserver.business.user.LoginUseCase;
 import eu.davidea.avocadoserver.business.user.User;
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.exceptions.AuthorizationException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
 import eu.davidea.avocadoserver.infrastructure.security.JwtTokenService;
-import eu.davidea.avocadoserver.infrastructure.security.JwtUserToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+/**
+ * @author Davide Steduto
+ * @since 28/08/2017
+ */
 @Service
 public class LoginFacade {
 
@@ -47,35 +52,47 @@ public class LoginFacade {
 //        );
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
 //        User user = (User) authentication.getPrincipal();
-
         // - With JWT Interceptor
         User user = loginUseCase.loginUser(login, rawPassword);
+
         JwtToken token = tokenService.generateToken(user);
         loginUseCase.saveUserToken(user, token);
 
         return token;
     }
 
+    @Transactional
+    public void registerLogin(JwtToken jwtToken) {
+        Objects.requireNonNull(jwtToken);
+
+        loginUseCase.registerLogin(jwtToken);
+    }
+
     @Transactional(readOnly = true)
     @NotNull
-    public JwtUserToken validateToken(String token) {
+    public JwtToken validateToken(String token) throws AuthenticationException, AuthorizationException {
         Objects.requireNonNull(token);
 
-        JwtUserToken jwtUserToken = tokenService.validateToken(token);
-        if (jwtUserToken != null) {
-            loginUseCase.validateUserStatus(jwtUserToken.getJti());
+        // Check incoming Token
+        JwtToken jwtToken = tokenService.validateToken(token);
+        // Check Token's data against Repository's data
+        if (jwtToken != null) {
+            loginUseCase.validateUserToken(jwtToken);
         }
-        return jwtUserToken;
+        return jwtToken;
     }
 
     @Transactional
     public void signup() {
+        // TODO: Implement user registration
         throw new NotImplementedException("signup");
     }
 
     @Transactional
-    public void logout(AuthenticationRequest authentication) {
-        throw new NotImplementedException("logout");
+    public void logout(JwtToken jwtToken) {
+        Objects.requireNonNull(jwtToken);
+
+        loginUseCase.logout(jwtToken);
     }
 
 }

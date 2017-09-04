@@ -2,6 +2,7 @@ package eu.davidea.avocadoserver.infrastructure.security;
 
 import eu.davidea.avocadoserver.business.user.User;
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
+import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,8 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by morujca on 29/04/2016.
+ * @author Davide Steduto
+ * @since 29/08/2017
  */
 @Service
 public class JwtTokenService {
@@ -28,10 +30,13 @@ public class JwtTokenService {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
     private final String jwtSecret;
+    private final long jwtDuration;
     private Key key;
 
-    public JwtTokenService(@Value("${jwt.secret}") String jwtSecret) {
+    public JwtTokenService(@Value("${jwt.secret}") String jwtSecret,
+                           @Value("${jwt.duration}") long jwtDuration) {
         this.jwtSecret = jwtSecret;
+        this.jwtDuration = jwtDuration;
     }
 
     @PostConstruct
@@ -40,16 +45,22 @@ public class JwtTokenService {
         this.key = new SecretKeySpec(jwtSecretBytes, SignatureAlgorithm.HS512.getJcaName());
     }
 
+    /**
+     * Generates a new JWT Token to return to the user's device.
+     *
+     * @param user the User object
+     * @return the JWT Token
+     */
     @NotNull
     public JwtToken generateToken(User user) {
         LocalDateTime now = LocalDateTime.now();
         Date issueAt = Date.from(now
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
-        Date expireAt = Date.from(now
-                .plus(365, ChronoUnit.DAYS) // Expire after 365 days
+        Date expireAt = (jwtDuration >= 0 ? Date.from(now
+                .plus(jwtDuration, ChronoUnit.MINUTES) // Expire after X days
                 .atZone(ZoneId.systemDefault())
-                .toInstant());
+                .toInstant()) : null);
 
         String jti = UUID.randomUUID().toString();
         String token = Jwts.builder()
@@ -61,36 +72,48 @@ public class JwtTokenService {
                 .signWith(SignatureAlgorithm.HS512, this.key)
                 .compact();
 
-        JwtToken jwtToken = new JwtToken(jti, token, issueAt, expireAt);
-        logger.debug("Generated token is: {}", jwtToken);
+        JwtToken jwtToken = new JwtToken(
+                user.getUsername(), user.getAuthority(),
+                jti, token, issueAt, expireAt);
+        logger.debug("Generated token: {}", jwtToken.toString());
 
         return jwtToken;
     }
 
-    public JwtUserToken validateToken(String token) {
+    /**
+     * Provides a basic first step validation for the incoming token.
+     *
+     * @param token the incoming token
+     * @return the JWT Token object
+     * @throws AuthenticationException if token is expired or invalid
+     */
+    @NotNull
+    public JwtToken validateToken(String token) throws AuthenticationException {
         try {
-            JwtUserToken userToken = buildUserToken(token);
-            logger.debug("Built user token: {} ", userToken.toShortString());
-            return userToken;
+            JwtToken jwtToken = parseToken(token);
+            logger.debug("Parsed token: {} ", jwtToken.toString());
+            return jwtToken;
         } catch (ClaimJwtException expired) {
-            logger.warn("Invalid/Expired token for user={}, jti={}, issuedAt={}, expiredAt={}",
-                    expired.getClaims().getId(), expired.getClaims().getSubject(), expired.getClaims().getExpiration());
+            logger.warn("Invalid/Expired token for user={}, audience={}, jti={}, issuedAt={}, expiredAt={}",
+                    expired.getClaims().getSubject(), expired.getClaims().getAudience(), expired.getClaims().getId(),
+                    expired.getClaims().getIssuedAt(), expired.getClaims().getExpiration());
+            // TODO: Should remove user's token from Repository?
             // With JWT Interceptor:
-            throw new AuthenticationException("Token is expired");
+            throw new AuthenticationException(ExceptionCode.TOKEN_EXPIRED);
         } catch (IllegalArgumentException | JwtException e) {
             logger.warn("Invalid token: {}", e.getLocalizedMessage());
             // With JWT Interceptor:
-            throw new AuthenticationException("Token is invalid");
+            throw new AuthenticationException(ExceptionCode.INVALID_TOKEN);
         }
         // With Spring Security:
         //return null;
     }
 
-    private JwtUserToken buildUserToken(String token) {
+    private JwtToken parseToken(String token) {
         Jws<Claims> claimsJws = Jwts.parser()
                 .setSigningKey(this.key)
                 .parseClaimsJws(token);
-        return new JwtUserToken(claimsJws.getBody());
+        return new JwtToken(claimsJws.getBody());
     }
 
 }

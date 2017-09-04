@@ -1,22 +1,48 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import eu.davidea.avocadoserver.business.enums.EnumAuthority;
+import io.jsonwebtoken.Claims;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.time.Instant;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
-public class JwtToken extends UsernamePasswordAuthenticationToken {
+/**
+ * @author Davide Steduto
+ * @since 29/08/2017
+ */
+public class JwtToken {
 
     private String jti;
     private String token;
+    private String subject;
+    private EnumAuthority audience;
     private Date issuedAt;
     private Date expiresAt;
 
-    public JwtToken(String jti, String token, Date issuedAt, Date expiresAt) {
-        super(null, null);
+    /**
+     * Constructor for new built Token after a positive login
+     */
+    public JwtToken(String subject, EnumAuthority audience, String jti, String token, Date issuedAt, Date expiresAt) {
+        this.subject = subject;
+        this.audience = audience;
         this.jti = jti;
         this.token = token;
         this.issuedAt = issuedAt;
         this.expiresAt = expiresAt;
+    }
+
+    /**
+     * Constructor for incoming Token
+     */
+    public JwtToken(Claims claims) {
+        this.jti = claims.getId();
+        this.subject = claims.getSubject();
+        this.audience = EnumAuthority.valueOf(claims.getAudience());
+        this.issuedAt = claims.getIssuedAt();
+        this.expiresAt = claims.getExpiration();
     }
 
     public String getJti() {
@@ -35,12 +61,36 @@ public class JwtToken extends UsernamePasswordAuthenticationToken {
         this.token = token;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public EnumAuthority getAudience() {
+        return audience;
+    }
+
+    public void setAudience(EnumAuthority audience) {
+        this.audience = audience;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList((GrantedAuthority) () -> audience.name());
+    }
+
     public Date getIssuedAt() {
         return issuedAt;
     }
 
     public void setIssuedAt(Date issuedAt) {
         this.issuedAt = issuedAt;
+    }
+
+    public boolean isTokenExpired() {
+        return expiresAt != null && expiresAt.toInstant().isBefore(Instant.now());
     }
 
     public Date getExpiresAt() {
@@ -53,15 +103,13 @@ public class JwtToken extends UsernamePasswordAuthenticationToken {
 
     @Override
     public String toString() {
-        return "Token{jti=" + jti +
+        return "Token{" +
+                "jti=" + jti +
+                ", username=" + subject +
+                ", authority=" + audience +
                 ", issuedAt=" + issuedAt +
                 ", expiresAt=" + expiresAt +
-                ", token=" + token +
                 "}";
-    }
-
-    public String toShortString() {
-        return "Token{jti=" + jti + "}";
     }
 
 }

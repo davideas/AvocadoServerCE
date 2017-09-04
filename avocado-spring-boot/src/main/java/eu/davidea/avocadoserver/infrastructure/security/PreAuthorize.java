@@ -17,7 +17,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface PreAuthorize {
     /**
-     * @return the type or role for this method invocation.
+     * @return the type of role for this method invocation.
      */
     EnumAuthority value();
 }

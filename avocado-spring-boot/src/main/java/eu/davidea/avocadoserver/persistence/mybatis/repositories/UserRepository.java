@@ -53,4 +53,5 @@ public class UserRepository {
     public int saveUserToken(UserToken userToken) {
         return mapper.insertUserToken(userToken);
     }
+
 }

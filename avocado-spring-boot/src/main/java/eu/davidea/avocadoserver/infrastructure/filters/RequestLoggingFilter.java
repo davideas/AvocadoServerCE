@@ -38,7 +38,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     public static final String ENABLED = "enabled";
 
     private static final String BEFORE_MESSAGE = ">>> START processing HTTP request=";
-    private static final String AFTER_MESSAGE = "<<< END processing HTTP request={} elapsed={}ms status={}";
+    private static final String AFTER_MESSAGE = "<<< END processing HTTP status={} request={} elapsed={}ms";
     private static final int MAX_PAYLOAD_LENGTH = 50;
     private static final String REQUEST_ID = "requestId";
     private static final String START_TIME = "startTime";
@@ -250,7 +250,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         String requestId = (String) request.getAttribute(REQUEST_ID);
         long startTime = (Long) request.getAttribute(START_TIME);
         long elapsed = System.currentTimeMillis() - startTime;
-        logger.debug(AFTER_MESSAGE, requestId, elapsed, response.getStatus());
+        logger.debug(AFTER_MESSAGE, response.getStatus(), requestId, elapsed);
     }
 
     /**

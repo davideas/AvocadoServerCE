@@ -19,6 +19,12 @@ public enum ExceptionCode {
     UNAUTHORIZED(
             HttpStatus.UNAUTHORIZED,
             "Invalid username or password"),
+    INVALID_TOKEN(
+            HttpStatus.UNAUTHORIZED,
+            "Invalid Token"),
+    TOKEN_EXPIRED(
+            HttpStatus.UNAUTHORIZED,
+            "Token is expired"),
     FORBIDDEN(
             HttpStatus.FORBIDDEN,
             "Access denied"),

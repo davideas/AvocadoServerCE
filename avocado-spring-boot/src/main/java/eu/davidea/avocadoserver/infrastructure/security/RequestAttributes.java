@@ -19,7 +19,7 @@ import static org.springframework.util.StringUtils.hasLength;
 public class RequestAttributes {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    public static final String USER_TOKEN_REQ_ATTR = "userToken";
+    public static final String TOKEN_REQ_ATTR = "jwtToken";
 
     private final HttpServletRequest request;
 

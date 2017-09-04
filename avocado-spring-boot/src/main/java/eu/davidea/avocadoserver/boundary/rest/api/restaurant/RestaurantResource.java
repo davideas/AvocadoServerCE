@@ -2,7 +2,7 @@ package eu.davidea.avocadoserver.boundary.rest.api.restaurant;
 
 import eu.davidea.avocadoserver.business.enums.EnumAuthority;
 import eu.davidea.avocadoserver.business.enums.EnumUnitMeasure;
-import eu.davidea.avocadoserver.infrastructure.security.JwtUserToken;
+import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
 import eu.davidea.avocadoserver.infrastructure.security.PreAuthorize;
 import eu.davidea.avocadoserver.infrastructure.security.RequestAttributes;
 import org.slf4j.Logger;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class RestaurantResource {
 
     @GetMapping
     @RequestMapping("/findByName")
-    public ResponseEntity findRestaurantsByName(@RequestAttribute(RequestAttributes.USER_TOKEN_REQ_ATTR) JwtUserToken userToken,
+    public ResponseEntity findRestaurantsByName(@RequestAttribute(RequestAttributes.TOKEN_REQ_ATTR) JwtToken jwtToken,
                                                 @RequestParam(name = "name") String name) {
 
         logger.trace("findRestaurantByName(name={})", name);
@@ -43,12 +42,11 @@ public class RestaurantResource {
 
     @GetMapping
     @RequestMapping("/findNearby")
-    public ResponseEntity findRestaurantsNearby(@RequestAttribute(RequestAttributes.USER_TOKEN_REQ_ATTR) JwtUserToken userToken,
+    public ResponseEntity findRestaurantsNearby(@RequestAttribute(RequestAttributes.TOKEN_REQ_ATTR) JwtToken jwtToken,
                                                 @RequestParam(name = "lat") Float latitude,
                                                 @RequestParam(name = "long") Float longitude,
                                                 @RequestParam(name = "radius") Short radius,
-                                                @RequestParam(name = "unit") EnumUnitMeasure unit)
-            throws MissingServletRequestParameterException {
+                                                @RequestParam(name = "unit") EnumUnitMeasure unit) {
 
         logger.trace("findRestaurantsNearby(lat={}, long={}, radius={}, unit={})", latitude, longitude, radius, unit);
         List<RestaurantDTO> restaurantDtoList =
@@ -60,7 +58,7 @@ public class RestaurantResource {
     @GetMapping
     @RequestMapping("/{restaurantId}")
     @PreAuthorize(EnumAuthority.ROLE_RESTAURANT)
-    public ResponseEntity getRestaurantById(@RequestAttribute(RequestAttributes.USER_TOKEN_REQ_ATTR) JwtUserToken userToken,
+    public ResponseEntity getRestaurantById(@RequestAttribute(RequestAttributes.TOKEN_REQ_ATTR) JwtToken jwtToken,
                                             @PathVariable Long restaurantId) {
         logger.trace("getRestaurantById(restaurantId={})", restaurantId);
 

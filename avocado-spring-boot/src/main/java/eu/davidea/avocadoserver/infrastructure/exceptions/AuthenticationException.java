@@ -10,8 +10,13 @@ public class AuthenticationException extends ServiceException {
         super(ExceptionCode.UNAUTHORIZED, technicalMessage);
     }
 
-    public AuthenticationException(ExceptionCode code, String technicalMessage) {
-        super(code, technicalMessage);
+    public AuthenticationException(ExceptionCode tokenExpired) {
+        super(tokenExpired, tokenExpired.getFriendlyMessage());
+    }
+
+    public AuthenticationException(ExceptionCode invalidToken, String technicalMessage) {
+        super(invalidToken, technicalMessage);
+        setFriendlyMessage(technicalMessage);
     }
 
 }

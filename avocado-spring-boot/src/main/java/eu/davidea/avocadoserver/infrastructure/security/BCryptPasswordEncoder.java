@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  * (exponentially) to hash the passwords. The default value is 10.
  *
  * @author Dave Syer
- *
  */
 public class BCryptPasswordEncoder {
     private Pattern BCRYPT_PATTERN = Pattern

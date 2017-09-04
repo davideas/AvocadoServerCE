@@ -1,5 +1,6 @@
 package eu.davidea.avocadoserver.infrastructure.security;
 
+import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,21 +9,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import eu.davidea.avocadoserver.boundary.rest.api.auth.LoginFacade;
-
-import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.USER_TOKEN_REQ_ATTR;
+import static eu.davidea.avocadoserver.infrastructure.security.RequestAttributes.TOKEN_REQ_ATTR;
 
 /**
  * Filter that orchestrates authentication by using supplied JWT token
  *
- * @author pascal alma
+ * @author Davide
+ * @since 29/08/2017
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
@@ -38,7 +37,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String token = requestAttributes.getToken();
 
         if (token != null) {
-            JwtUserToken userToken = loginFacade.validateToken(token);
+            JwtToken userToken = loginFacade.validateToken(token);
 
             if (userToken != null) {
                 UsernamePasswordAuthenticationToken authentication =
@@ -46,8 +45,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                request.setAttribute(USER_TOKEN_REQ_ATTR, userToken);
-                logger.debug("Authenticated user {}", userToken.getUsername());
+                request.setAttribute(TOKEN_REQ_ATTR, userToken);
+                logger.debug("Authenticated user {}", userToken.getSubject());
             }
         }
 

@@ -2,38 +2,38 @@ package eu.davidea.avocadoserver.infrastructure.security;
 
 
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthorizationException;
-import eu.davidea.avocadoserver.infrastructure.statistics.QueryStatsLogger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Davide Steduto
+ * @since 03/09/2017
+ */
 @Aspect
 @Component
 public class PreAuthorizeAop {
 
-    private QueryStatsLogger queryStatsLogger;
-
     @Autowired
-    public PreAuthorizeAop(QueryStatsLogger queryStatsLogger) {
-        this.queryStatsLogger = queryStatsLogger;
+    public PreAuthorizeAop() {
     }
 
     /**
      * Verify user role against {@code @}{@link PreAuthorize} role.
      */
     @Before("execution(@eu.davidea.avocadoserver.infrastructure.security.PreAuthorize * *(..)) && " +
-            "args(userToken,..) && " +
+            "args(jwtToken,..) && " +
             "@annotation(preAuthorize)")
-    public void authorize(JoinPoint joinPoint, JwtUserToken userToken, PreAuthorize preAuthorize)
+    public void authorize(JoinPoint joinPoint, JwtToken jwtToken, PreAuthorize preAuthorize)
             throws AuthorizationException {
 
-        boolean result = userToken.getAuthorities().stream().anyMatch(
+        boolean result = jwtToken.getAuthorities().stream().anyMatch(
                 authority -> authority.getAuthority().equals(preAuthorize.value().name())
         );
         if (!result) {
-            throw AuthorizationException.notInRole(userToken.getUsername(), preAuthorize.value().name());
+            throw AuthorizationException.notInRole(jwtToken.getSubject(), preAuthorize.value().name());
         }
     }
 
