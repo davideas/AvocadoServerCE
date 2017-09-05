@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -52,9 +53,9 @@ public class LoginResource {
      */
     @PostMapping
     @RequestMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity login(@RequestBody AuthenticationRequest authenticationRequest, Device device) {
         logger.trace("login()");
-        JwtToken jwtToken = loginFacade.login(authenticationRequest);
+        JwtToken jwtToken = loginFacade.login(authenticationRequest, device);
         return ResponseEntity.ok().body(jwtToken.getToken());
     }
 

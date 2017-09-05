@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS USER_AUTHORITY (
  */
 CREATE TABLE IF NOT EXISTS USERS (
   id                        BIGINT AUTO_INCREMENT                 NOT NULL,
-  cre_date                  TIMESTAMP                             NOT NULL,
+  cre_date                  TIMESTAMP DEFAULT current_timestamp   NOT NULL,
   mod_date                  TIMESTAMP                             NOT NULL,
   username                  VARCHAR(50)                           NOT NULL,
   nickname                  VARCHAR(50)                           NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS USERS (
   avatar                    BLOB,
   authority                 VARCHAR(20)                           NOT NULL,
   status                    VARCHAR(20) DEFAULT 'REGISTERED'      NOT NULL,
-  last_password_change_date TIMESTAMP,
+  last_password_change_date TIMESTAMP                             NULL,
   CONSTRAINT PK_USERS PRIMARY KEY (id),
   CONSTRAINT FK_USR_FAV_LOCALE FOREIGN KEY (language_code) REFERENCES LANGUAGE_CODE (code),
   CONSTRAINT FK_USR_AUTHORITY FOREIGN KEY (authority) REFERENCES USER_AUTHORITY (code),
@@ -134,16 +134,16 @@ CREATE UNIQUE INDEX IDX_USR_EMAIL
  * Note: A user can login from multiple devices and tokens.
  */
 CREATE TABLE IF NOT EXISTS USER_TOKENS (
-  id              BIGINT AUTO_INCREMENT NOT NULL,
-  user_id         BIGINT                NOT NULL,
-  jti             VARCHAR(128)          NOT NULL,
+  id              BIGINT AUTO_INCREMENT                           NOT NULL,
+  user_id         BIGINT                                          NOT NULL,
+  jti             VARCHAR(128)                                    NOT NULL,
   enabled         TINYINT(1) COMMENT 'If this token is enabled' DEFAULT 1,
   os_name         VARCHAR(64),
   os_version      VARCHAR(64),
   user_agent      VARCHAR(256),
-  cre_date        TIMESTAMP,
-  exp_date        TIMESTAMP NULL,
-  last_login_date TIMESTAMP,
+  cre_date        TIMESTAMP DEFAULT current_timestamp             NOT NULL,
+  exp_date        TIMESTAMP                                       NULL,
+  last_login_date TIMESTAMP DEFAULT current_timestamp             NOT NULL,
   CONSTRAINT PK_USER_TOKENS PRIMARY KEY (id),
   CONSTRAINT FK_TKN_USER_ID FOREIGN KEY (user_id) REFERENCES USERS (id)
 );
@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS RESTAURANT_STATUS (
  */
 CREATE TABLE IF NOT EXISTS RESTAURANTS (
   id               BIGINT AUTO_INCREMENT                         NOT NULL,
-  cre_date         TIMESTAMP                                     NOT NULL,
+  cre_date         TIMESTAMP DEFAULT current_timestamp           NOT NULL,
   mod_date         TIMESTAMP                                     NOT NULL,
   user_id          BIGINT COMMENT 'Owner of the restaurant'      NOT NULL,
   name             VARCHAR(255) COMMENT 'Name of the restaurant' NOT NULL,
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS MENUS (
   id             BIGINT AUTO_INCREMENT                            NOT NULL,
   restaurant_id  BIGINT                                           NOT NULL,
   order_id       TINYINT(1) COMMENT 'Sorting number for the menu' NOT NULL,
-  cre_date       TIMESTAMP                                        NOT NULL,
+  cre_date       TIMESTAMP DEFAULT current_timestamp              NOT NULL,
   mod_date       TIMESTAMP                                        NOT NULL,
   title_trans_id MEDIUMINT COMMENT 'Menu title ref. translation id',
   status         VARCHAR(50) DEFAULT 'CREATED',

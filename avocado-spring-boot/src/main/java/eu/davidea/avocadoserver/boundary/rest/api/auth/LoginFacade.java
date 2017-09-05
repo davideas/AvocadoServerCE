@@ -10,6 +10,7 @@ import eu.davidea.avocadoserver.infrastructure.security.JwtTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +40,7 @@ public class LoginFacade {
     }
 
     @Transactional
-    public JwtToken login(AuthenticationRequest authenticationRequest) {
+    public JwtToken login(AuthenticationRequest authenticationRequest, Device device) {
         Objects.requireNonNull(authenticationRequest);
 
         String login = authenticationRequest.getUsername();
@@ -55,8 +56,9 @@ public class LoginFacade {
         // - With JWT Interceptor
         User user = loginUseCase.loginUser(login, rawPassword);
 
-        JwtToken token = tokenService.generateToken(user);
+        JwtToken token = tokenService.generateToken(user, device);
         loginUseCase.saveUserToken(user, token);
+        //TODO: Clear very old user tokens Async?
 
         return token;
     }

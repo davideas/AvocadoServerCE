@@ -30,8 +30,7 @@ public class PreAuthorizeAop {
             throws AuthorizationException {
 
         boolean result = jwtToken.getAuthorities().stream().anyMatch(
-                authority -> authority.getAuthority().equals(preAuthorize.value().name())
-        );
+                authority -> authority == preAuthorize.value());
         if (!result) {
             throw AuthorizationException.notInRole(jwtToken.getSubject(), preAuthorize.value().name());
         }

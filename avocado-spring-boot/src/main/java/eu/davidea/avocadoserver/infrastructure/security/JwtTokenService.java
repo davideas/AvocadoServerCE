@@ -7,6 +7,7 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -49,16 +50,16 @@ public class JwtTokenService {
      * Generates a new JWT Token to return to the user's device.
      *
      * @param user the User object
+     * @param device
      * @return the JWT Token
      */
-    @NotNull
-    public JwtToken generateToken(User user) {
-        LocalDateTime now = LocalDateTime.now();
+    public JwtToken generateToken(User user, Device device) {
+        Instant now = Instant.ofEpochMilli((System.currentTimeMillis() / 1000L) * 1000L);
         Date issueAt = Date.from(now
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
         Date expireAt = (jwtDuration >= 0 ? Date.from(now
-                .plus(jwtDuration, ChronoUnit.MINUTES) // Expire after X days
+                .plus(jwtDuration, ChronoUnit.MINUTES) // Expire after X minutes
                 .atZone(ZoneId.systemDefault())
                 .toInstant()) : null);
 

@@ -54,4 +54,13 @@ public class UserRepository {
         return mapper.insertUserToken(userToken);
     }
 
+    @LogQueryStats
+    public boolean updateLastLoginDate(String jti) {
+        return mapper.updateLastLoginDate(jti) == 1;
+    }
+
+    @LogQueryStats
+    public boolean deleteUserToken(String jti) {
+        return mapper.deleteToken(jti) == 1;
+    }
 }

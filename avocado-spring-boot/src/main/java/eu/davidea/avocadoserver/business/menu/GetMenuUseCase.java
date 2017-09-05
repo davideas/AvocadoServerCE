@@ -34,4 +34,13 @@ public class GetMenuUseCase {
         return menus;
     }
 
+    public Menu getMenu(Long restaurantId, Long menuId) {
+        Objects.requireNonNull(restaurantId);
+        Objects.requireNonNull(menuId);
+
+        Menu menu = menuRepository.getMenuById(restaurantId, menuId);
+        logger.debug("Found menu for restaurantId={}, menuId={}", restaurantId, menuId);
+        return menu;
+    }
+
 }

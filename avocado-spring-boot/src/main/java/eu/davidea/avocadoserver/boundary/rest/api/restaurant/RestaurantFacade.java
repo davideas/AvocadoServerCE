@@ -1,6 +1,5 @@
 package eu.davidea.avocadoserver.boundary.rest.api.restaurant;
 
-import eu.davidea.avocadoserver.boundary.helpers.EntityToDtoHelper;
 import eu.davidea.avocadoserver.boundary.rest.api.menu.MenuDTO;
 import eu.davidea.avocadoserver.business.enums.EnumUnitMeasure;
 import eu.davidea.avocadoserver.business.menu.GetMenuUseCase;
@@ -27,14 +26,11 @@ public class RestaurantFacade {
 
     private GetRestaurantUseCase getRestaurantUseCase;
     private GetMenuUseCase getMenuUseCase;
-    private EntityToDtoHelper dtoHelper;
 
     @Autowired
-    public RestaurantFacade(GetRestaurantUseCase getRestaurantUseCase,
-                            GetMenuUseCase getMenuUseCase, EntityToDtoHelper dtoHelper) {
+    public RestaurantFacade(GetRestaurantUseCase getRestaurantUseCase, GetMenuUseCase getMenuUseCase) {
         this.getRestaurantUseCase = getRestaurantUseCase;
         this.getMenuUseCase = getMenuUseCase;
-        this.dtoHelper = dtoHelper;
     }
 
     @Transactional(readOnly = true)
@@ -47,7 +43,7 @@ public class RestaurantFacade {
         }
 
         List<Restaurant> restaurants = getRestaurantUseCase.findRestaurantsNearby(latitude, longitude, radius, unit);
-        return dtoHelper.toDtos(restaurants);
+        return RestaurantDTO.toDtos(restaurants);
     }
 
     @Transactional(readOnly = true)
@@ -55,7 +51,7 @@ public class RestaurantFacade {
         Objects.requireNonNull(name);
 
         List<Restaurant> restaurants = getRestaurantUseCase.findRestaurantByName(name);
-        return dtoHelper.toDtos(restaurants);
+        return RestaurantDTO.toDtos(restaurants);
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +59,7 @@ public class RestaurantFacade {
         Objects.requireNonNull(restaurantId);
 
         Restaurant restaurant = getRestaurantUseCase.getRestaurantById(restaurantId);
-        return dtoHelper.toDto(restaurant);
+        return RestaurantDTO.toDto(restaurant);
     }
 
     @Transactional(readOnly = true)
@@ -72,9 +68,7 @@ public class RestaurantFacade {
         if (languageCode == null) {
             languageCode = "en-UK";
         }
-
         List<Menu> menus = getMenuUseCase.getMenus(restaurantId, languageCode);
-        return dtoHelper.toDto(menus);
-
+        return MenuDTO.toDto(menus);
     }
 }

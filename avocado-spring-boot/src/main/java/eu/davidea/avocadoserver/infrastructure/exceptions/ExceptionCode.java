@@ -19,12 +19,15 @@ public enum ExceptionCode {
     UNAUTHORIZED(
             HttpStatus.UNAUTHORIZED,
             "Invalid username or password"),
+    MISSING_TOKEN(
+            HttpStatus.UNAUTHORIZED,
+            "No JWT token found in request header"),
     INVALID_TOKEN(
             HttpStatus.UNAUTHORIZED,
             "Invalid Token"),
     TOKEN_EXPIRED(
             HttpStatus.UNAUTHORIZED,
-            "Token is expired"),
+            "Token expired"),
     FORBIDDEN(
             HttpStatus.FORBIDDEN,
             "Access denied"),

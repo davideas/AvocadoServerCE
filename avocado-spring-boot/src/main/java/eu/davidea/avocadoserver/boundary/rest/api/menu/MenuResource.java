@@ -43,8 +43,8 @@ public class MenuResource {
     public ResponseEntity getMenu(@PathVariable Long restaurantId, @PathVariable Long menuId,
                                             @RequestParam String languageCode) {
         logger.trace("getMenu(restaurantId={}, menuId={})", restaurantId, menuId);
-
-        return ResponseEntity.ok().body("");
+        MenuDTO menuDTO = menuFacade.getMenu(restaurantId, menuId);
+        return ResponseEntity.ok().body(menuDTO);
     }
 
     //TODO: AOP for user roles

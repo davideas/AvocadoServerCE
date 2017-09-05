@@ -2,12 +2,11 @@ package eu.davidea.avocadoserver.infrastructure.security;
 
 import eu.davidea.avocadoserver.business.enums.EnumAuthority;
 import io.jsonwebtoken.Claims;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Davide Steduto
@@ -77,8 +76,8 @@ public class JwtToken {
         this.audience = audience;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList((GrantedAuthority) () -> audience.name());
+    public List<EnumAuthority> getAuthorities() {
+        return Collections.singletonList(audience);
     }
 
     public Date getIssuedAt() {

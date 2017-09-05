@@ -2,9 +2,7 @@ package eu.davidea.avocadoserver.persistence.mybatis.mappers;
 
 import eu.davidea.avocadoserver.business.user.User;
 import eu.davidea.avocadoserver.business.user.UserToken;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -35,5 +33,11 @@ public interface UserMapper {
             "#{osVersion,jdbcType=VARCHAR}, #{userAgent,jdbcType=VARCHAR}, " +
             "#{creDate,jdbcType=TIMESTAMP}, #{expDate,jdbcType=TIMESTAMP}, #{lastLoginDate,jdbcType=TIMESTAMP})")
     int insertUserToken(UserToken userToken);
+
+    @Update("update user_tokens set last_login_date = current_timestamp() where jti = #{jti,jdbcType=VARCHAR}")
+    int updateLastLoginDate(String jti);
+
+    @Delete("delete from user_tokens where jti = #{jti,jdbcType=VARCHAR}")
+    int deleteToken(String jti);
 
 }

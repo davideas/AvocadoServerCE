@@ -28,4 +28,7 @@ public class MenuRepository {
         return mapper.getMenus(restaurantId, languageCode);
     }
 
+    public Menu getMenuById(Long restaurantId, Long menuId) {
+        return mapper.getMenuById(restaurantId, menuId);
+    }
 }

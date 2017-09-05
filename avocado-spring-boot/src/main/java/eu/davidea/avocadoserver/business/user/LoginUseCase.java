@@ -3,17 +3,12 @@ package eu.davidea.avocadoserver.business.user;
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthenticationException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.AuthorizationException;
 import eu.davidea.avocadoserver.infrastructure.exceptions.ExceptionCode;
-import eu.davidea.avocadoserver.infrastructure.exceptions.NotImplementedException;
 import eu.davidea.avocadoserver.infrastructure.security.JwtToken;
 import eu.davidea.avocadoserver.infrastructure.utilities.EmailValidator;
 import eu.davidea.avocadoserver.persistence.mybatis.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +18,6 @@ import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
 
 /**
  * @author Davide Steduto
@@ -58,8 +52,10 @@ public class LoginUseCase implements UserDetailsService {
     /* With JWT Interceptor */
     @NotNull
     public User loginUser(String login, CharSequence rawPassword) {
-        Objects.requireNonNull(login);
-
+        // Validate fields
+        if (!StringUtils.hasText(login)) {
+            throw new AuthenticationException("Login has invalid length");
+        }
         if (!StringUtils.hasText(rawPassword)) {
             throw new AuthenticationException("Password has invalid length");
         }
@@ -82,31 +78,31 @@ public class LoginUseCase implements UserDetailsService {
     }
 
     /* With JWT Interceptor */
-    private void performUserChecks(User user, CharSequence rawPassword) {
+    private void performUserChecks(User user, CharSequence rawPassword) throws AuthenticationException {
         if (user == null) {
             logger.debug("User not found");
-            throw new AuthenticationException("Invalid username or password");
+            throw new AuthenticationException("User not found");
         }
         logger.info("Found user {}", user.getUsername());
         if (!user.isAccountNonLocked()) {
             logger.debug("User account is locked");
-            throw new LockedException("User account is locked");
+            throw AuthenticationException.accountLocked();
         }
         if (!user.isEnabled()) {
             logger.debug("User account is disabled");
-            throw new DisabledException("User is disabled");
+            throw AuthenticationException.accountDisabled();
         }
         if (!user.isAccountNonExpired()) {
             logger.debug("User account is expired");
-            throw new AccountExpiredException("User account is expired");
+            throw AuthenticationException.accountExpired();
         }
         if (!user.isCredentialsNonExpired()) {
             logger.debug("User account credentials have expired");
-            throw new CredentialsExpiredException("User credentials have expired");
+            throw AuthenticationException.credentialsExpired();
         }
         if (!verifyPassword(rawPassword, user.getPassword())) {
             logger.debug("Password doesn't match");
-            throw new AuthenticationException("Invalid password");
+            throw new AuthenticationException("Password doesn't match");
         }
     }
 
@@ -116,9 +112,6 @@ public class LoginUseCase implements UserDetailsService {
     }
 
     public void saveUserToken(User user, JwtToken token) {
-        Objects.requireNonNull(user);
-        Objects.requireNonNull(token);
-
         UserToken userToken = new UserToken(user.getId(), user.getAuthority(), token.getJti());
         userToken.setExpDate(token.getExpiresAt());
         userRepository.saveUserToken(userToken);
@@ -149,13 +142,15 @@ public class LoginUseCase implements UserDetailsService {
     }
 
     public void registerLogin(JwtToken jwtToken) {
-        // TODO: Update user last login date
-        throw new NotImplementedException("registerLogin");
+        if (userRepository.updateLastLoginDate(jwtToken.getJti())) {
+            logger.warn("registerLogin: Token to update was not found!");
+        }
     }
 
     public void logout(JwtToken jwtToken) {
-        // TODO: Implement logout
-        throw new NotImplementedException("logout");
+        if (userRepository.deleteUserToken(jwtToken.getJti())) {
+            logger.warn("Logout: Token to delete was not found!");
+        }
     }
 
 }
