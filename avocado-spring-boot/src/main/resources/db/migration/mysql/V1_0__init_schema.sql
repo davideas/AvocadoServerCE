@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS USER_AUTHORITY (
 CREATE TABLE IF NOT EXISTS USERS (
   id                        BIGINT AUTO_INCREMENT                 NOT NULL,
   cre_date                  TIMESTAMP DEFAULT current_timestamp   NOT NULL,
-  mod_date                  TIMESTAMP                             NOT NULL,
+  mod_date                  TIMESTAMP DEFAULT current_timestamp   NOT NULL,
   username                  VARCHAR(50)                           NOT NULL,
   nickname                  VARCHAR(50)                           NOT NULL,
   firstname                 VARCHAR(50),
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS RESTAURANT_STATUS (
 CREATE TABLE IF NOT EXISTS RESTAURANTS (
   id               BIGINT AUTO_INCREMENT                         NOT NULL,
   cre_date         TIMESTAMP DEFAULT current_timestamp           NOT NULL,
-  mod_date         TIMESTAMP                                     NOT NULL,
+  mod_date         TIMESTAMP DEFAULT current_timestamp           NOT NULL,
   user_id          BIGINT COMMENT 'Owner of the restaurant'      NOT NULL,
   name             VARCHAR(255) COMMENT 'Name of the restaurant' NOT NULL,
   status           VARCHAR(50) DEFAULT 'CREATED',
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS MENUS (
   restaurant_id  BIGINT                                           NOT NULL,
   order_id       TINYINT(1) COMMENT 'Sorting number for the menu' NOT NULL,
   cre_date       TIMESTAMP DEFAULT current_timestamp              NOT NULL,
-  mod_date       TIMESTAMP                                        NOT NULL,
+  mod_date       TIMESTAMP DEFAULT current_timestamp              NOT NULL,
   title_trans_id MEDIUMINT COMMENT 'Menu title ref. translation id',
   status         VARCHAR(50) DEFAULT 'CREATED',
   CONSTRAINT PK_MENU PRIMARY KEY (id),

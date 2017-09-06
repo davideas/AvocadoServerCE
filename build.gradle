@@ -31,11 +31,13 @@ buildscript {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+        maven { url "http://dl.bintray.com/davideas/maven" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.junit.platform:junit-platform-gradle-plugin:${junitPlatformVersion}")
         classpath("org.flywaydb:flyway-gradle-plugin:3.0")
         classpath("mysql:mysql-connector-java:${mysqlConnectorVersion}") // Used by Flyway plugin
+        classpath "eu.davidea:grabver:0.4.0"
     }
 }

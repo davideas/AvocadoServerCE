@@ -24,18 +24,18 @@ So those Apps are also a playground to experiment new frameworks and new feature
 - API RESTful web services with Spring
   - [Spring Boot 2](https://github.com/spring-projects/spring-boot/wiki) & [Spring Framework 5](https://github.com/spring-projects/spring-framework)
   - Exception handler advice
-- API Security with [Spring Security](https://docs.spring.io/spring-security/site/docs/5.0.0.M3/reference/htmlsingle/) - **Started** 
-  - JWT (Json Web Token) with [jjwt](https://github.com/jwtk/jjwt) - **Started**
+- API Security with [Spring Security](https://docs.spring.io/spring-security/site/docs/5.0.0.M3/reference/htmlsingle/) 
+  - JWT (Json Web Token) with [jjwt](https://github.com/jwtk/jjwt)
   - BCrypt encoder (One-Way Encryption)
   - SSL and automatic redirect from _http_ to _https_
-  - CORS filter - **Started**
+  - CORS filter
 - Logging filter and query stats with [Spring AOP](https://docs.spring.io/spring/docs/5.0.0.RC3/spring-framework-reference/core.html#aop)
 - Logging via [slf4j](https://www.slf4j.org/) API + [Log4j2](https://logging.apache.org/log4j/2.x/) with gzip and rolling strategy
 - [MyBatis 3](http://www.mybatis.org/mybatis-3) SQL Mapping Framework for Java + Integration with Spring Boot
 - [FlyWay](https://flywaydb.org/) Database schema migrations made easy across all environments
 - [Firebase](https://github.com/firebase/quickstart-android) Messaging with Notification manager! - **Not started**
-- [JUnit 5](http://junit.org/junit5/) Jupiter - **Not fully applied**
-- [GrabVer](https://github.com/davideas/grabver) Gradle Automatic Build Versioning - **Not yet applied**
+- [JUnit 5](http://junit.org/junit5/) Jupiter
+- [GrabVer](https://github.com/davideas/grabver) Gradle Automatic Build Versioning
 - A real use case with SQL scripts for demo database schema
 - Environment configuration files (local-acc-prod)
 - Integration with IDE: Deployment and JUnit tests can be run via command line and via IDE!

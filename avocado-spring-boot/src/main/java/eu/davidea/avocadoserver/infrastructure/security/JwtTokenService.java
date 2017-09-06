@@ -25,7 +25,7 @@ import java.util.UUID;
  * @author Davide Steduto
  * @since 29/08/2017
  */
-@Service
+@Service("jwtTokenService")
 public class JwtTokenService {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
