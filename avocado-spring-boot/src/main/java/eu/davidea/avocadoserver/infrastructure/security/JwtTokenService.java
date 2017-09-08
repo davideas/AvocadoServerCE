@@ -54,6 +54,8 @@ public class JwtTokenService {
      * @return the JWT Token
      */
     public JwtToken generateToken(User user, Device device) {
+        // Dates in JWT are expressed in "NumericDate" format, aka unix/epoch (seconds).
+        // https://tools.ietf.org/html/rfc7519#section-2.
         Instant now = Instant.ofEpochMilli((System.currentTimeMillis() / 1000L) * 1000L);
         Date issueAt = Date.from(now
                 .atZone(ZoneId.systemDefault())
