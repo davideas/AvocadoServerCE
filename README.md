@@ -1,4 +1,4 @@
-[![API](https://img.shields.io/badge/SpringBoot2-M3-green.svg?style=flat)](https://github.com/spring-projects/spring-boot/wiki)
+[![API](https://img.shields.io/badge/SpringBoot2-M4-green.svg?style=flat)](https://github.com/spring-projects/spring-boot/wiki)
 [![Licence](https://img.shields.io/badge/Licence-Apache2-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 # Avocado Server CE (Community Edition)
@@ -24,7 +24,7 @@ So those Apps are also a playground to experiment new frameworks and new feature
 - API RESTful web services with Spring
   - [Spring Boot 2](https://github.com/spring-projects/spring-boot/wiki) & [Spring Framework 5](https://github.com/spring-projects/spring-framework)
   - Exception handler advice
-- API Security with [Spring Security](https://docs.spring.io/spring-security/site/docs/5.0.0.M3/reference/htmlsingle/) 
+- API Security with [Spring Security](https://docs.spring.io/spring-security/site/docs/5.0.0.M4/reference/htmlsingle/) 
   - JWT (Json Web Token) with [jjwt](https://github.com/jwtk/jjwt)
   - BCrypt encoder (One-Way Encryption)
   - SSL and automatic redirect from _http_ to _https_
