@@ -91,7 +91,7 @@ dependencies {
         exclude group: 'org.slf4j' // We use the latest version SLF4J
     }
     // - Flyway for automatic database schema migration. Used in Gradle and at runtime only.
-    runtimeOnly("org.flywaydb:flyway-core")
+    compile("org.flywaydb:flyway-core")
     // - MyBatis for SQL Mapping Framework for Java
     compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:${myBatisBootVersion}")
 

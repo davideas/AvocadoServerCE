@@ -15,11 +15,13 @@
  */
 package eu.davidea.avocadoserver;
 
+import org.flywaydb.core.Flyway;
 import eu.davidea.avocadoserver.infrastructure.filters.RequestLoggingFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -116,6 +118,13 @@ public class Application extends SpringBootServletInitializer {
         //source.registerCorsConfiguration("/health", config);
 
         return new CorsFilter(source);
+    }
+
+    @Bean
+    public FlywayMigrationInitializer flywayMigrationInitializer(Flyway flyway) {
+        System.out.println("\n\nConfiguring flyway initializer...\n\n");
+        flyway.setOutOfOrder(true); // Allows migrations to be run "out of order".
+        return new FlywayMigrationInitializer(flyway);
     }
 
     public static void main(final String[] args) {

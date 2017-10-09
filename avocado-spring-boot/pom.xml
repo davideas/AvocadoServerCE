@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>eu.davidea</groupId>
 		<artifactId>AvocadoServerCE</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<name>avocado-spring-boot</name>
 	<artifactId>avocado-spring-boot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<properties>
