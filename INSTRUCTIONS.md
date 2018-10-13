@@ -43,7 +43,7 @@ Full article here: https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html
 
 ##### Part I
 1. Execute `"%JAVA_HOME%/bin/keytool" -genkey -alias tomcat -keyalg RSA
-   -keystore [/preferred/keystore/path]` (-keystore is optional, see point 4).
+   -keystore [/preferred/keystore/path]`<br>(-keystore is optional, see point 4).
 2. The default password used by Tomcat is `changeit`.
 3. You must fill all the requested fields from the keytool.
 4. If you didn't specify a keystore path, the file `".keystore"` will be generated under
