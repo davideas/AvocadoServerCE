@@ -39,16 +39,17 @@ This must be done once for the server configuration.
 For the purpose of this project we only create a _self-signed_ certificate.
 For a real certificate you must buy it from a certification authority.
 
-Full article here: https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html
+Full article here: https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html
 
 ##### Part I
-1. Execute `$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA
-   -keystore [/preferred/keystore/path]` (-keystore is optional).
-2. You must fill all the requested fields from the keytool.
-3. If you didn't specify a keystore path, the file `".keystore"` will be generated under
+1. Execute `"%JAVA_HOME%/bin/keytool" -genkey -alias tomcat -keyalg RSA
+   -keystore [/preferred/keystore/path]` (-keystore is optional, see point 4).
+2. The default password used by Tomcat is `changeit`.
+3. You must fill all the requested fields from the keytool.
+4. If you didn't specify a keystore path, the file `".keystore"` will be generated under
    user home (in Windows `C:\Users\<user>\.keystore"`).
 ##### Part II
-1. Edit the file `$CATALINA_BASE/conf/server.xml`.
+1. Edit the file `%CATALINA_BASE%/conf/server.xml`.
 2. Identify the property `<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" .../>`
 3. Uncomment it and modify the full element as following, then restart Tomcat:
 ``` xml
